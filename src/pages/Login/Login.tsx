@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createUser } from '@/redux/states'
 import { formSchema, FormData } from "./Schema";
+import { useDispatch } from 'react-redux'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +15,8 @@ import { loginUser } from "./services";
 
 export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
+
+  const dispatch = useDispatch()
 
   const {
     register,
@@ -34,7 +38,8 @@ export default function LoginForm() {
     try {
       const user = await loginUser({ numberDoc: values.idNumber, password: values.password });
       console.log("User data:", user);
-      navigate("/");
+      dispatch(createUser(user))
+      navigate("/dashboard");
     } catch (err) {
       if (err instanceof Error) {
         setFieldError("idNumber", { type: "manual", message: err.message });
