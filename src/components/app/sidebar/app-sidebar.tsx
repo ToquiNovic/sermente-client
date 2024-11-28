@@ -1,9 +1,8 @@
 import {
   BookOpen,
-  Bot,
-  Settings,
+  LayoutList,
   Settings2,
-  SquareTerminal,
+  Blocks
 } from "lucide-react";
 import { NavMain } from "@/components/nav-main";
 import {
@@ -20,9 +19,9 @@ const data = {
   },
   navMain: [
     {
-      title: "Terminal",
+      title: "Encuestas",
       url: "#",
-      icon: SquareTerminal,
+      icon: BookOpen,
       isActive: false,
       items: [
         {
@@ -40,56 +39,33 @@ const data = {
       ],
     },
     {
-      title: "Server",
+      title: "Categorias",
       url: "#",
-      icon: Bot,
+      icon: LayoutList,
       items: [
         {
-          title: "Crear Servidor",
-          url: "/create-server",
+          title: "Crear Categorias",
+          url: "/create-category",
         },
         {
-          title: "Servidores",
-          url: "/servers",
+          title: "Categorias",
+          url: "/categorys",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Subcategorias",
       url: "#",
-      icon: BookOpen,
+      icon: Blocks,
       items: [
         {
-          title: "Introduction",
+          title: "Crear SubCategorias",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "SubCategorias",
           url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Dependencias",
-      url: "#",
-      icon: Settings,
-      items: [
-        {
-          title: "Facultades",
-          url: "/faculty",
-        },
-        {
-          title: "Programas",
-          url: "/program",
-        },
+        }
       ],
     },
     {
@@ -102,12 +78,12 @@ const data = {
           url: "/rol",
         },
         {
-          title: "Estado de servidor",
-          url: "/server-status",
+          title: "Usuarios",
+          url: "/users",
         },
         {
-          title: "Estado de usuarios",
-          url: "/user-status",
+          title: "Economía",
+          url: "/economy",
         },
       ],
     },

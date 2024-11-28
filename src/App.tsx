@@ -5,7 +5,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminLayout, PublicLayout } from "./layouts";
 import { AdminGuard } from "./components/AdminGuard";
-import { Dashboard } from "@/pages";
+import { Dashboard, CreateCategory, UserPage, RolePage } from "@/pages";
+import { CreateUser } from "@/pages/User";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
 import { useCheckBackend } from "@/hooks/useCheckBackend";
@@ -50,6 +51,10 @@ function App() {
               <Route element={<AdminGuard />}>
                 <Route element={<AdminLayout />}>
                   <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/create-category" element={<CreateCategory />} />
+                  <Route path="/create-user" element={<CreateUser />} />
+                  <Route path="/users" element={<UserPage />} />
+                  <Route path="/rol" element={<RolePage />} />
                 </Route>
               </Route>
 
