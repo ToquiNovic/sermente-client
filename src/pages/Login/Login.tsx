@@ -59,54 +59,56 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Iniciar Sesión</CardTitle>
-        <CardDescription>
-          Ingresa tus credenciales para acceder a tu cuenta.
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="id-number">Número de Identificación</Label>
-            <Input
-              id="id-number"
-              type="text"
-              placeholder="Ingresa tu número de identificación"
-              {...register("idNumber")}
-              aria-invalid={!!errors.idNumber}
-              aria-describedby="id-number-error"
-            />
-            {errors.idNumber && (
-              <p id="id-number-error" className="text-sm text-red-500">
-                {errors.idNumber.message}
-              </p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Contraseña</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Ingresa tu contraseña"
-              {...register("password")}
-              aria-invalid={!!errors.password}
-              aria-describedby="password-error"
-            />
-            {errors.password && (
-              <p id="password-error" className="text-sm text-red-500">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Iniciando Sesión..." : "Iniciar Sesión"}
-          </Button>
-        </CardFooter>
-      </form>
-    </Card>
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Iniciar Sesión</CardTitle>
+          <CardDescription>
+            Ingresa tus credenciales para acceder a tu cuenta.
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="id-number">Número de Identificación</Label>
+              <Input
+                id="id-number"
+                type="text"
+                placeholder="Ingresa tu número de identificación"
+                {...register("idNumber")}
+                aria-invalid={!!errors.idNumber}
+                aria-describedby="id-number-error"
+              />
+              {errors.idNumber && (
+                <p id="id-number-error" className="text-sm text-red-500">
+                  {errors.idNumber.message}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Contraseña</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Ingresa tu contraseña"
+                {...register("password")}
+                aria-invalid={!!errors.password}
+                aria-describedby="password-error"
+              />
+              {errors.password && (
+                <p id="password-error" className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Iniciando Sesión..." : "Iniciar Sesión"}
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
   );
 }
