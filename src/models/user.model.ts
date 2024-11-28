@@ -11,3 +11,9 @@ export interface User {
   id: string;
   accessToken: string;
 }
+
+export interface UserTableData {
+  id: string;
+  numerDoc: string;
+  rol: string;
+}
