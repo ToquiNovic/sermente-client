@@ -7,10 +7,27 @@ import { AdminLayout, PublicLayout } from "./layouts";
 import { AdminGuard } from "./components/AdminGuard";
 import { Dashboard } from "@/pages";
 import { store, persistor } from "./redux/store";
+import { Spinner } from "@/components";
+import { useCheckBackend } from "@/hooks/useCheckBackend";
 
 const Login = lazy(() => import("@/pages/Login/Login"));
 
 function App() {
+  const { backendReady, loading } = useCheckBackend();
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  if (!backendReady) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg">
+          El backend no está disponible, por favor intenta más tarde.
+        </p>
+      </div>
+    );
+  }
   return (
     <Provider store={store}>
       <PersistGate loading={<div>Loading persisted state...</div>} persistor={persistor}>
