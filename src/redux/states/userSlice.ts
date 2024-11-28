@@ -1,13 +1,10 @@
+// redux/states/userSlice.ts
 import { User } from "@/models";
 import { createSlice } from "@reduxjs/toolkit";
 
 const userEmptyState: User = {
   id: "",
-  role: "",
-  status: "",
-  username: "",
   accessToken: "",
-  refreshToken: "",
 };
 
 export const userSlice = createSlice({

@@ -1,22 +1,26 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createUser } from '@/redux/states'
+import { toast } from "sonner";
+import { createUser } from "@/redux/states";
 import { formSchema, FormData } from "./Schema";
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "./services";
 
 export default function LoginForm() {
-  const [error, setError] = useState<string | null>(null);
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -31,19 +35,25 @@ export default function LoginForm() {
     },
   });
 
-  const navigate = useNavigate();
-
   const onSubmit = async (values: FormData) => {
-    setError(null);
     try {
-      const user = await loginUser({ numberDoc: values.idNumber, password: values.password });
-      console.log("User data:", user);
-      dispatch(createUser(user))
-      navigate("/dashboard");
+      const user = await loginUser({
+        numberDoc: values.idNumber,
+        password: values.password,
+      });
+
+      if (user && user.accessToken) {
+        dispatch(createUser({ id: user.id, accessToken: user.accessToken }));
+        toast.success("Inicio de sesión exitoso 🎉");
+        navigate("/dashboard");
+      } else {
+        throw new Error("Credenciales inválidas");
+      }
     } catch (err) {
+      console.error("Error:", err);
       if (err instanceof Error) {
         setFieldError("idNumber", { type: "manual", message: err.message });
-        setError(err.message);
+        toast.error(`Error: ${err.message} 🚨`);
       }
     }
   };
@@ -52,7 +62,9 @@ export default function LoginForm() {
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Iniciar Sesión</CardTitle>
-        <CardDescription>Ingresa tus credenciales para acceder a tu cuenta.</CardDescription>
+        <CardDescription>
+          Ingresa tus credenciales para acceder a tu cuenta.
+        </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
@@ -95,13 +107,6 @@ export default function LoginForm() {
           </Button>
         </CardFooter>
       </form>
-      {error && (
-        <Alert variant="destructive" className="mt-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
     </Card>
   );
 }
