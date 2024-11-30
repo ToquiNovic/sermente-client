@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Provider } from "react-redux";
 import { lazy, Suspense } from "react";
 import { PersistGate } from "redux-persist/integration/react";
@@ -16,6 +17,8 @@ const Login = lazy(() => import("@/pages/Login/Login"));
 function App() {
   const { backendReady, loading } = useCheckBackend();
 
+  const queryClient = new QueryClient()
+
   if (loading) {
     return <Spinner />;
   }
@@ -30,7 +33,8 @@ function App() {
     );
   }
   return (
-    <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
       <PersistGate loading={<div>Loading persisted state...</div>} persistor={persistor}>
         <Toaster
           position="bottom-right"
@@ -65,6 +69,8 @@ function App() {
         </Suspense>
       </PersistGate>
     </Provider>
+    </QueryClientProvider>
+    
   );
 }
 

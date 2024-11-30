@@ -17,3 +17,9 @@ export interface UserTableData {
   numerDoc: string;
   rol: string;
 }
+
+export interface CreateUserFormData {
+  numberDoc: string;
+  password: string;
+  roleId: number;
+}
