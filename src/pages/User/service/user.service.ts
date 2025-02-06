@@ -6,7 +6,7 @@ interface GetUsersResponse {
   users: {
     id: string;
     numberDoc: string;
-    roleId: number;
+    role: string;
   }[];
 }
 

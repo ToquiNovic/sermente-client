@@ -83,7 +83,7 @@ const data = {
         },
         {
           title: "Economía",
-          url: "/economy",
+          url: "/#",
         },
       ],
     },

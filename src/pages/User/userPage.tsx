@@ -17,7 +17,7 @@ const UserPage = () => {
         const formattedData = users.map((user) => ({
           id: user.id,
           numerDoc: user.numberDoc,
-          rol: `Rol ${user.roleId}`,
+          rol: user.role,
         }));
 
         setData(formattedData);
@@ -42,9 +42,8 @@ const UserPage = () => {
 
   return (
     <div className="w-full">
-      <h1>User Page</h1>
+      <h1>Lista de Usuarios</h1>
       <div className="flex items-center py-4">
-        Nuevo Usuario
         <CreateUser onUserCreated={handleUserCreated} />
       </div>
 
