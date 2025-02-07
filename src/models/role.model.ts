@@ -11,3 +11,16 @@ export interface RolePayload {
   state: boolean;
   description: string;
 }
+
+export interface CreateRoleFromData {
+  name: string;
+  state: boolean;
+  description: string;
+}
+
+export interface RoleTableData {
+  id: string;
+  name: string;
+  state: boolean;
+  description?: string;
+}
