@@ -12,14 +12,14 @@ export interface User {
   accessToken: string;
 }
 
-export interface UserTableData {
-  id: string;
-  numerDoc: string;
-  rol: string;
-}
-
 export interface CreateUserFormData {
   numberDoc: string;
   password: string;
-  roleId: number;
+  roleIds: string[];
+}
+
+export interface UserTableData {
+  id: string;
+  numberDoc: string;
+  roles: { id: string; name: string }[];
 }

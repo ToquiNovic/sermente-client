@@ -1,18 +1,25 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
+import { UserTableData } from "@/models";
+import RoleCell from "./RoleCell";
 
-export type UserTableData = {
-  id: string;
-  numerDoc: string;
-  rol: string;
-};
-
-export const columns: ColumnDef<UserTableData>[] = [
+export const getColumns = (
+  setData: React.Dispatch<React.SetStateAction<UserTableData[]>>,
+  openAssignRoleModal: (userId: string, currentRoles: { id: string; name: string }[]) => void
+): ColumnDef<UserTableData>[] => [
   {
-    accessorKey: "numerDoc",
-    header: "Numero de Documento",
+    accessorKey: "numberDoc",
+    header: "Número de Documento",
   },
   {
-    accessorKey: "rol",
-    header: "Rol",
+    accessorKey: "roles",
+    header: "Roles",
+    cell: ({ row }: { row: Row<UserTableData> }) => (
+      <RoleCell
+        roles={row.getValue("roles")}
+        userId={row.original.id}
+        setData={setData}
+        openAssignRoleModal={openAssignRoleModal}
+      />
+    ),
   },
 ];

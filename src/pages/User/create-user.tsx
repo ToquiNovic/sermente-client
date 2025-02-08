@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks';
+// @/pages/User/create-user.tsx
+import { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks";
 import {
   Dialog,
   DialogContent,
@@ -13,64 +14,95 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from '@/components/ui/dialog';
-import { Plus } from 'lucide-react';
-import { createUser } from './service';
-import { CreateUserFormData, UserTableData } from '@/models';
+} from "@/components/ui/dialog";
+import { Plus, Check, ChevronDown } from "lucide-react";
+import { createUser, getUsers } from "./service";
+import { getRoles } from "@/pages/Rol/service";
+import { CreateUserFormData, UserTableData, Role } from "@/models";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-export const CreateUser = ({ onUserCreated }: { onUserCreated: (user: UserTableData) => void }) => {
-  // Utiliza CreateUserFormData para tipar el estado inicial
+export const CreateUser = ({
+  onUserCreated,
+  setData,
+}: {
+  onUserCreated: (user: UserTableData) => void;
+  setData: React.Dispatch<React.SetStateAction<UserTableData[]>>;
+}) => {
   const [formData, setFormData] = useState<CreateUserFormData>({
-    numberDoc: '',
-    password: '',
-    roleId: 3, 
+    numberDoc: "",
+    password: "",
+    roleIds: ["3"],
   });
+
+  const [open, setOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { toast } = useToast();
 
+  // Obtener roles desde la API
+  const { data: roles = [], isLoading } = useQuery<Role[]>({
+    queryKey: ["roles"],
+    queryFn: getRoles,
+  });
+
   const mutation = useMutation({
     mutationFn: () => createUser(formData),
-    onSuccess: (newUser: UserTableData) => {
-      onUserCreated({
-        id: newUser.id,
-        numerDoc: newUser.numerDoc,
-        rol: newUser.rol,
-      });
-
-      setFormData({ numberDoc: '', password: '', roleId: 3 });
-
+    onSuccess: async (newUser: UserTableData) => {
+      onUserCreated(newUser);
+    
+      const updatedUsers = await getUsers();
+      setData(updatedUsers);
+    
+      setIsDialogOpen(false);
+      setFormData({ numberDoc: "", password: "", roleIds: ["3"] });
+    
       toast({
-        title: 'Usuario creado',
-        description: 'El usuario ha sido creado exitosamente',
-        variant: 'default',
+        title: "Usuario creado",
+        description: "El usuario ha sido creado exitosamente",
+        variant: "default",
       });
     },
+    
+  
     onError: () => {
       toast({
-        title: 'Error al crear el usuario',
-        description: 'No se ha podido crear el usuario',
-        variant: 'destructive',
+        title: "Error al crear el usuario",
+        description: "No se ha podido crear el usuario",
+        variant: "destructive",
       });
     },
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'roleId' ? parseInt(value) || 3 : value,
+      [name]: value,
     }));
   };
 
-  const handleCreateUser = () => {
-    const { numberDoc, password, roleId } = formData;
+  const handleSelectRole = (roleId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      roleIds: [roleId],
+    }));
 
-    if (!numberDoc.trim() || !password.trim() || roleId <= 0) {
+    setTimeout(() => setOpen(false), 100);
+  };
+
+  const handleCreateUser = () => {
+    const { numberDoc, password, roleIds } = formData;
+
+    if (!numberDoc.trim() || !password.trim() || roleIds.length === 0) {
       toast({
-        title: 'Campos incompletos',
-        description: 'Por favor, completa todos los campos correctamente.',
-        variant: 'destructive',
+        title: "Campos incompletos",
+        description: "Por favor, completa todos los campos correctamente.",
+        variant: "destructive",
       });
       return;
     }
@@ -79,7 +111,7 @@ export const CreateUser = ({ onUserCreated }: { onUserCreated: (user: UserTableD
   };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="ml-auto">
           <Plus className="mr-2 h-4 w-4" /> Nuevo
@@ -121,18 +153,43 @@ export const CreateUser = ({ onUserCreated }: { onUserCreated: (user: UserTableD
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="roleId" className="text-right">
-              Rol ID
+            <Label htmlFor="roleIds" className="text-right">
+              Rol
             </Label>
-            <Input
-              id="roleId"
-              name="roleId"
-              type="number"
-              value={formData.roleId || ''}
-              placeholder="1"
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
+            <div className="col-span-3">
+              <DropdownMenu open={open} onOpenChange={setOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full flex justify-between"
+                  >
+                    {roles.find((r) => String(r.id) === formData.roleIds[0])
+                      ?.name || "Seleccionar rol"}
+                    <ChevronDown className="h-4 w-4 ml-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full">
+                  {isLoading ? (
+                    <DropdownMenuItem disabled>
+                      Cargando roles...
+                    </DropdownMenuItem>
+                  ) : (
+                    roles.map((role) => (
+                      <DropdownMenuItem
+                        key={role.id}
+                        onSelect={() => handleSelectRole(String(role.id))}
+                        className="flex justify-between cursor-pointer"
+                      >
+                        {role.name}
+                        {formData.roleIds.includes(role.id) && (
+                          <Check className="h-4 w-4 text-green-500" />
+                        )}
+                      </DropdownMenuItem>
+                    ))
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
         <DialogFooter>
