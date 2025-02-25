@@ -1,4 +1,3 @@
-// @/pages/User/create-user.tsx
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -18,7 +17,7 @@ import {
 import { Plus, Check, ChevronDown } from "lucide-react";
 import { createUser, getUsers } from "./service";
 import { getRoles } from "@/pages/Rol/service";
-import { CreateUserFormData, UserTableData, Role } from "@/models";
+import { CreateUserFormData, UserTableData, Role, UserState } from "@/models";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,7 +43,6 @@ export const CreateUser = ({
 
   const { toast } = useToast();
 
-  // Obtener roles desde la API
   const { data: roles = [], isLoading } = useQuery<Role[]>({
     queryKey: ["roles"],
     queryFn: getRoles,
@@ -55,9 +53,11 @@ export const CreateUser = ({
     onSuccess: async (newUser: UserTableData) => {
       onUserCreated(newUser);
     
-      const updatedUsers = await getUsers();
+      const updatedUsers = (await getUsers()).map(user => ({
+        ...user,
+        state: user.state as UserState,
+      }));
       setData(updatedUsers);
-    
       setIsDialogOpen(false);
       setFormData({ numberDoc: "", password: "", roleIds: ["3"] });
     
@@ -68,7 +68,6 @@ export const CreateUser = ({
       });
     },
     
-  
     onError: () => {
       toast({
         title: "Error al crear el usuario",
@@ -90,15 +89,15 @@ export const CreateUser = ({
     setFormData((prev) => ({
       ...prev,
       roleIds: [roleId],
+      password: roleId === "ID_ENCUESTADO" ? "" : prev.password,
     }));
-
     setTimeout(() => setOpen(false), 100);
   };
 
-  const handleCreateUser = () => {
-    const { numberDoc, password, roleIds } = formData;
+  const selectedRole = roles.find((r) => String(r.id) === formData.roleIds[0]);
 
-    if (!numberDoc.trim() || !password.trim() || roleIds.length === 0) {
+  const handleCreateUser = () => {
+    if (!formData.numberDoc.trim() || (selectedRole?.name !== "Encuestado" && !formData.password.trim())) {
       toast({
         title: "Campos incompletos",
         description: "Por favor, completa todos los campos correctamente.",
@@ -106,7 +105,6 @@ export const CreateUser = ({
       });
       return;
     }
-
     mutation.mutate();
   };
 
@@ -117,7 +115,6 @@ export const CreateUser = ({
           <Plus className="mr-2 h-4 w-4" /> Nuevo
         </Button>
       </DialogTrigger>
-
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Nuevo Usuario</DialogTitle>
@@ -125,65 +122,33 @@ export const CreateUser = ({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="numberDoc" className="text-right">
-              Número de Documento
-            </Label>
-            <Input
-              id="numberDoc"
-              name="numberDoc"
-              type="text"
-              value={formData.numberDoc}
-              placeholder="12345678"
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
+            <Label htmlFor="numberDoc" className="text-right">Número de Documento</Label>
+            <Input id="numberDoc" name="numberDoc" type="text" value={formData.numberDoc} placeholder="12345678" onChange={handleInputChange} className="col-span-3" />
           </div>
+          {selectedRole?.name !== "Encuestado" && (
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="password" className="text-right">Contraseña</Label>
+              <Input id="password" name="password" type="password" value={formData.password} placeholder="********" onChange={handleInputChange} className="col-span-3" />
+            </div>
+          )}
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="password" className="text-right">
-              Contraseña
-            </Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              placeholder="********"
-              onChange={handleInputChange}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="roleIds" className="text-right">
-              Rol
-            </Label>
+            <Label htmlFor="roleIds" className="text-right">Rol</Label>
             <div className="col-span-3">
               <DropdownMenu open={open} onOpenChange={setOpen}>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full flex justify-between"
-                  >
-                    {roles.find((r) => String(r.id) === formData.roleIds[0])
-                      ?.name || "Seleccionar rol"}
+                  <Button variant="outline" className="w-full flex justify-between">
+                    {selectedRole?.name || "Seleccionar rol"}
                     <ChevronDown className="h-4 w-4 ml-2" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-full">
                   {isLoading ? (
-                    <DropdownMenuItem disabled>
-                      Cargando roles...
-                    </DropdownMenuItem>
+                    <DropdownMenuItem disabled>Cargando roles...</DropdownMenuItem>
                   ) : (
                     roles.map((role) => (
-                      <DropdownMenuItem
-                        key={role.id}
-                        onSelect={() => handleSelectRole(String(role.id))}
-                        className="flex justify-between cursor-pointer"
-                      >
+                      <DropdownMenuItem key={role.id} onSelect={() => handleSelectRole(String(role.id))} className="flex justify-between cursor-pointer">
                         {role.name}
-                        {formData.roleIds.includes(role.id) && (
-                          <Check className="h-4 w-4 text-green-500" />
-                        )}
+                        {formData.roleIds.includes(role.id) && <Check className="h-4 w-4 text-green-500" />}
                       </DropdownMenuItem>
                     ))
                   )}
@@ -193,13 +158,9 @@ export const CreateUser = ({
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleCreateUser}>
-            Crear
-          </Button>
+          <Button type="submit" onClick={handleCreateUser}>Crear</Button>
           <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Cerrar
-            </Button>
+            <Button type="button" variant="secondary">Cerrar</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

@@ -4,6 +4,7 @@ import { CreateUserFormData } from "@/models";
 // Interfaz para la respuesta de obtener usuarios
 interface GetUsersResponse {
   users: {
+    state: string;
     id: string;
     numberDoc: string;
     roles: { id: string; name: string }[];
@@ -30,10 +31,18 @@ export const getUsers = async (): Promise<GetUsersResponse["users"]> => {
 export const createUser = async (userData: CreateUserFormData) => {
   const { numberDoc, password, roleIds } = userData;
 
-  if (!numberDoc || !password || !roleIds || !Array.isArray(roleIds)) {
+  if (!numberDoc || !roleIds || !Array.isArray(roleIds)) {
     console.error("Error: Faltan campos requeridos o roleIds no es un array.", { numberDoc, password, roleIds });
-    throw new Error("The fields 'numberDoc', 'password', and 'roleIds' (as an array) are required.");
+    throw new Error("El número de documento y el rol son obligatorios.");
   }
+
+  const isEncuestado = roleIds.includes("3");
+
+  if (!isEncuestado && !password) {
+    console.error("Error: La contraseña es obligatoria para este rol.");
+    throw new Error("La contraseña es obligatoria excepto para encuestados.");
+  }
+
   try {
     const response = await axios.post("/api/user", { numberDoc, password, roleIds });
     return response.data;
@@ -70,6 +79,45 @@ export const removeRoleFromUser = async (userId: string, roleId: string) => {
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message || "Error al eliminar el rol.");
+    }
+    throw new Error("Error de conexión con el servidor.");
+  }
+};
+
+// Servicio para eliminar un usuario
+export const deleteUser = async (userId: string) => {
+  try {
+    const response = await axios.delete(`/api/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message || "Error al eliminar el usuario.");
+    }
+    throw new Error("Error de conexión con el servidor.");
+  }
+};
+
+// servicio para obtener el detalle de un usuario
+export const getUserDetails = async (userId: string) => {
+  try {
+    const response = await axios.get(`/api/user/${userId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message || "Error al obtener el detalle del usuario.");
+    }
+    throw new Error("Error de conexión con el servidor.");
+  }
+};
+
+// servicio para actualizar el estado de un usuario
+export const updateUserState = async (userId: string, state: string) => {
+  try {
+    const response = await axios.put(`/api/user/${userId}/state`, { state });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message || "Error al actualizar el estado del usuario.");
     }
     throw new Error("Error de conexión con el servidor.");
   }

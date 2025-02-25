@@ -1,3 +1,5 @@
+// pages/User/DataTable/data-table.tsx
+import { useMemo } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -20,9 +22,12 @@ interface DataTableProps<TData> {
 }
 
 const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
+  const memoizedData = useMemo(() => data, [data]);
+  const memoizedColumns = useMemo(() => columns, [columns]);
+
   const table = useReactTable({
-    data,
-    columns,
+    data: memoizedData,
+    columns: memoizedColumns,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -43,7 +48,7 @@ const DataTable = <TData,>({ columns, data }: DataTableProps<TData>) => {
         ))}
       </TableHeader>
 
-      <TableBody>        
+      <TableBody>
         {table.getRowModel().rows.map((row) => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map((cell) => (
