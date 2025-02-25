@@ -1,4 +1,9 @@
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { lazy, Suspense } from "react";
@@ -7,7 +12,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { AdminLayout, PublicLayout } from "./layouts";
 import { AdminGuard } from "./components/AdminGuard";
 import { Dashboard, CreateCategory, UserPage, RolePage } from "@/pages";
-import { CreateUser } from "@/pages/User";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
 import { useCheckBackend } from "@/hooks/useCheckBackend";
@@ -33,14 +37,10 @@ function AppWrapper() {
     );
   }
 
-  return (
-    <App />
-  );
+  return <App />;
 }
 
 function App() {
-  const navigate = useNavigate();
-
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
@@ -67,17 +67,7 @@ function App() {
                 <Route element={<AdminLayout />}>
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/create-category" element={<CreateCategory />} />
-                  <Route
-                    path="/create-user"
-                    element={
-                      <CreateUser
-                        onUserCreated={(user) => {
-                          console.log("Usuario creado:", user);
-                          navigate("/users"); 
-                        }}
-                      />
-                    }
-                  />
+                  <Route path="/create-user" element={<Navigate to="/users" />} />
                   <Route path="/users" element={<UserPage />} />
                   <Route path="/rol" element={<RolePage />} />
                 </Route>
