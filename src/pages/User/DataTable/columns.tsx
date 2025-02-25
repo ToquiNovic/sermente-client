@@ -10,45 +10,48 @@ export const getColumns = (
   handleUserDetails: (user: UserTableData) => void,
   handleUserStateChange: (userId: string, newState: UserState) => void,
   setData: React.Dispatch<React.SetStateAction<UserTableData[]>>,
-  openAssignRoleModal: (userId: string, currentRoles: { id: string; name: string }[]) => void // Agregar esta línea
-): ColumnDef<UserTableData>[] => [
-
-  {
-    accessorKey: "numberDoc",
-    header: "Número de Documento",
-  },
-  {
-    accessorKey: "roles",
-    header: "Roles",
-    cell: ({ row }: { row: Row<UserTableData> }) => (
-      <RoleCell
-        roles={row.getValue("roles")}
-        userId={row.original.id}
-        setData={setData}
-        openAssignRoleModal={openAssignRoleModal}
-      />
-    ),
-  },
-  {
-    accessorKey: "state",
-    header: "Estado",
-    cell: ({ row }) => {
-      const state = (Object.values(UserState) as string[]).includes(row.original.state)
-        ? (row.original.state as UserState)
-        : UserState.INACTIVE;
+  openAssignRoleModal: (userId: string, currentRoles: { id: string; name: string }[]) => void
+): ColumnDef<UserTableData>[] => {
   
-      return <StatusIndicator key={`${row.original.id}-${state}`} state={state} />;
+  return [
+    {
+      accessorKey: "numberDoc",
+      header: "Número de Documento",
     },
-  },  
-  {
-    id: "actions",
-    header: "Acciones",
-    cell: ({ row }) => (
-      <ActionCell
-        user={row.original}
-        onUserDeleted={handleUserDeleted}
-        onUserStateChange={handleUserStateChange}
-      />
-    ),
-  },
-];
+    {
+      accessorKey: "roles",
+      header: "Roles",
+      cell: ({ row }: { row: Row<UserTableData> }) => (
+        <RoleCell
+          roles={row.getValue("roles")}
+          userId={row.original.id}
+          setData={setData}
+          openAssignRoleModal={openAssignRoleModal}
+        />
+      ),
+    },
+    {
+      accessorKey: "state",
+      header: "Estado",
+      cell: ({ row }) => {
+        const state = (Object.values(UserState) as string[]).includes(row.original.state)
+          ? (row.original.state as UserState)
+          : UserState.INACTIVE;
+
+        return <StatusIndicator key={`${row.original.id}-${state}`} state={state} />;
+      },
+    },
+    {
+      id: "actions",
+      header: "Acciones",
+      cell: ({ row }) => (
+        <ActionCell
+          user={row.original}
+          onUserDeleted={handleUserDeleted}
+          onUserStateChange={handleUserStateChange}
+          onUserDetails={handleUserDetails}
+        />
+      ),
+    },
+  ];
+};

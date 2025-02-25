@@ -24,10 +24,12 @@ const ActionsCell = ({
   user,
   onUserDeleted,
   onUserStateChange,
+  onUserDetails,
 }: {
   user: UserTableData;
   onUserDeleted: (id: string) => void;
   onUserStateChange: (userId: string, newState: UserState) => void;
+  onUserDetails: (user: UserTableData) => void;
 }) => {
   const { toast } = useToast();
 
@@ -50,7 +52,8 @@ const ActionsCell = ({
             } catch (error) {
               toast({
                 title: "Error al eliminar",
-                description: error instanceof Error ? error.message : "Error desconocido.",
+                description:
+                  error instanceof Error ? error.message : "Error desconocido.",
                 variant: "destructive",
               });
             }
@@ -69,7 +72,7 @@ const ActionsCell = ({
     } catch (error) {
       console.error("❌ Error al actualizar el estado:", error);
     }
-  };   
+  };
 
   return (
     <DropdownMenu>
@@ -82,11 +85,18 @@ const ActionsCell = ({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Acciones</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => onUserDetails(user)}>
+          Detalle
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
         <DropdownMenuLabel>Cambiar Estado</DropdownMenuLabel>
         {STATES.map(({ key, label }) => (
           <DropdownMenuItem key={key} onClick={() => handleStateChange(key)}>
             {label}
-            {user.state === key && <Check className="ml-auto h-4 w-4 text-green-500" />}
+            {user.state === key && (
+              <Check className="ml-auto h-4 w-4 text-green-500" />
+            )}
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
