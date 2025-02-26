@@ -20,3 +20,22 @@ export interface Survey {
   typeSurvey: TypeSurvey;
   creator: Creator;
 }
+
+export interface SurveyFormData {
+  title: string;
+  description: string;
+  deadline: string;
+  typeSurveyId: string;
+}
+
+export interface TypeSurvey {
+  id: number;
+  name: string;
+  description: string;
+  state: boolean;
+  isPublic: boolean;
+}
+
+export interface TypeSurveyResponse {
+  typeSurveys: TypeSurvey[];
+}
