@@ -36,7 +36,7 @@ const surveySchema = z.object({
 // Tipo en TypeScript basado en el esquema de Zod
 type SurveyRequest = SurveyFormData & { createdBy: string };
 
-const CreateSurveyPage = () => {
+export const CreateSurveyPage = () => {
   const navigate = useNavigate();
   const [typeSurveys, setTypeSurveys] = useState<TypeSurvey[]>([]);
   const [loading, setLoading] = useState(false);
@@ -178,5 +178,3 @@ const CreateSurveyPage = () => {
     </div>
   );
 };
-
-export default CreateSurveyPage;

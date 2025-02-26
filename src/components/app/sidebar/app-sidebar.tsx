@@ -41,11 +41,11 @@ const data = {
       items: [
         {
           title: "Crear Categorias",
-          url: "/create-category",
+          url: "/commingsoon",
         },
         {
           title: "Categorias",
-          url: "/categorys",
+          url: "/commingsoon",
         },
       ],
     },
@@ -56,11 +56,11 @@ const data = {
       items: [
         {
           title: "Crear SubCategorias",
-          url: "#",
+          url: "/commingsoon",
         },
         {
           title: "SubCategorias",
-          url: "#",
+          url: "/commingsoon",
         }
       ],
     },
@@ -79,47 +79,47 @@ const data = {
         },
         {
           title: "Tipo Contrato",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Tipo Sangre",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Tipo Encuesta",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Tipo Salario",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Estrato",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Nivel de Estudio",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Generos",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Dependencias",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "housing_types",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "marital_statuses",
-          url: "/#",
+          url: "/commingsoon",
         },
         {
           title: "Economía",
-          url: "/#",
+          url: "/commingsoon",
         },
       ],
     },
