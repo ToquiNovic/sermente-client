@@ -1,3 +1,4 @@
+// models/survey.model.ts
 export interface TypeSurvey {
   id: number;
   name: string;
@@ -26,6 +27,11 @@ export interface SurveyFormData {
   description: string;
   deadline: string;
   typeSurveyId: string;
+}
+
+export interface UpdateSurveyData {
+  id: string;
+  deadline: string;
 }
 
 export interface TypeSurvey {

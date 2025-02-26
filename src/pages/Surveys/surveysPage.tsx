@@ -1,10 +1,11 @@
+// pages/surveys/SurveysPage.tsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Pencil, Settings, Trash2, BarChart3 } from "lucide-react";
-import { getSurveys } from "./services";
+import { Plus, CalendarCog, Settings, Trash2, BarChart3 } from "lucide-react";
+import { getSurveys, updateSurvey } from "./services";
 import { Survey } from "@/models";
 import { toast } from "sonner";
-import { format, differenceInDays, differenceInHours } from "date-fns";
+import { format, differenceInDays, differenceInHours, differenceInMinutes } from "date-fns";
 import { es } from "date-fns/locale";
 import {
   Card,
@@ -29,11 +30,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ChangeDateDialog from "./ChangeDateDialog";
 
 const SurveysPage = () => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isChangeDateDialogOpen, setIsChangeDateDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,6 +65,33 @@ const SurveysPage = () => {
     setIsDeleteDialogOpen(false);
   };
 
+  const handleChangeDate = (survey: Survey) => {
+    setSelectedSurvey(survey);
+    setIsChangeDateDialogOpen(true);
+  };
+
+  const handleUpdateDate = async (newDate: string) => {
+    if (selectedSurvey) {
+      try {
+        const updatedSurvey = await updateSurvey({
+          id: selectedSurvey.id,
+          deadline: newDate,
+        });
+
+        setSurveys((prevSurveys) =>
+          prevSurveys.map((s) =>
+            s.id === updatedSurvey.id ? updatedSurvey : s
+          )
+        );
+        toast.success(`Fecha actualizada para "${selectedSurvey.title}".`);
+      } catch (error) {
+        toast.error("Hubo un error al actualizar la fecha.");
+        console.error("Error updating survey:", error);
+      }
+    }
+    setIsChangeDateDialogOpen(false);
+  };
+
   return (
     <TooltipProvider>
       <div className="w-full p-6">
@@ -78,13 +108,16 @@ const SurveysPage = () => {
             const deadlineDate = new Date(survey.deadline);
             const daysLeft = differenceInDays(deadlineDate, new Date());
             const hoursLeft = differenceInHours(deadlineDate, new Date());
-
+            const minutesLeft = differenceInMinutes(deadlineDate, new Date());
             const formattedDate = format(deadlineDate, "PPPP p", {
               locale: es,
             });
 
             return (
-              <Card key={survey.id} className="shadow-lg rounded-lg relative">
+              <Card
+                key={survey.id}
+                className="shadow-lg rounded-lg relative flex flex-col justify-between h-full"
+              >
                 <CardHeader>
                   <CardTitle>{survey.title}</CardTitle>
                   <CardDescription>{survey.description}</CardDescription>
@@ -102,32 +135,33 @@ const SurveysPage = () => {
                     <TooltipContent>Eliminar</TooltipContent>
                   </Tooltip>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex flex-col justify-end flex-grow">
                   <p className="text-xs text-gray-500">
                     ⏳{" "}
                     {daysLeft > 0
                       ? `Faltan ${daysLeft} día(s)`
                       : hoursLeft > 0
                       ? `Faltan ${hoursLeft} hora(s)`
+                      : minutesLeft > 0
+                      ? `Faltan ${minutesLeft} minuto(s)`
                       : "Tiempo agotado"}
                   </p>
                   <p className="text-xs text-gray-400">📅 {formattedDate}</p>
                 </CardContent>
 
-                <CardFooter className="flex justify-between">
+                <CardFooter className="flex justify-between mt-auto">
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/surveys/edit/${survey.id}`)}
+                        onClick={() => handleChangeDate(survey)}
                       >
-                        <Pencil className="h-4 w-4" />
+                        <CalendarCog className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Editar</TooltipContent>
+                    <TooltipContent>Cambiar Fecha</TooltipContent>
                   </Tooltip>
-
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -140,7 +174,6 @@ const SurveysPage = () => {
                     </TooltipTrigger>
                     <TooltipContent>Gestionar</TooltipContent>
                   </Tooltip>
-
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -182,6 +215,14 @@ const SurveysPage = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* ✅ Diálogo para cambiar la fecha */}
+        <ChangeDateDialog
+          open={isChangeDateDialogOpen}
+          surveyId={selectedSurvey?.id ?? ""}
+          onClose={() => setIsChangeDateDialogOpen(false)}
+          onDateUpdated={handleUpdateDate}
+        />
       </div>
     </TooltipProvider>
   );

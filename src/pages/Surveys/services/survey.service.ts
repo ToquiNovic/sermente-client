@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Survey, SurveyFormData, TypeSurvey, TypeSurveyResponse } from "@/models";
+import { Survey, SurveyFormData, TypeSurvey, TypeSurveyResponse, UpdateSurveyData } from "@/models";
 
 export const getSurveys = async (): Promise<Survey[]> => {
   try {
@@ -37,6 +37,16 @@ export const createSurvey = async (data: SurveyFormData): Promise<Survey> => {
     return response.data.survey;
   } catch (error) {
     console.error("Error creating survey:", error);
+    throw error;
+  }
+};
+
+export const updateSurvey = async (data: UpdateSurveyData): Promise<Survey> => {
+  try {
+    const response = await axios.put(`/api/survey/${data.id}`, data);
+    return response.data.survey;
+  } catch (error) {
+    console.error("Error updating survey:", error);
     throw error;
   }
 };

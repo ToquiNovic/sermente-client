@@ -1,3 +1,4 @@
+// pages/survey/create-survey.tsx
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,6 +47,7 @@ const CreateSurveyPage = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<SurveyFormData>({
     resolver: zodResolver(surveySchema),
   });
@@ -67,11 +69,11 @@ const CreateSurveyPage = () => {
     if (!userId) {
       toast.error("No se pudo identificar al usuario.");
       return;
-    }    
-  
+    }
+
     setLoading(true);
     try {
-      const surveyData: SurveyRequest = { ...data, createdBy: userId };      
+      const surveyData: SurveyRequest = { ...data, createdBy: userId };
       await createSurvey(surveyData);
       toast.success(`Encuesta "${data.title}" creada con éxito.`);
       reset();
@@ -84,7 +86,7 @@ const CreateSurveyPage = () => {
   };
 
   return (
-    <div className="w-full flex justify-center mt-10">
+    <div>
       <Card className="w-full max-w-lg shadow-lg p-4">
         <CardHeader>
           <CardTitle>Crear Nueva Encuesta</CardTitle>
@@ -117,19 +119,23 @@ const CreateSurveyPage = () => {
               )}
             </div>
 
-            {/* Campo de fecha y hora */}
-            <div>
-              <Label htmlFor="deadline">Fecha y Hora Límite</Label>
-              <Input
-                id="deadline"
-                type="datetime-local"
-                {...register("deadline")}
-              />
-              {errors.deadline?.message && (
-                <p className="text-red-500 text-sm">
-                  {errors.deadline.message}
-                </p>
-              )}
+            {/* Campo de fecha y botón para cambiarla */}
+            <div className="flex items-center gap-4">
+              <div className="flex-1">
+                <Label htmlFor="deadline">Fecha y Hora Límite</Label>
+                <Input
+                  id="deadline"
+                  type="datetime-local"
+                  {...register("deadline")}
+                  value={watch("deadline") || ""}
+                  readOnly
+                />
+                {errors.deadline?.message && (
+                  <p className="text-red-500 text-sm">
+                    {errors.deadline.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Select para el tipo de encuesta */}
