@@ -15,6 +15,8 @@ import { Dashboard, CreateCategory, UserPage, RolePage } from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
 import { useCheckBackend } from "@/hooks/useCheckBackend";
+import SurveysPage from "./pages/Surveys/surveysPage";
+import CreateSurvey from "./pages/Surveys/create-survey";
 
 const Login = lazy(() => import("@/pages/Login/Login"));
 
@@ -70,6 +72,8 @@ function App() {
                   <Route path="/create-user" element={<Navigate to="/users" />} />
                   <Route path="/users" element={<UserPage />} />
                   <Route path="/rol" element={<RolePage />} />
+                  <Route path="/surveys" element={<SurveysPage />} />
+                  <Route path="/surveys/new" element={<CreateSurvey />} />
                 </Route>
               </Route>
 

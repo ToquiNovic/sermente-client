@@ -59,7 +59,7 @@ const UserPage = () => {
 
   return (
     <div className="w-full">
-      <h1>Lista de Usuarios</h1>
+      <h1 className="text-2xl font-bold">Lista de Usuarios</h1>
       <div className="flex items-center py-4">
         <CreateUser
           onUserCreated={(newUser) => {

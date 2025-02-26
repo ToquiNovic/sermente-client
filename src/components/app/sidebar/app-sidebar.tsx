@@ -25,16 +25,12 @@ const data = {
       isActive: false,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Crear Encuesta",
+          url: "/surveys/new",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Encuestas",
+          url: "/surveys",
         },
       ],
     },
@@ -80,6 +76,46 @@ const data = {
         {
           title: "Usuarios",
           url: "/users",
+        },
+        {
+          title: "Tipo Contrato",
+          url: "/#",
+        },
+        {
+          title: "Tipo Sangre",
+          url: "/#",
+        },
+        {
+          title: "Tipo Encuesta",
+          url: "/#",
+        },
+        {
+          title: "Tipo Salario",
+          url: "/#",
+        },
+        {
+          title: "Estrato",
+          url: "/#",
+        },
+        {
+          title: "Nivel de Estudio",
+          url: "/#",
+        },
+        {
+          title: "Generos",
+          url: "/#",
+        },
+        {
+          title: "Dependencias",
+          url: "/#",
+        },
+        {
+          title: "housing_types",
+          url: "/#",
+        },
+        {
+          title: "marital_statuses",
+          url: "/#",
         },
         {
           title: "Economía",
