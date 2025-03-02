@@ -1,9 +1,4 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { lazy, Suspense } from "react";
@@ -11,7 +6,16 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminLayout, PublicLayout } from "./layouts";
 import { AdminGuard } from "./components/AdminGuard";
-import { Dashboard, CreateCategory, UserPage, RolePage, SurveysPage, CreateSurveyPage, ComingSoon } from "@/pages";
+import {
+  Dashboard,
+  CreateCategory,
+  UserPage,
+  RolePage,
+  SurveysPage,
+  CreateSurveyPage,
+  ComingSoon,
+  SurveyManagerPage,
+} from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
 import { useCheckBackend } from "@/hooks/useCheckBackend";
@@ -67,12 +71,19 @@ function App() {
                 <Route element={<AdminLayout />}>
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/create-category" element={<CreateCategory />} />
-                  <Route path="/create-user" element={<Navigate to="/users" />} />
+                  <Route
+                    path="/create-user"
+                    element={<Navigate to="/users" />}
+                  />
                   <Route path="/users" element={<UserPage />} />
                   <Route path="/rol" element={<RolePage />} />
                   <Route path="/surveys" element={<SurveysPage />} />
                   <Route path="/surveys/new" element={<CreateSurveyPage />} />
                   <Route path="/commingsoon" element={<ComingSoon />} />
+                  <Route
+                    path="/surveys/manage/:id"
+                    element={<SurveyManagerPage />}
+                  />
                 </Route>
               </Route>
 
