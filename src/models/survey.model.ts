@@ -45,3 +45,18 @@ export interface TypeSurvey {
 export interface TypeSurveyResponse {
   typeSurveys: TypeSurvey[];
 }
+
+export interface SurveyAssignment {
+  survey: string;
+  names: string;
+  surNames: string;
+  email?: string;
+  phone?: string;
+  dependency: string;
+  positionCompany: string;
+  numberDoc: string;
+  contractType: string; 
+  hierarchyOfEmployment: string;
+}
+
+export type SurveyAssignmentList = SurveyAssignment[];

@@ -25,17 +25,15 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState<"respondent" | "specialist">("respondent");
 
-  // Determinar si es especialista (requiere contraseña)
   const isSpecialist = selectedTab === "specialist";
 
-  // Usamos el esquema dinámico según el tipo de usuario
   const {
     register,
     handleSubmit,
     setError: setFieldError,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
-    resolver: zodResolver(formSchema(isSpecialist)), // Se usa el esquema correspondiente
+    resolver: zodResolver(formSchema(isSpecialist)),
     defaultValues: {
       idNumber: "",
       password: "",
@@ -46,9 +44,9 @@ export default function LoginForm() {
     try {
       const user = await loginUser({
         numberDoc: values.idNumber,
-        password: isSpecialist ? values.password : undefined, // Solo enviamos la contraseña si es especialista
+        password: isSpecialist ? values.password : undefined, 
       });
-
+      
       if (user && user.accessToken) {
         dispatch(createUser({ id: user.id, accessToken: user.accessToken }));
         toast.success("Inicio de sesión exitoso 🎉");

@@ -15,7 +15,8 @@ export interface User {
 export interface CreateUserFormData {
   numberDoc: string;
   password: string;
-  roleIds: string[];
+  roleNames?: string[]; 
+  roleIds: string[];  
 }
 
 export enum UserState {

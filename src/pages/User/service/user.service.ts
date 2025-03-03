@@ -29,14 +29,14 @@ export const getUsers = async (): Promise<GetUsersResponse["users"]> => {
 
 // Servicio para crear un usuario
 export const createUser = async (userData: CreateUserFormData) => {
-  const { numberDoc, password, roleIds } = userData;
+  const { numberDoc, password, roleNames } = userData;
 
-  if (!numberDoc || !roleIds || !Array.isArray(roleIds)) {
-    console.error("Error: Faltan campos requeridos o roleIds no es un array.", { numberDoc, password, roleIds });
+  if (!numberDoc || !roleNames || !Array.isArray(roleNames)) {
+    console.error("Error: Faltan campos requeridos o roleNames no es un array.", { numberDoc, password, roleNames });
     throw new Error("El número de documento y el rol son obligatorios.");
   }
 
-  const isEncuestado = roleIds.includes("3");
+  const isEncuestado = roleNames.includes("Encuestado"); // Validación por nombre
 
   if (!isEncuestado && !password) {
     console.error("Error: La contraseña es obligatoria para este rol.");
@@ -44,7 +44,7 @@ export const createUser = async (userData: CreateUserFormData) => {
   }
 
   try {
-    const response = await axios.post("/api/user", { numberDoc, password, roleIds });
+    const response = await axios.post("/api/user", { numberDoc, password, roleNames });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
