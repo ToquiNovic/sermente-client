@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Survey, SurveyFormData, TypeSurvey, TypeSurveyResponse, UpdateSurveyData } from "@/models";
+import { Survey, SurveyFormData, UpdateSurveyData } from "@/models";
 
 export const getSurveys = async (): Promise<Survey[]> => {
   try {
@@ -7,16 +7,6 @@ export const getSurveys = async (): Promise<Survey[]> => {
     return response.data.surveys;
   } catch (error) {
     console.error('Error fetching surveys:', error);
-    throw error;
-  }
-};
-
-export const getAllTypesSurvey = async (): Promise<TypeSurvey[]> => {
-  try {
-    const response = await axios.get<TypeSurveyResponse>("/api/typesurvey");
-    return response.data.typeSurveys;
-  } catch (error) {
-    console.error("Error fetching types:", error);
     throw error;
   }
 };

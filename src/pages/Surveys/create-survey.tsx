@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { RootState } from "@/redux/store";
-import { SurveyFormData, TypeSurvey } from "@/models";
-import { getAllTypesSurvey, createSurvey } from "./services";
+import { SurveyFormData } from "@/models";
+import { createSurvey } from "./services";
 import {
   Card,
   CardHeader,
@@ -26,13 +26,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { BookOpen } from "lucide-react";
 
 // Esquema de validación con Zod
 const surveySchema = z.object({
@@ -43,14 +37,12 @@ const surveySchema = z.object({
   deadline: z
     .string()
     .refine((date) => !isNaN(Date.parse(date)), "Fecha y hora inválidas."),
-  typeSurveyId: z.string().min(1, "Debes seleccionar un tipo de encuesta."),
 });
 
 type SurveyRequest = SurveyFormData & { createdBy: string };
 
 export const CreateSurveyPage = () => {
   const navigate = useNavigate();
-  const [typeSurveys, setTypeSurveys] = useState<TypeSurvey[]>([]);
   const [loading, setLoading] = useState(false);
   const userId = useSelector((state: RootState) => state.user?.id);
 
@@ -60,21 +52,8 @@ export const CreateSurveyPage = () => {
       title: "",
       description: "",
       deadline: "",
-      typeSurveyId: "",
     },
   });
-
-  useEffect(() => {
-    const fetchTypes = async () => {
-      try {
-        const types = await getAllTypesSurvey();
-        setTypeSurveys(types);
-      } catch {
-        toast.error("Error cargando los tipos de encuestas.");
-      }
-    };
-    fetchTypes();
-  }, []);
 
   const onSubmit = async (data: SurveyFormData) => {
     if (!userId) {
@@ -99,7 +78,9 @@ export const CreateSurveyPage = () => {
   return (
     <Card className="w-full max-w-lg shadow-lg p-6">
       <CardHeader>
-        <CardTitle>Crear Nueva Encuesta</CardTitle>
+        <CardTitle className="flex items-center gap-x-2">
+          <BookOpen /> Crear Nueva Encuesta
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -111,7 +92,10 @@ export const CreateSurveyPage = () => {
                 <FormItem>
                   <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Ej: Encuesta de satisfacción" />
+                    <Input
+                      {...field}
+                      placeholder="Ej: Encuesta de satisfacción"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -125,7 +109,10 @@ export const CreateSurveyPage = () => {
                 <FormItem>
                   <FormLabel>Descripción</FormLabel>
                   <FormControl>
-                    <Textarea {...field} placeholder="Ej: Evaluación de la calidad del servicio..." />
+                    <Textarea
+                      {...field}
+                      placeholder="Ej: Evaluación de la calidad del servicio..."
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,33 +133,12 @@ export const CreateSurveyPage = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="typeSurveyId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tipo de Encuesta</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Seleccione un tipo" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {typeSurveys.map((type) => (
-                          <SelectItem key={type.id} value={type.id.toString()}>
-                            {type.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <CardFooter className="flex justify-between mt-4">
-              <Button type="button" variant="outline" onClick={() => navigate("/surveys")}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate("/surveys")}
+              >
                 Cancelar
               </Button>
               <Button type="submit" disabled={loading}>

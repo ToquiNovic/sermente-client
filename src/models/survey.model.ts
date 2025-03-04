@@ -1,12 +1,4 @@
 // models/survey.model.ts
-export interface TypeSurvey {
-  id: number;
-  name: string;
-  description: string;
-  state: boolean;
-  isPublic: boolean;
-}
-
 export interface Creator {
   id: string;
   numberDoc: string;
@@ -18,7 +10,6 @@ export interface Survey {
   description: string;
   deadline: string;
   createdAt: string;
-  typeSurvey: TypeSurvey;
   creator: Creator;
 }
 
@@ -32,18 +23,6 @@ export interface SurveyFormData {
 export interface UpdateSurveyData {
   id: string;
   deadline: string;
-}
-
-export interface TypeSurvey {
-  id: number;
-  name: string;
-  description: string;
-  state: boolean;
-  isPublic: boolean;
-}
-
-export interface TypeSurveyResponse {
-  typeSurveys: TypeSurvey[];
 }
 
 export interface SurveyAssignment {

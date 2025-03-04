@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { lazy, Suspense } from "react";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "@/components/ui/sonner";
-import { AdminLayout, PublicLayout } from "./layouts";
+import { AdminPanelLayout, PublicLayout } from "./layouts";
 import { AdminGuard } from "./components/AdminGuard";
 import {
   Dashboard,
@@ -70,7 +70,7 @@ function App() {
 
               {/* Rutas Protegidas */}
               <Route element={<AdminGuard />}>
-                <Route element={<AdminLayout />}>
+                <Route element={<AdminPanelLayout />}>
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/create-category" element={<CreateCategory />} />
                   <Route

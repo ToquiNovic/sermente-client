@@ -1,21 +1,37 @@
-import { Outlet } from 'react-router-dom'
-import { AppSidebar } from '@/components/app/sidebar/app-sidebar'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { Toaster } from '@/components/ui/toaster'
+import { Sidebar } from "@/components/app/sidebar/sidebar";
+import { Toaster } from "@/components/ui/toaster";
+import { useSidebar } from "@/hooks";
+import { cn } from "@/lib/utils";
+import { Outlet } from "react-router-dom";
 
-export const AdminLayout = () => {
+export default function AdminPanelLayout() {
+  const sidebar = useSidebar();
+
+  if (!sidebar) return null;
+
+  const { isOpen, settings } = sidebar;
+
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="w-full p-2">
-        <SidebarTrigger />
-        <div className="flex h-full w-full justify-center p-10">
-          <Outlet />
-        </div>
+    <>
+      <Sidebar />
+      <main
+        className={cn(
+          "min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300",
+          !settings?.disabled && (!isOpen ? "lg:ml-[90px]" : "lg:ml-72")
+        )}
+      >
+        <Outlet /> 
         <Toaster />
       </main>
-    </SidebarProvider>
-  )
+      <footer
+        className={cn(
+          "transition-[margin-left] ease-in-out duration-300",
+          !settings?.disabled && (!isOpen ? "lg:ml-[90px]" : "lg:ml-72")
+        )}
+      >
+        {/* <Footer /> */}
+      </footer>
+    </>
+  );
 }
 
-export default AdminLayout

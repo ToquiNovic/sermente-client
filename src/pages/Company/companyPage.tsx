@@ -39,6 +39,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { CompanySurveys } from "./CompanySurveys";
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
 
 export const CompanyPage = () => {
   const navigate = useNavigate();
@@ -82,6 +84,7 @@ export const CompanyPage = () => {
   };
 
   return (
+    <ContentLayout title="Empresas">
     <TooltipProvider>
       <div className="w-full p-6">
         <div className="flex items-center justify-between mb-4">
@@ -204,6 +207,9 @@ export const CompanyPage = () => {
                       </Tooltip>
                     </TooltipProvider>
                   )}
+
+                  {/* Lista de encuestas */}
+                  <CompanySurveys companyId={company.id} />
                 </CardContent>
 
                 <CardFooter className="flex justify-between mt-auto">
@@ -266,5 +272,6 @@ export const CompanyPage = () => {
         </DialogContent>
       </Dialog>
     </TooltipProvider>
+    </ContentLayout>
   );
 };

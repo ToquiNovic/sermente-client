@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import { fullUserSlice } from "./states/fullUserSlice";
 import { userSlice } from "./states/userSlice";
+import { persistedSidebarReducer } from "./states/sidebarSlice"; 
 
 // Configuración de persistencia
 const userPersistConfig = {
@@ -26,6 +27,7 @@ export const store = configureStore({
   reducer: {
     user: persistedUserReducer,
     fullUser: persistedFullUserReducer,
+    sidebar: persistedSidebarReducer, 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -41,3 +43,6 @@ export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+export * from "./states/userSlice";
+export * from "./states/fullUserSlice";
+export * from "./states/sidebarSlice";
