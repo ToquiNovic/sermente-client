@@ -1,3 +1,4 @@
+// @/layouts/AdminLayout.tsx
 import { Sidebar } from "@/components/app/sidebar/sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { useSidebar } from "@/hooks";
