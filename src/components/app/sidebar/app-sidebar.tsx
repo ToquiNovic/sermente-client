@@ -2,7 +2,8 @@ import {
   BookOpen,
   LayoutList,
   Settings2,
-  Blocks
+  Blocks,
+  Building2 
 } from "lucide-react";
 import { NavMain } from "@/components/nav-main";
 import {
@@ -18,6 +19,22 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
+    {
+      title: "Empresa",
+      url: "#",
+      icon: Building2 ,
+      isActive: false,
+      items: [
+        {
+          title: "Crear Empresa",
+          url: "/company/new",
+        },
+        {
+          title: "Empresa",
+          url: "/company",
+        },
+      ],
+    },
     {
       title: "Encuestas",
       url: "#",

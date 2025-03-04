@@ -15,6 +15,8 @@ import {
   CreateSurveyPage,
   ComingSoon,
   SurveyManagerPage,
+  CompanyPage,
+  CreateCompany
 } from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
@@ -84,6 +86,8 @@ function App() {
                     path="/surveys/manage/:id"
                     element={<SurveyManagerPage />}
                   />
+                  <Route path="/company" element={<CompanyPage />} />
+                  <Route path="/company/new" element={<CreateCompany />} />
                 </Route>
               </Route>
 
