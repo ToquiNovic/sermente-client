@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UsersTab, CategoriesTab, SubcategoriesTab, OptionsTab } from "./Tabs";
 import { Survey } from "@/models";
 import { getSurvey } from "./services";
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
 
 export const SurveyManagerPage = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ export const SurveyManagerPage = () => {
   }, [id]);
 
   return (
-    <div className="w-full">
+    <ContentLayout title="Gestionar Encuesta" icon={<UsersTab />}>
       <h1 className="text-2xl font-bold mb-4">
         Gestionar Encuesta:{" "}
         <span className="font-normal">{survey?.title}</span>
@@ -52,6 +53,6 @@ export const SurveyManagerPage = () => {
           <OptionsTab />
         </TabsContent>
       </Tabs>
-    </div>
+    </ContentLayout>
   );
 };

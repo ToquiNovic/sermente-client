@@ -31,6 +31,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import ChangeDateDialog from "./ChangeDateDialog";
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
 
 const SurveysPage = () => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
@@ -93,7 +94,8 @@ const SurveysPage = () => {
   };
 
   return (
-    <TooltipProvider>
+    <ContentLayout title="Encuestas" icon={<BarChart3 />}>
+      <TooltipProvider>
       <div className="w-full p-6">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold">Encuestas Disponibles</h1>
@@ -225,6 +227,7 @@ const SurveysPage = () => {
         />
       </div>
     </TooltipProvider>
+    </ContentLayout>
   );
 };
 

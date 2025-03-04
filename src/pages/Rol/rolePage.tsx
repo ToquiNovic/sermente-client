@@ -4,6 +4,7 @@ import DataTable from "./DataTable/data-table";
 import { getRoles } from "./service/role.service";
 import { CreateRole } from "./create-role";
 import { RoleTableData } from "@/models";
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
 
 const RolePage = () => {
   const [data, setData] = useState<RoleTableData[]>([]);
@@ -61,7 +62,8 @@ const RolePage = () => {
   }
 
   return (
-    <div className="w-full">
+    <ContentLayout title="Roles">
+      <div className="w-full">
       <h1>Lista de Roles</h1>
       <div className="flex items-center py-4">
         <CreateRole onRoleCreated={handleRoleCreated} />
@@ -70,6 +72,7 @@ const RolePage = () => {
         <DataTable columns={columns(handleRoleDeleted, handleRoleUpdated)} data={data} />
       </div>
     </div>
+    </ContentLayout>
   );
 };
 

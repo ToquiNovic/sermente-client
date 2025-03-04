@@ -1,9 +1,12 @@
 import Hero from "./Hero";
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
 
 export const ComingSoon = () => {
   return (
-    <main className="h-screen min-h-fit">
+    <ContentLayout title="Próximamente">
+      <main className="h-screen min-h-fit">
       <Hero />
     </main>
+    </ContentLayout>
   );
 };

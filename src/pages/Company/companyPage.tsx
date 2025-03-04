@@ -26,6 +26,7 @@ import {
   Mail,
   Building2,
   UsersRound,
+  ChevronRight,
 } from "lucide-react";
 import { getCompanies, deleteCompany } from "./services";
 import { useEffect, useState } from "react";
@@ -84,12 +85,12 @@ export const CompanyPage = () => {
   };
 
   return (
-    <ContentLayout title="Empresas">
+    <ContentLayout title="Empresa" icon={<Building2 />}>
     <TooltipProvider>
       <div className="w-full p-6">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold flex items-center gap-x-2">
-            <Building2 /> EMPRESAS
+            <ChevronRight  /> Lista de Empresas
           </h1>
           <Button variant="outline" onClick={() => navigate("/company/new")}>
             <Plus className="mr-2 h-4 w-4" /> Nueva

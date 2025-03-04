@@ -28,6 +28,8 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
+import { Building2, ChevronRight } from "lucide-react";
 
 export const CreateCompany = () => {
   const navigate = useNavigate();
@@ -50,7 +52,7 @@ export const CreateCompany = () => {
   });
 
   const onSubmit = async (data: CreateCompanyFormData) => {
-    console.log("Submitting..."); // <-- Agregar esto
+    console.log("Submitting...");
     if (!userId) {
       toast.error("No se pudo identificar al usuario.");
       return;
@@ -63,7 +65,7 @@ export const CreateCompany = () => {
 
     setLoading(true);
     try {
-      console.log("Datos antes de enviar:", requestData); // <-- Agregar esto
+      console.log("Datos antes de enviar:", requestData); 
       await createCompany(requestData);
       toast.success(`Empresa "${data.nameCompany}" creada con éxito.`);
       form.reset();
@@ -76,9 +78,10 @@ export const CreateCompany = () => {
   };
 
   return (
+    <ContentLayout title="Crear Empresa" icon={<Building2 />}>
     <Card className="w-full max-w-lg shadow-lg p-6">
       <CardHeader>
-        <CardTitle>Crear Nueva Empresa</CardTitle>
+        <CardTitle> <ChevronRight  /> Crear Nueva Empresa</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -232,5 +235,6 @@ export const CreateCompany = () => {
         </Form>
       </CardContent>
     </Card>
+    </ContentLayout>
   );
 };

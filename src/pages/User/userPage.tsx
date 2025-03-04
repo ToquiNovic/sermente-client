@@ -14,6 +14,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
 
 const UserPage = () => {
   const [data, setData] = useState<UserTableData[]>([]);
@@ -58,7 +59,8 @@ const UserPage = () => {
   }
 
   return (
-    <div className="w-full">
+    <ContentLayout title="Usuarios">
+      <div className="w-full">
       <h1 className="text-2xl font-bold">Lista de Usuarios</h1>
       <div className="flex items-center py-4">
         <CreateUser
@@ -125,6 +127,7 @@ const UserPage = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </ContentLayout>
   );
 };
 

@@ -1,6 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { Ellipsis, LogOut } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { getMenuList } from "./utils";
 import { Button } from "@/components/ui/button";
@@ -123,11 +122,11 @@ export function Menu({ isOpen }: MenuProps) {
                         isOpen === false ? "opacity-0 hidden" : "opacity-100"
                       )}
                     >
-                      Sign out
+                      Cerrar Sesión
                     </p>
                   </Button>
                 </TooltipTrigger>
-                {isOpen === false && <TooltipContent side="right">Sign out</TooltipContent>}
+                {isOpen === false && <TooltipContent side="right">Cerrar Sesión</TooltipContent>}
               </Tooltip>
             </TooltipProvider>
           </li>
