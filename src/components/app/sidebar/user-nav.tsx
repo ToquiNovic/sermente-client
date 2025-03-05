@@ -19,9 +19,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/states/userSlice";
 
 export function UserNav() {
+  const dispatch = useDispatch();
   const { userPerfil, fetchUserDetails } = useUserProfile();
+
+  const handleLogout = () => {
+      dispatch(logout());
+    };
 
   return (
     <DropdownMenu onOpenChange={(open) => open && fetchUserDetails()}>
@@ -85,7 +92,7 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {}}>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="w-4 h-4 mr-3 text-muted-foreground" />
           Cerrar Sesión
         </DropdownMenuItem>
