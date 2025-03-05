@@ -61,7 +61,7 @@ export function getMenuList(pathname: string): Group[] {
           ],
         },
         {
-          label: "Encuestas",
+          label: "Encuesta",
           href: "#",
           icon: BookOpen,
           submenus: [
@@ -78,7 +78,7 @@ export function getMenuList(pathname: string): Group[] {
           ],
         },
         {
-          label: "Categorías",
+          label: "Categoría",
           href: "#",
           icon: LayoutList,
           submenus: [
@@ -95,7 +95,7 @@ export function getMenuList(pathname: string): Group[] {
           ],
         },
         {
-          label: "Subcategorías",
+          label: "Subcategoría",
           href: "#",
           icon: Blocks,
           submenus: [
@@ -114,7 +114,7 @@ export function getMenuList(pathname: string): Group[] {
       ],
     },
     {
-      groupLabel: "Configuraciones",
+      groupLabel: "Configuracion",
       menus: [
         {
           label: "Configuraciones",

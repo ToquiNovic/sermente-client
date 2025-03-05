@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/app/sidebar/navbar";
 import { Breadcrumb } from "@/components";
+import { Card } from "@/components/ui/card";
 
 interface ContentLayoutProps {
   title: string;
@@ -13,7 +14,9 @@ export function ContentLayout({ title, icon, children }: ContentLayoutProps) {
       <Navbar title={title} icon={icon} />
       <div className="container pt-8 pb-8 px-4 sm:px-8">
         <Breadcrumb />
-        {children}
+        <Card className="p-6">
+          {children}
+        </Card>
       </div>
     </div>
   );
