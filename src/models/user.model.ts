@@ -2,7 +2,7 @@
 export interface User {
   id: string;
   accessToken: string;
-  userPerfil: UserPerfil | null;
+  userPerfil?: UserPerfil | null;
 }
 
 export interface CreateUserFormData {

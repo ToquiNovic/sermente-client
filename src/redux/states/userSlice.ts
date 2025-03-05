@@ -4,7 +4,6 @@ import { User, UserPerfil } from "@/models";
 
 interface SetUserPayload {
   id: string;
-  userPerfil: UserPerfil;
   accessToken: string;
 }
 
@@ -12,7 +11,6 @@ interface SetUserPayload {
 const userEmptyState: User = {
   id: "",
   accessToken: "",
-  userPerfil: null,
 };
 
 export const userSlice = createSlice({
@@ -21,7 +19,6 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<SetUserPayload>) => {
       state.id = action.payload.id;
-      state.userPerfil = action.payload.userPerfil;
       state.accessToken = action.payload.accessToken;
     },
     createUser: (_, action: PayloadAction<User>) => action.payload,
