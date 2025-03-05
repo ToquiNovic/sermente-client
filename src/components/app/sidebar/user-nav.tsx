@@ -29,12 +29,20 @@ export function UserNav() {
         <Tooltip delayDuration={100}>
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="relative h-8 w-8 rounded-full">
+              <Button
+                variant="outline"
+                className="relative h-8 w-8 rounded-full"
+              >
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="#" alt="Avatar" />
                   <AvatarFallback className="bg-transparent">
-                    {userPerfil?.people?.names && userPerfil?.people?.surNames ? (
-                      `${userPerfil.people.names.charAt(0).toUpperCase()}${userPerfil.people.surNames.charAt(0).toUpperCase()}`
+                    {userPerfil?.people?.names &&
+                    userPerfil?.people?.surNames ? (
+                      `${userPerfil.people.names
+                        .charAt(0)
+                        .toUpperCase()}${userPerfil.people.surNames
+                        .charAt(0)
+                        .toUpperCase()}`
                     ) : (
                       <User />
                     )}
@@ -56,7 +64,8 @@ export function UserNav() {
                 : userPerfil?.numberDoc || "Sin información"}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {userPerfil?.roles.map((role) => role.name).join(", ") || "Sin roles asignados"}
+              {(userPerfil?.roles ?? []).map((role) => role.name).join(", ") ||
+                "Sin roles asignados"}
             </p>
           </div>
         </DropdownMenuLabel>
