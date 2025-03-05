@@ -1,7 +1,9 @@
 import { NavLink, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Ellipsis, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getMenuList } from "./utils";
+import { logout } from "@/redux/states/userSlice";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CollapseMenuButton } from "./collapse-menu-button";
@@ -17,8 +19,13 @@ interface MenuProps {
 }
 
 export function Menu({ isOpen }: MenuProps) {
+  const dispatch = useDispatch();
   const location = useLocation();
   const menuList = getMenuList(location.pathname);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
@@ -64,7 +71,9 @@ export function Menu({ isOpen }: MenuProps) {
                             asChild
                           >
                             <NavLink to={href}>
-                              <span className={cn(isOpen === false ? "" : "mr-4")}>
+                              <span
+                                className={cn(isOpen === false ? "" : "mr-4")}
+                              >
                                 <Icon size={18} />
                               </span>
                               <p
@@ -109,9 +118,9 @@ export function Menu({ isOpen }: MenuProps) {
               <Tooltip delayDuration={100}>
                 <TooltipTrigger asChild>
                   <Button
-                    onClick={() => {}}
                     variant="outline"
                     className="w-full justify-center h-10 mt-5"
+                    onClick={handleLogout}
                   >
                     <span className={cn(isOpen === false ? "" : "mr-4")}>
                       <LogOut size={18} />
@@ -126,7 +135,9 @@ export function Menu({ isOpen }: MenuProps) {
                     </p>
                   </Button>
                 </TooltipTrigger>
-                {isOpen === false && <TooltipContent side="right">Cerrar Sesión</TooltipContent>}
+                {isOpen === false && (
+                  <TooltipContent side="right" onClick={handleLogout} >Cerrar Sesión</TooltipContent>
+                )}
               </Tooltip>
             </TooltipProvider>
           </li>

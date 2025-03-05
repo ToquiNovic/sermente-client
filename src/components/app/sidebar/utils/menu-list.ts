@@ -54,7 +54,7 @@ export function getMenuList(pathname: string): Group[] {
               active: pathname === "/company/new",
             },
             {
-              label: "Empresa",
+              label: "Empresas",
               href: "/company",
               active: pathname === "/company",
             },

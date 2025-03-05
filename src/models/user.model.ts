@@ -1,15 +1,8 @@
-// export interface User {
-//   id: string;
-//   username: string;
-//   role: string;
-//   status: string;
-//   accessToken: string;
-//   refreshToken: string;
-// }
-// model/user.model.ts
+// @/models/user.model.ts
 export interface User {
   id: string;
   accessToken: string;
+  userPerfil: UserPerfil | null;
 }
 
 export interface CreateUserFormData {
@@ -30,4 +23,22 @@ export interface UserTableData {
   numberDoc: string;
   roles: { id: string; name: string }[];
   state: UserState;
+}
+
+export interface PeoplePerfil {
+  names: string;
+  surNames: string;
+}
+
+export interface RolePerfil {
+  id: string;
+  name: string;
+}
+
+export interface UserPerfil {
+  id: string;
+  numberDoc: string;
+  roles: RolePerfil[];
+  state: UserState;
+  people: PeoplePerfil;
 }

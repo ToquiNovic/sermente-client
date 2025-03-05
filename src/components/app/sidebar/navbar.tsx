@@ -1,6 +1,5 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { UserNav } from "./user-nav";
-import { SheetMenu } from "./sheet-menu";
 
 interface NavbarProps {
   title: string;
@@ -12,7 +11,6 @@ export const Navbar: React.FC<NavbarProps> = ({ title, icon }) => {
     <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
       <div className="mx-4 sm:mx-8 flex h-14 items-center">
         <div className="flex items-center space-x-4 lg:space-x-0">
-          <SheetMenu />
           <div className="flex items-center gap-2"> 
             {icon && <span className="text-xl">{icon}</span>} 
             <h1 className="font-bold">{title}</h1>
