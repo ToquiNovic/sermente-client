@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminPanelLayout, PublicLayout } from "./layouts";
 import { AdminGuard } from "./components/AdminGuard";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import {
   Dashboard,
   CreateCategory,
@@ -16,7 +17,7 @@ import {
   ComingSoon,
   SurveyManagerPage,
   CompanyPage,
-  CreateCompany
+  CreateCompany,
 } from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
@@ -50,52 +51,57 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <PersistGate
-          loading={<div>Loading persisted state...</div>}
-          persistor={persistor}
-        >
-          <Toaster
-            position="bottom-right"
-            richColors
-            expand={true}
-            duration={3000}
-            closeButton={true}
-          />
-          <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-              {/* Rutas Públicas */}
-              <Route element={<PublicLayout />}>
-                <Route path="/" element={<Login />} />
-              </Route>
-
-              {/* Rutas Protegidas */}
-              <Route element={<AdminGuard />}>
-                <Route element={<AdminPanelLayout />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/create-category" element={<CreateCategory />} />
-                  <Route
-                    path="/create-user"
-                    element={<Navigate to="/users" />}
-                  />
-                  <Route path="/users" element={<UserPage />} />
-                  <Route path="/rol" element={<RolePage />} />
-                  <Route path="/surveys" element={<SurveysPage />} />
-                  <Route path="/surveys/new" element={<CreateSurveyPage />} />
-                  <Route path="/commingsoon" element={<ComingSoon />} />
-                  <Route
-                    path="/surveys/manage/:id"
-                    element={<SurveyManagerPage />}
-                  />
-                  <Route path="/company" element={<CompanyPage />} />
-                  <Route path="/company/new" element={<CreateCompany />} />
+        <TooltipProvider>
+          <PersistGate
+            loading={<div>Loading persisted state...</div>}
+            persistor={persistor}
+          >
+            <Toaster
+              position="bottom-right"
+              richColors
+              expand={true}
+              duration={3000}
+              closeButton={true}
+            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Routes>
+                {/* Rutas Públicas */}
+                <Route element={<PublicLayout />}>
+                  <Route path="/" element={<Login />} />
                 </Route>
-              </Route>
 
-              {/* Fallback para rutas no encontradas */}
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </Suspense>
-        </PersistGate>
+                {/* Rutas Protegidas */}
+                <Route element={<AdminGuard />}>
+                  <Route element={<AdminPanelLayout />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route
+                      path="/create-category"
+                      element={<CreateCategory />}
+                    />
+                    <Route
+                      path="/create-user"
+                      element={<Navigate to="/users" />}
+                    />
+                    <Route path="/users" element={<UserPage />} />
+                    <Route path="/rol" element={<RolePage />} />
+                    <Route path="/surveys" element={<SurveysPage />} />
+                    <Route path="/surveys/new" element={<CreateSurveyPage />} />
+                    <Route path="/commingsoon" element={<ComingSoon />} />
+                    <Route
+                      path="/surveys/manage/:id"
+                      element={<SurveyManagerPage />}
+                    />
+                    <Route path="/company" element={<CompanyPage />} />
+                    <Route path="/company/new" element={<CreateCompany />} />
+                  </Route>
+                </Route>
+
+                {/* Fallback para rutas no encontradas */}
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </Suspense>
+          </PersistGate>
+        </TooltipProvider>
       </Provider>
     </QueryClientProvider>
   );
