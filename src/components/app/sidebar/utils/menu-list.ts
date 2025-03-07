@@ -6,6 +6,10 @@ import {
   Building2,
   LucideIcon,
   LayoutGrid,
+  UsersRound,
+  SlidersVertical,
+  CircleUser,
+  Coins,
 } from "lucide-react";
 
 type Submenu = {
@@ -116,17 +120,15 @@ export function getMenuList(pathname: string): Group[] {
     {
       groupLabel: "Configuracion",
       menus: [
+        {label: "Usuarios", href: "/users", icon: UsersRound, active: pathname === "/users"},
+        {label: "Roles", href: "/rol", icon: SlidersVertical, active: pathname === "/rol"},
+        {label: "Cuenta", href: "/commingsoon", icon: CircleUser , active: pathname === "/commingsoon"},
+        {label: "Economía", href: "/commingsoon", icon: Coins, active: pathname === "/commingsoon"},
         {
           label: "Configuraciones",
           href: "#",
           icon: Settings2,
           submenus: [
-            { label: "Roles", href: "/rol", active: pathname === "/rol" },
-            {
-              label: "Usuarios",
-              href: "/users",
-              active: pathname === "/users",
-            },
             {
               label: "Tipo Contrato",
               href: "/commingsoon",
@@ -177,12 +179,7 @@ export function getMenuList(pathname: string): Group[] {
               href: "/commingsoon",
               active: pathname === "/commingsoon",
             },
-            {
-              label: "Economía",
-              href: "/commingsoon",
-              active: pathname === "/commingsoon",
-            },
-          ],
+          ],          
         },
       ],
     },

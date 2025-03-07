@@ -20,10 +20,6 @@ export const companySchema = z.object({
     .string()
     .min(3, "El email debe tener al menos 3 caracteres.")
     .optional(),
-  urlLogo: z
-    .string()
-    .min(3, "La URL del logo debe tener al menos 3 caracteres.")
-    .optional(),
   numberOfEmployees: z
     .preprocess(
       (val) => Number(val),

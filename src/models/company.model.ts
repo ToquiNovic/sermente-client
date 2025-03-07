@@ -12,6 +12,7 @@ export interface Company {
   numberOfEmployees: number;
 }
 export interface CreateCompanyFormData {
+  id: string;
   nameCompany: string;
   nitCompany: string;
   legalAgent: string;
@@ -21,4 +22,5 @@ export interface CreateCompanyFormData {
   urlLogo?: string;
   specialistId: string;
   numberOfEmployees: number;
+  extensionFile?: string;
 }

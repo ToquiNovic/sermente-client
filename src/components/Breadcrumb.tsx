@@ -57,6 +57,7 @@ export default function AppBreadcrumb() {
                 <Link to="/dashboard">{groupLabel}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
+            <BreadcrumbSeparator /> 
           </>
         ) : <BreadcrumbSeparator />}
 

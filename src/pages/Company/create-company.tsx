@@ -1,22 +1,14 @@
-// src/pages/Company/create-company.tsx
+// @/pages/company/create-company.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
 import { CreateCompanyFormData } from "@/models";
 import { createCompany } from "./services";
 import { companySchema } from "./schemas/company.schema";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -29,16 +21,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { ContentLayout } from "@/components/app/sidebar/content-layout";
-import { Building2, ChevronRight } from "lucide-react";
+import { Building2 } from "lucide-react";
+import InputUploadImage from "./components/inputUploadImage";
+import { useImageUpload } from "@/hooks/useImageUpload";
+import { v4 as uuidv4 } from "uuid";
 
 export const CreateCompany = () => {
   const navigate = useNavigate();
+  const [companyId] = useState(uuidv4());
   const [loading, setLoading] = useState(false);
   const userId = useSelector((state: RootState) => state.user?.id);
+  const { isUploading, uploadedUrl, setUploadedUrl } = useImageUpload();
+  const [fileExtension, setFileExtension] = useState<string | null>(null);
 
   const form = useForm<CreateCompanyFormData>({
     resolver: zodResolver(companySchema),
     defaultValues: {
+      id: companyId,
       nameCompany: "",
       nitCompany: "",
       legalAgent: "",
@@ -52,7 +51,6 @@ export const CreateCompany = () => {
   });
 
   const onSubmit = async (data: CreateCompanyFormData) => {
-    console.log("Submitting...");
     if (!userId) {
       toast.error("No se pudo identificar al usuario.");
       return;
@@ -60,18 +58,24 @@ export const CreateCompany = () => {
 
     const requestData: CreateCompanyFormData = {
       ...data,
+      id: companyId || uuidv4(),
       specialistId: userId,
+      urlLogo: uploadedUrl || "",
+      extensionFile: fileExtension || "",
     };
 
     setLoading(true);
     try {
-      console.log("Datos antes de enviar:", requestData); 
       await createCompany(requestData);
+
       toast.success(`Empresa "${data.nameCompany}" creada con éxito.`);
       form.reset();
       navigate("/company");
-    } catch {
-      toast.error("Error al crear la empresa. Inténtalo nuevamente.");
+    } catch (error) {
+      console.error("Error al crear la empresa:", error);
+      toast.error(
+        `Error: ${error instanceof Error ? error.message : "Error desconocido"}`
+      );
     } finally {
       setLoading(false);
     }
@@ -79,11 +83,7 @@ export const CreateCompany = () => {
 
   return (
     <ContentLayout title="Crear Empresa" icon={<Building2 />}>
-    <Card className="w-full max-w-lg shadow-lg p-6">
-      <CardHeader>
-        <CardTitle> <ChevronRight  /> Crear Nueva Empresa</CardTitle>
-      </CardHeader>
-      <CardContent>
+      <CardContent className="md:px-10 md:py-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -205,15 +205,18 @@ export const CreateCompany = () => {
             <FormField
               control={form.control}
               name="urlLogo"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
-                  <FormLabel>URL del logo</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Ej: https://www.google.com/logo.png"
-                    />
-                  </FormControl>
+                  <FormLabel>Logo de la Empresa</FormLabel>
+                  <InputUploadImage
+                    tipo="companies"
+                    id={companyId}
+                    onUploadComplete={(url, extension) => {
+                      setUploadedUrl(url ?? null);
+                      setFileExtension(extension);
+                    }}
+                  />
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -227,14 +230,13 @@ export const CreateCompany = () => {
               >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={loading || isUploading}>
                 {loading ? "Creando..." : "Crear Empresa"}
               </Button>
             </CardFooter>
           </form>
         </Form>
       </CardContent>
-    </Card>
     </ContentLayout>
   );
 };
