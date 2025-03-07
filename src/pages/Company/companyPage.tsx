@@ -1,10 +1,12 @@
+import { ContentLayout } from "@/components/app/sidebar/content-layout";
 import { CompanyList } from "./components";
+import { Building2 } from "lucide-react";
 
 export const CompanyPage = () => {
   return (
-    <div className="container mx-auto p-6">
+    <ContentLayout title="Dashboard" icon={<Building2 />}>
       <CompanyList />
-    </div>
+    </ContentLayout>
   );
 };
 
