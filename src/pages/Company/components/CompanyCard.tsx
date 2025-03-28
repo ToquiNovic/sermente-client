@@ -117,7 +117,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDelete }) =
       <CardFooter className="flex justify-between mt-auto">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="outline" size="sm" onClick={() => navigate(`/company/manage/${company.companyId}`)}>
+            <Button variant="outline" size="sm" onClick={() => navigate(`/company/manage/${company.id}`)}>
               <Settings className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
@@ -125,7 +125,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDelete }) =
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="default" size="sm" onClick={() => navigate(`/company/reports/${company.companyId}`)}>
+            <Button variant="default" size="sm" onClick={() => navigate(`/company/reports/${company.id}`)}>
               <BookOpenText  className="h-4 w-4" />
             </Button>
           </TooltipTrigger>

@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Company } from "@/models";
 
 export const CompanyManage = () => {
-  const { id: companyId } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<string>("empresa");
@@ -17,10 +17,10 @@ export const CompanyManage = () => {
   // Cargar los datos de la empresa al montar el componente
   useEffect(() => {
     const fetchCompany = async () => {
-      if (!companyId) return;
+      if (!id) return;
 
       try {
-        const companyData: Company = await getCompany(companyId);
+        const companyData: Company = await getCompany(id);
         setCompany(companyData);
       } catch (error) {
         toast.error((error as Error).message);
@@ -30,21 +30,21 @@ export const CompanyManage = () => {
     };
 
     fetchCompany();
-  }, [companyId]);
+  }, [id]);
 
   // Función para manejar el guardado
   const handleSave = async (updatedCompany: Partial<Company>) => {
-    if (!companyId) return;
+    if (!id) return;
 
     try {
       // Log para verificar los datos enviados
       console.log("Datos enviados a la API:", updatedCompany);
 
       // Actualizar la empresa a través de la API
-      await updateCompany(companyId, updatedCompany);
+      await updateCompany(id, updatedCompany);
 
       // Refetch para asegurarnos de que los datos están actualizados
-      const companyData = await getCompany(companyId);
+      const companyData = await getCompany(id);
       setCompany(companyData);
 
       toast.success("Empresa actualizada correctamente");
@@ -94,7 +94,7 @@ export const CompanyManage = () => {
           <CompanyTab company={company} onSave={handleSave} />
         </TabsContent>
         <TabsContent value="trabajadores">
-          {companyId && <WorkersTab companyId={companyId} />}
+          {id && <WorkersTab companyId={id} />}
         </TabsContent>
       </Tabs>
     </ContentLayout>
