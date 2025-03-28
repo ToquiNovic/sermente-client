@@ -26,6 +26,7 @@ interface ExcelPreviewModalProps {
   onClose: () => void;
   data: Record<string, string>[];
   headers: string[];
+  companyId: string;
 }
 
 const ExcelPreviewModal: React.FC<ExcelPreviewModalProps> = ({
@@ -33,6 +34,7 @@ const ExcelPreviewModal: React.FC<ExcelPreviewModalProps> = ({
   onClose,
   data,
   headers,
+  companyId,
 }) => {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -41,19 +43,33 @@ const ExcelPreviewModal: React.FC<ExcelPreviewModalProps> = ({
     setLoading(true);
     try {
       const formattedData = data.map((row) => ({
-        email: row["Correo"] ?? "",
-        names: row["Nombres"] ?? "",
-        surNames: row["Apellidos"] ?? "",
-        document: row["Documento"] ?? "",
-        contractType: row["Tipo Contrato"] ?? "",
-        hierarchyOfEmployment: row["Jerarquía Laboral"] ?? "",
+        email: row["CORREO ELECTRÓNICO"]?.trim() || "",
+        names: row["NOMBRES"]?.trim() || "",
+        surNames: row["APELLIDOS"]?.trim() || "",
+        numberDoc: String(row["N° de IDENTIFICACIÓN"] || "").trim(),
+        dependency: row["DEPENDENCIA"]?.trim() || "",
+        phone: row["TELEFONO"]?.trim() || "",
+        positionCompany: row["CARGO"]?.trim() || "",
+        contractType: row["TIPO DE VINCULACIÓN"]?.trim() || "",
+        hierarchyOfEmployment: row["NIVEL JERARQUICO DEL EMPLEO"]?.trim() || "",
       }));
-  
-      const companyId = "ID_DE_LA_EMPRESA";
-  
-      console.log("Datos a enviar:", formattedData);
-  
-      await assignUsersToCompany(companyId, { companyId, users: formattedData });
+
+      // Filtrar filas vacías
+      const filteredData = formattedData.filter((row) =>
+        Object.values(row).some((value) => value?.trim() !== "")
+      );
+
+      if (filteredData.length === 0) {
+        toast.error("No hay datos válidos para asignar.");
+        setLoading(false);
+        return;
+      }
+
+      console.log("Datos a enviar:", filteredData);
+
+      await assignUsersToCompany(companyId, {
+        users: filteredData,
+      });
       toast.success(`Usuarios asignados a la empresa correctamente.`);
       setConfirmDialogOpen(false);
       onClose();

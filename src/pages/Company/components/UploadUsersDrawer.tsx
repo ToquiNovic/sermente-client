@@ -15,7 +15,11 @@ import { Upload, File } from "lucide-react";
 import { toast } from "sonner";
 import ExcelPreviewModal from "./ExcelPreviewModal";
 
-export const UploadUsersDrawer = () => {
+interface UploadUsersDrawerProps {
+  companyId: string;
+}
+
+export const UploadUsersDrawer: React.FC<UploadUsersDrawerProps> = ({ companyId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [previewData, setPreviewData] = useState<Record<string, string>[]>([]);
@@ -158,7 +162,7 @@ export const UploadUsersDrawer = () => {
         </DrawerContent>
       </Drawer>
 
-      <ExcelPreviewModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} data={previewData} headers={expectedHeaders} />
+      <ExcelPreviewModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} data={previewData} headers={expectedHeaders}  companyId={companyId} />
     </>
   );
 };

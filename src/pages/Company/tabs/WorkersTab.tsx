@@ -23,7 +23,7 @@ export const WorkersTab: React.FC<WorkersTabProps> = ({ companyId }) => {
             <Button variant="outline" className="hover:bg-gray-100">Opciones</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <UploadUsersDrawer />
+            <UploadUsersDrawer companyId={companyId} />
             <DropdownMenuItem 
               className="cursor-pointer hover:bg-gray-100 flex items-center gap-2"
               onClick={() => downloadFile(plantillaPath, "serMente_cargar_trabajadores.xlsx")}
