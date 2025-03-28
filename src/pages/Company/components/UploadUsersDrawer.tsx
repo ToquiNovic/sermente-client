@@ -1,3 +1,4 @@
+// components/UploadUsersDrawer.tsx
 import { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import * as XLSX from "xlsx";
@@ -14,14 +15,13 @@ import { Upload, File } from "lucide-react";
 import { toast } from "sonner";
 import ExcelPreviewModal from "./ExcelPreviewModal";
 
-const UploadUsersDrawer = () => {
+export const UploadUsersDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [previewData, setPreviewData] = useState<Record<string, string>[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expectedHeaders, setExpectedHeaders] = useState<string[]>([]);
 
-  // Función para cargar los encabezados desde la plantilla
   useEffect(() => {
     const loadTemplateHeaders = async () => {
       try {
@@ -44,7 +44,6 @@ const UploadUsersDrawer = () => {
     loadTemplateHeaders();
   }, []);
 
-  // Función para validar encabezados
   const validateHeaders = useCallback(
     (headers: string[]) => {
       return expectedHeaders.length > 0 && expectedHeaders.every((header) => headers.includes(header));
@@ -163,5 +162,3 @@ const UploadUsersDrawer = () => {
     </>
   );
 };
-
-export default UploadUsersDrawer;

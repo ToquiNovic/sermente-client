@@ -21,6 +21,26 @@ export const getCompanies = async (): Promise<Company[]> => {
   }
 };
 
+export const getCompany = async (companyId: string): Promise<Company> => {
+  try {
+    const response = await axios.get(`/api/company/${companyId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        "Error al obtener la empresa:",
+        error.response?.data || error.message
+      );
+      throw new Error(
+        error.response?.data?.message || "Error al obtener la empresa."
+      );
+    } else {
+      console.error("Error desconocido al obtener la empresa:", error);
+      throw new Error("Error desconocido al obtener la empresa.");
+    }
+  }
+};
+
 export const createCompany = async (companyData: CreateCompanyFormData) => {
   try {
     const response = await axios.post("/api/company", companyData);
@@ -48,5 +68,22 @@ export const deleteCompany = async (companyId: string) => {
       );
     }
     throw new Error("Error de conexión con el servidor.");
+  }
+};
+
+// Actualizar los datos de la empresa
+export const updateCompany = async (companyId: string, companyData: Partial<Company>): Promise<Company> => {
+  try {
+    const response = await axios.patch(`/api/company/${companyId}`, companyData);
+    return response.data.company;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("Error al actualizar la empresa (Axios):", errorMessage);
+      throw new Error(errorMessage);
+    } else {
+      console.error("Error desconocido al actualizar la empresa:", error);
+      throw new Error("Error desconocido al actualizar la empresa.");
+    }
   }
 };

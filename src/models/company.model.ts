@@ -1,3 +1,4 @@
+// models/company.model.ts
 export interface Company {
   id: string;
   specialistId: string;

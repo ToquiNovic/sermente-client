@@ -1,6 +1,6 @@
+// components/ExcelPreviewModal.tsx
 import { useState } from "react";
 import { toast } from "sonner";
-import { postSurveyAssignment } from "../services"; 
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { assignUsersToCompany } from "../services";
 
 interface ExcelPreviewModalProps {
   isOpen: boolean;
@@ -40,29 +41,25 @@ const ExcelPreviewModal: React.FC<ExcelPreviewModalProps> = ({
     setLoading(true);
     try {
       const formattedData = data.map((row) => ({
-        survey: row["Encuesta"] ?? "",
+        email: row["Correo"] ?? "",
         names: row["Nombres"] ?? "",
         surNames: row["Apellidos"] ?? "",
-        dependency: row["Dependencia"] ?? "",
-        position: row["Cargo"] ?? "",
-        email: row["Correo"] ?? "",
-        phone: row["Teléfono"] ?? "",
         document: row["Documento"] ?? "",
-        positionCompany: row["Puesto Empresa"] ?? "",  
-        numberDoc: row["Número Documento"] ?? "", 
-        contractType: row["Tipo Contrato"] ?? "", 
-        hierarchyOfEmployment: row["Jerarquía Laboral"] ?? "", 
+        contractType: row["Tipo Contrato"] ?? "",
+        hierarchyOfEmployment: row["Jerarquía Laboral"] ?? "",
       }));
-
-      console.log('Datos a enviar:', formattedData);
   
-      await postSurveyAssignment(formattedData);
-      toast.success(`Encuesta asignada a ${formattedData.length} trabajadores.`);
+      const companyId = "ID_DE_LA_EMPRESA";
+  
+      console.log("Datos a enviar:", formattedData);
+  
+      await assignUsersToCompany(companyId, { companyId, users: formattedData });
+      toast.success(`Usuarios asignados a la empresa correctamente.`);
       setConfirmDialogOpen(false);
       onClose();
     } catch (error) {
       console.error(error);
-      toast.error("Hubo un error al asignar la encuesta.");
+      toast.error("Hubo un error al asignar los usuarios.");
     } finally {
       setLoading(false);
     }

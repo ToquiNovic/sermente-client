@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNavigate } from "react-router-dom";
-import { Trash2, Settings, BarChart3, Contact, MapPinHouse, Phone, Mail, Building2, UsersRound } from "lucide-react";
+import { Trash2, Settings, BookOpenText , Contact, MapPinHouse, Phone, Mail, Building2, UsersRound } from "lucide-react";
 import { Company } from "@/models";
-import { CompanySurveys } from "../CompanySurveys";
+// import { CompanySurveys } from "../CompanySurveys";
 
 interface CompanyCardProps {
   company: Company;
@@ -112,12 +112,12 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDelete }) =
             </Tooltip>
         )}
 
-        <CompanySurveys companyId={company.id} />
+        {/* <CompanySurveys companyId={company.id} /> */}
       </CardContent>
       <CardFooter className="flex justify-between mt-auto">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="outline" size="sm" onClick={() => navigate(`/company/manage/${company.id}`)}>
+            <Button variant="outline" size="sm" onClick={() => navigate(`/company/manage/${company.companyId}`)}>
               <Settings className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
@@ -125,11 +125,11 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({ company, onDelete }) =
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="default" size="sm" onClick={() => navigate(`/company/stats/${company.id}`)}>
-              <BarChart3 className="h-4 w-4" />
+            <Button variant="default" size="sm" onClick={() => navigate(`/company/reports/${company.companyId}`)}>
+              <BookOpenText  className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
-          <TooltipContent>Ver Estadísticas</TooltipContent>
+          <TooltipContent>Ver reportes</TooltipContent>
         </Tooltip>
       </CardFooter>
     </Card>
