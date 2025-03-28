@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Download, UserPlus } from "lucide-react";
 import { downloadFile } from "@/pages/Surveys/utils/downloadFile";
-import { UploadUsersDrawer } from "@/pages/Company/components/UploadUsersDrawer";
+// import { UploadUsersDrawer } from "@/pages/Company/components/UploadUsersDrawer";
 
 const UsersTab = () => {
   const plantillaPath = "/serMente_cargar_trabajadores.xlsx";
@@ -24,7 +24,7 @@ const UsersTab = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <UploadUsersDrawer />
+            {/* <UploadUsersDrawer /> */}
             <DropdownMenuItem
               className="cursor-pointer hover:bg-gray-100 flex items-center gap-2"
               onClick={() =>

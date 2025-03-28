@@ -32,7 +32,7 @@ export const CompanySurveys: React.FC<CompanySurveysProps> = ({ companyId }) => 
       try {
         const response = await axios.get(`/api/company/${companyId}/surveys`);
         setSurveys(response.data.surveys);
-      } catch (_) {
+      } catch {
         setError("No se pudieron cargar las encuestas.");
       } finally {
         setLoading(false);
