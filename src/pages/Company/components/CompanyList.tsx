@@ -18,7 +18,6 @@ export const CompanyList = () => {
     const fetchCompanies = async () => {
       try {
         const companies = await getCompanies();
-        console.log('companies', companies);
         
         setData(companies);
       } catch (error) {

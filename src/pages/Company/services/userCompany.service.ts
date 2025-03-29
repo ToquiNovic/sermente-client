@@ -11,3 +11,13 @@ export const assignUsersToCompany = async ( companyId: string, users: AssignUser
     throw error;
   }
 };
+
+export const removeUserFromCompany = async (companyId: string, userId: string) => {
+  try {
+    const response = await axios.delete(`/api/company/${companyId}/assign/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error al eliminar usuario de la empresa:", error);
+    throw error;
+  }
+};

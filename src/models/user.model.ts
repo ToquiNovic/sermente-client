@@ -25,6 +25,7 @@ export interface UserTableData {
   state: UserState;
 }
 
+
 export interface PeoplePerfil {
   names: string;
   surNames: string;
@@ -41,4 +42,13 @@ export interface UserPerfil {
   roles: RolePerfil[];
   state: UserState;
   people: PeoplePerfil;
+}
+
+export interface WorkerTableData {
+  id: string;
+  numberDoc: string;
+  names: string;
+  surNames: string;
+  phone: string;
+  email: string;
 }

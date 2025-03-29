@@ -1,9 +1,15 @@
 // pages/Company/tabs/WorkersTab.tsx
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Download, UserPlus } from "lucide-react";
+import { useUserProfile } from "@/hooks";
 import { downloadFile } from "@/pages/Surveys/utils/downloadFile";
-import {UploadUsersDrawer} from "../components";
+import { UploadUsersDrawer, WorkersList } from "../components";
 
 interface WorkersTabProps {
   companyId: string;
@@ -11,8 +17,8 @@ interface WorkersTabProps {
 
 export const WorkersTab: React.FC<WorkersTabProps> = ({ companyId }) => {
   const plantillaPath = "/serMente_cargar_trabajadores.xlsx";
-  console.log('companyId', companyId);
-
+  const { userPerfil } = useUserProfile();
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -20,13 +26,17 @@ export const WorkersTab: React.FC<WorkersTabProps> = ({ companyId }) => {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="hover:bg-gray-100">Opciones</Button>
+            <Button variant="outline" className="hover:bg-gray-100">
+              Opciones
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <UploadUsersDrawer companyId={companyId} />
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="cursor-pointer hover:bg-gray-100 flex items-center gap-2"
-              onClick={() => downloadFile(plantillaPath, "serMente_cargar_trabajadores.xlsx")}
+              onClick={() =>
+                downloadFile(plantillaPath, "serMente_cargar_trabajadores.xlsx")
+              }
             >
               <Download className="h-4 w-4" />
               Descargar Plantilla (Excel)
@@ -40,7 +50,7 @@ export const WorkersTab: React.FC<WorkersTabProps> = ({ companyId }) => {
       </div>
 
       <div className="mt-6">
-        <p className="text-gray-500">Aquí aparecerá la tabla de Trabajadores de la empresa.</p>
+        <WorkersList companyId={companyId} specialistId={userPerfil?.id || ""} />
       </div>
     </div>
   );

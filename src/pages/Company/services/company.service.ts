@@ -41,6 +41,22 @@ export const getCompany = async (companyId: string): Promise<Company> => {
   }
 };
 
+export const getCompanyUsers = async (companyId: string, specialistId: string) => {
+  try{
+    const response = await axios.post(`/api/company/${companyId}/users`, { specialistId });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("Error al obtener usuarios de la empresa:", errorMessage);
+      throw new Error(errorMessage);
+    } else {
+      console.error("Error desconocido al obtener usuarios de la empresa:", error);
+      throw new Error("Error desconocido al obtener usuarios de la empresa.");
+    }
+  }
+}
+
 export const createCompany = async (companyData: CreateCompanyFormData) => {
   try {
     const response = await axios.post("/api/company", companyData);

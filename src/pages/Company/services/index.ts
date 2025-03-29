@@ -1,2 +1,2 @@
-export { getCompanies, createCompany, deleteCompany, getCompany, updateCompany } from './company.service'
-export { assignUsersToCompany } from './userCompany.service'
+export { getCompanies, createCompany, deleteCompany, getCompany, updateCompany, getCompanyUsers } from './company.service'
+export { assignUsersToCompany, removeUserFromCompany } from './userCompany.service'
