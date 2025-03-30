@@ -19,6 +19,7 @@ import {
   CompanyPage,
   CreateCompany,
   CompanyManage,
+  RespondentPage
 } from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
@@ -69,6 +70,7 @@ function App() {
                 {/* Rutas Públicas */}
                 <Route element={<PublicLayout />}>
                   <Route path="/" element={<Login />} />
+                  <Route path="/respondent" element={<RespondentPage />} />
                 </Route>
 
                 {/* Rutas Protegidas */}

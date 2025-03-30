@@ -1,0 +1,1 @@
+export { RespondentPage } from "./RespondentPage";

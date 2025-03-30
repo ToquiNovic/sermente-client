@@ -1,1 +1,1 @@
-export * from "./login.service.ts";
+export { loginUser } from "./login.service.ts";
