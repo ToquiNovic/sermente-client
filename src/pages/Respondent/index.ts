@@ -1,2 +1,2 @@
 // src/pages/Respondent/index.ts
-export { RespondentPage } from "./RespondentPage";
+export { RespondentPage } from "./respondentPages";
