@@ -47,7 +47,6 @@ export const WorkersList = ({ companyId, specialistId }: Props) => {
       try {
         setLoading(true);
         const data: Worker[] = await getCompanyUsers(companyId, specialistId);
-        console.log("Datos obtenidos:", data);
         setWorkers(data);
       } catch (err) {
         setError((err as Error).message);

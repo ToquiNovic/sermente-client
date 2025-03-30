@@ -5,20 +5,35 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
+  RowSelectionState,
 } from "@tanstack/react-table";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { DataTablePagination } from "@/components/app/DataTablePagination";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DataTableProps<TData extends Record<string, unknown>> {
   columns: ColumnDef<TData>[];
   data: TData[];
 }
 
-export const DataTable = <TData extends Record<string, unknown>>({ columns, data }: DataTableProps<TData>) => {
+export const DataTable = <TData extends Record<string, unknown>>({
+  columns,
+  data,
+}: DataTableProps<TData>) => {
   const [filterValue, setFilterValue] = useState("");
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const filteredData = useMemo(() => {
     if (!filterValue) return data;
@@ -39,61 +54,77 @@ export const DataTable = <TData extends Record<string, unknown>>({ columns, data
   });
 
   return (
-      <div>
-        <div className="flex items-center py-4 space-x-2">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Input
-                placeholder="Buscar Usuario..."
-                value={filterValue}
-                onChange={(event) => setFilterValue(event.target.value)}
-                className="max-w-sm"
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              Puedes buscar por nombre, apellido, documento, teléfono o correo.
-            </TooltipContent>
-          </Tooltip>
-        </div>
+    <div>
+      <div className="flex items-center py-4 space-x-2">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Input
+              placeholder="Buscar Usuario..."
+              value={filterValue}
+              onChange={(event) => setFilterValue(event.target.value)}
+              className="max-w-sm"
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            Puedes buscar por nombre, apellido, documento, teléfono o correo.
+          </TooltipContent>
+        </Tooltip>
+      </div>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length > 0 ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  className={`${
+                    row.getIsSelected() ? "bg-blue-100" : ""
+                  } pointer-events-none hover:bg-transparent`}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      <div style={{ pointerEvents: "auto" }}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
+                    </TableCell>
                   ))}
                 </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.length > 0 ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="text-center py-4 text-gray-500">
-                    No hay campos con ese valor.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-between space-x-2 py-4">
-          <span>{Object.keys(rowSelection).length} fila(s) seleccionada(s).</span>
-          <DataTablePagination table={table} />
-        </div>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="text-center py-4"
+                >
+                  No hay datos que coincidan con la búsqueda.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <span>{Object.keys(rowSelection).length} fila(s) seleccionada(s).</span>
+        <DataTablePagination table={table} />
+      </div>
+    </div>
   );
 };
