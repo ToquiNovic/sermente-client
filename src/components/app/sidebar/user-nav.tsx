@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { LayoutGrid, LogOut, User } from "lucide-react";
 import { useUserProfile } from "@/hooks";
-
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {

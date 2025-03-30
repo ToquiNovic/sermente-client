@@ -19,7 +19,9 @@ import {
   CompanyPage,
   CreateCompany,
   CompanyManage,
-  RespondentPage
+  RespondentPage,
+  UnauthorizedPage,
+  NotFoundPage
 } from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
@@ -96,13 +98,17 @@ function App() {
                     />
                     <Route path="/company" element={<CompanyPage />} />
                     <Route path="/company/new" element={<CreateCompany />} />
-                    <Route path="/company/manage/:id" element={<CompanyManage />} />
-                    
+                    <Route
+                      path="/company/manage/:id"
+                      element={<CompanyManage />}
+                    />
                   </Route>
                 </Route>
 
+                <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
                 {/* Fallback para rutas no encontradas */}
-                <Route path="*" element={<Navigate to="/" />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </PersistGate>
