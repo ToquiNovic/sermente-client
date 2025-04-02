@@ -17,8 +17,7 @@ export const CompanyList = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const companies = await getCompanies();
-        
+        const companies = await getCompanies();        
         setData(companies);
       } catch (error) {
         console.error("Error fetching companies:", error);

@@ -5,11 +5,11 @@ import { Plus, CalendarCog, Settings, Trash2, BarChart3 } from "lucide-react";
 import { getSurveys, updateSurvey } from "./services";
 import { Survey } from "@/models";
 import { toast } from "sonner";
-import { format, differenceInDays, differenceInHours, differenceInMinutes } from "date-fns";
-import { es } from "date-fns/locale";
+// import { format, differenceInDays, differenceInHours, differenceInMinutes } from "date-fns";
+// import { es } from "date-fns/locale";
 import {
   Card,
-  CardContent,
+  // CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -107,13 +107,13 @@ const SurveysPage = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           {surveys.map((survey) => {
-            const deadlineDate = new Date(survey.deadline);
-            const daysLeft = differenceInDays(deadlineDate, new Date());
-            const hoursLeft = differenceInHours(deadlineDate, new Date());
-            const minutesLeft = differenceInMinutes(deadlineDate, new Date());
-            const formattedDate = format(deadlineDate, "PPPP p", {
-              locale: es,
-            });
+            // const deadlineDate = new Date(survey.deadline);
+            // const daysLeft = differenceInDays(deadlineDate, new Date());
+            // const hoursLeft = differenceInHours(deadlineDate, new Date());
+            // const minutesLeft = differenceInMinutes(deadlineDate, new Date());
+            // const formattedDate = format(deadlineDate, "PPPP p", {
+            //   locale: es,
+            // });
 
             return (
               <Card
@@ -137,7 +137,7 @@ const SurveysPage = () => {
                     <TooltipContent>Eliminar</TooltipContent>
                   </Tooltip>
                 </CardHeader>
-                <CardContent className="flex flex-col justify-end flex-grow">
+                {/* <CardContent className="flex flex-col justify-end flex-grow">
                   <p className="text-xs text-gray-500">
                     ⏳{" "}
                     {daysLeft > 0
@@ -149,7 +149,7 @@ const SurveysPage = () => {
                       : "Tiempo agotado"}
                   </p>
                   <p className="text-xs text-gray-400">📅 {formattedDate}</p>
-                </CardContent>
+                </CardContent> */}
 
                 <CardFooter className="flex justify-between mt-auto">
                   <Tooltip>
