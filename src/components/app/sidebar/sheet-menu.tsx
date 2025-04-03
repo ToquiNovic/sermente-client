@@ -10,7 +10,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
-import Logo from "/icon.svg"; 
+import Logo from "/icon.svg";
 
 export function SheetMenu() {
   return (
@@ -28,7 +28,7 @@ export function SheetMenu() {
             asChild
           >
             <Link to="/dashboard" className="flex items-center gap-2 pb-2 pt-1">
-            <img src={Logo} alt="Logo" className="w-6 h-6 mr-1" /> 
+              <img src={Logo} alt="Logo" className="w-6 h-6 mr-1" />
               <SheetTitle className="font-bold text-lg">SerMente</SheetTitle>
             </Link>
           </Button>

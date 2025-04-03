@@ -1,8 +1,6 @@
 import {
   BookOpen,
-  LayoutList,
   Settings2,
-  Blocks,
   Building2,
   LucideIcon,
   LayoutGrid,
@@ -80,41 +78,7 @@ export function getMenuList(pathname: string): Group[] {
               active: pathname === "/surveys",
             },
           ],
-        },
-        {
-          label: "Categoría",
-          href: "#",
-          icon: LayoutList,
-          submenus: [
-            {
-              label: "Crear Categorías",
-              href: "/commingsoon",
-              active: pathname === "/commingsoon",
-            },
-            {
-              label: "Categorías",
-              href: "/commingsoon",
-              active: pathname === "/commingsoon",
-            },
-          ],
-        },
-        {
-          label: "Subcategoría",
-          href: "#",
-          icon: Blocks,
-          submenus: [
-            {
-              label: "Crear SubCategorías",
-              href: "/commingsoon",
-              active: pathname === "/commingsoon",
-            },
-            {
-              label: "SubCategorías",
-              href: "/commingsoon",
-              active: pathname === "/commingsoon",
-            },
-          ],
-        },
+        }
       ],
     },
     {
