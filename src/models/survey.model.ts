@@ -16,8 +16,11 @@ export interface Survey {
 export interface SurveyFormData {
   title: string;
   description: string;
-  deadline: string;
-  typeSurveyId: string;
+  categories?: {
+    name: string;
+    description?: string;
+  }[];
+  id?: string; 
 }
 
 export interface UpdateSurveyData {

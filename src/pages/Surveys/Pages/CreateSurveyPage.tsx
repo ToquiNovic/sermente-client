@@ -1,33 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import { RootState } from "@/redux/store";
-import { SurveyFormData } from "@/models";
-import { createSurvey } from "../services";
-import { CardContent } from "@/components/ui/card";
+// @/pages/surveys/pages/CreateSurveyPage.tsx
 import { BookOpen } from "lucide-react";
+import { CardContent } from "@/components/ui/card";
 import { ContentLayout } from "@/components/app/sidebar/content-layout";
 import { MultiStepContainer } from "../Components";
 
 export const CreateSurveyPage = () => {
-  const navigate = useNavigate();
-  const userId = useSelector((state: RootState) => state.user?.id);
-
-  const onSubmit = async (data: SurveyFormData) => {
-    if (!userId) {
-      toast.error("No se pudo identificar al usuario.");
-      return;
-    }
-
-    try {
-      await createSurvey({ ...data });
-      toast.success(`Encuesta "${data.title}" creada con éxito.`);
-      navigate("/surveys");
-    } catch {
-      toast.error("Error al crear la encuesta. Inténtalo nuevamente.");
-    }
-  };
-
   return (
     <ContentLayout title="Crear Encuesta" icon={<BookOpen />}>
       <div className="w-full p-6">
@@ -38,7 +15,7 @@ export const CreateSurveyPage = () => {
           </div>
         </div>
         <CardContent>
-          <MultiStepContainer onSubmit={onSubmit} />
+          <MultiStepContainer />
         </CardContent>
       </div>
     </ContentLayout>

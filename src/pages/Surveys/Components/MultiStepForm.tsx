@@ -4,78 +4,112 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { surveySchema } from "../Schemas";
 import { SurveyFormData } from "@/models";
 import { StepLayout } from "./Steps/stepLayout";
-import { Button } from "@/components/ui/button";
 import { stepsList } from "../utils/stepsList";
-import { useState, useEffect } from "react";
-import { CardFooter } from "@/components/ui/card";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { createSurvey } from "../services";
 
 interface MultiStepFormProps {
   step: number;
   setStep: (step: number) => void;
-  onSubmit: (data: SurveyFormData) => void;
 }
 
-export const MultiStepForm = ({
-  step,
-  setStep,
-  onSubmit,
-}: MultiStepFormProps) => {
+export const MultiStepForm = ({ step, setStep }: MultiStepFormProps) => {
   const methods = useForm<SurveyFormData>({
     resolver: zodResolver(surveySchema),
-    defaultValues: { title: "", description: "" },
+    defaultValues: { title: "", description: "", categories: [] },
     mode: "onChange",
   });
 
-  const [dynamicTitle, setDynamicTitle] = useState("");
   const [isStepValid, setIsStepValid] = useState(false);
+  const [formTitle, setFormTitle] = useState("");
 
-  const { title, component: StepComponent } = stepsList[step] || {
-    title: "Paso Desconocido",
+  const currentStepMeta = stepsList[step] || {
+    title: "Paso desconocido",
     component: () => <p>Paso no encontrado</p>,
+    buttons: [],
   };
 
-  useEffect(() => {
-    methods.trigger();
-  }, [step, methods]);
+  const StepComponent = currentStepMeta.component;
 
-  const handleNextStep = () => {
-    if (isStepValid) setStep(step + 1); // Solo avanza si el paso es válido
+  const onNext = () => {
+    const values = methods.getValues();
+    console.log("🟡 Datos actuales del formulario:", values);
+
+    if (step === 1) {
+      console.log("📦 Categorías actuales:", values.categories);
+    }
+
+    if (step < stepsList.length - 1) {
+      setStep(step + 1);
+    }
+  };
+
+  const onBack = () => {
+    if (step > 0) setStep(step - 1);
+  };
+
+  const onSubmit = async () => {
+    const valid = await methods.trigger();
+    if (!valid) return;
+
+    const data = methods.getValues();
+
+    try {
+      const res = await createSurvey(data);
+
+      console.log("res", res);
+
+      // 🔥 Establece el ID en el formulario
+      methods.setValue("id", res.id);
+      console.log("🆔 Encuesta creada con ID:", res.id);
+
+      // ⚠️ Opcional: también lo puedes imprimir aquí
+      const updated = methods.getValues();
+      console.log("📦 Datos después del setValue:", updated);
+
+      toast.success("Encuesta creada exitosamente");
+      setStep(1); // ⬅️ No redirijas aún, continúa al paso 2
+    } catch {
+      toast.error("Ocurrió un error al crear la encuesta");
+    }
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
+      <form className="space-y-6">
         <StepLayout
-          title={dynamicTitle || title}
+          title={formTitle || currentStepMeta.title}
           steps={stepsList.map((s) => s.title)}
           currentStep={step}
         >
           <StepComponent
-            setTitle={setDynamicTitle}
+            setTitle={setFormTitle}
             setIsStepValid={setIsStepValid}
+            onNext={onNext}
+            onBack={onBack}
+            onSubmit={onSubmit}
           />
-        </StepLayout>
 
-        <CardFooter className="flex justify-between">
-          {step > 0 && (
-            <Button variant="outline" onClick={() => setStep(step - 1)}>
-              Anterior
-            </Button>
-          )}
-          {step < stepsList.length - 1 ? (
-            <Button
-              type="button"
-              onClick={handleNextStep}
-              disabled={!isStepValid}
-            >
-              Siguiente
-            </Button>
-          ) : (
-            <Button type="submit" disabled={!isStepValid}>
-              Enviar
-            </Button>
-          )}
-        </CardFooter>
+          <div className="flex justify-between pt-6">
+            {currentStepMeta.buttons?.includes("back") && (
+              <Button type="button" variant="outline" onClick={onBack}>
+                Atrás
+              </Button>
+            )}
+            {currentStepMeta.buttons?.includes("next") && (
+              <Button type="button" onClick={onNext} disabled={!isStepValid}>
+                Siguiente
+              </Button>
+            )}
+            {currentStepMeta.buttons?.includes("submit") && (
+              <Button type="button" onClick={onSubmit} disabled={!isStepValid}>
+                Guardar encuesta
+              </Button>
+            )}
+          </div>
+        </StepLayout>
       </form>
     </FormProvider>
   );

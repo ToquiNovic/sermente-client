@@ -1,6 +1,7 @@
 // @/pages/surveys/components/Steps/StepOne.tsx
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -12,16 +13,42 @@ import {
 } from "@/components/ui/form";
 
 interface StepOneProps {
-  setIsStepValid: (isValid: boolean) => void;
+  setIsStepValid: (valid: boolean) => void;
+  setTitle: (title: string) => void;
 }
 
-export const StepOne = ({ setIsStepValid }: StepOneProps) => {
-  const { control, formState } = useFormContext();
-  const { isValid } = formState;
+export const StepOne = ({ setIsStepValid, setTitle }: StepOneProps) => {
+  const {
+    control,
+    formState: { isValid },
+    trigger,
+    setValue,
+    watch,
+    getValues,
+  } = useFormContext();
+
+  const title = watch("title");
+
+  useEffect(() => {
+    trigger();
+  }, [trigger]);
 
   useEffect(() => {
     setIsStepValid(isValid);
   }, [isValid, setIsStepValid]);
+
+  useEffect(() => {
+    const currentId = getValues("id");
+    if (!currentId) {
+      const newId = uuidv4();
+      setValue("id", newId);
+      console.log("🆔 UUID generado en StepOne:", newId);
+    }
+  }, [getValues, setValue]);
+
+  useEffect(() => {
+    setTitle(title || "");
+  }, [title, setTitle]);
 
   return (
     <div className="space-y-4">
@@ -38,7 +65,6 @@ export const StepOne = ({ setIsStepValid }: StepOneProps) => {
           </FormItem>
         )}
       />
-
       <FormField
         control={control}
         name="description"
