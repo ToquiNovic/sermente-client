@@ -1,6 +1,6 @@
 // services/category.service.ts
 import axios from "axios";
-import { Category, CreateCategoryProps } from "../Schemas";
+import { Category, CreateCategoryProps } from "../Models";
 
 export const getCategories = async (): Promise<Category[]> => {
   try {
