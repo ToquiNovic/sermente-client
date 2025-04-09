@@ -1,3 +1,4 @@
+// /surveys/components/DeleteSurveyDialog.tsx
 import { useState } from "react";
 import {
   Dialog,
@@ -13,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { AlertCircle, Clipboard } from "lucide-react";
 import { toast } from "sonner";
 
-interface DeleteCompanyDialogProps {
+interface DeleteSurveyDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;
@@ -25,7 +26,7 @@ export const DeleteCompanyDialog = ({
   onClose,
   onDelete,
   companyName,
-}: DeleteCompanyDialogProps) => {
+}: DeleteSurveyDialogProps) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleDelete = () => {
@@ -41,7 +42,7 @@ export const DeleteCompanyDialog = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Eliminar empresa</DialogTitle>
+          <DialogTitle>Eliminar Encuesta</DialogTitle>
           <DialogDescription>Esta acción no se puede deshacer.</DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -50,7 +51,7 @@ export const DeleteCompanyDialog = ({
             <AlertTitle>Atención</AlertTitle>
             <AlertDescription>
               Esta acción es irreversible. Para confirmar la eliminación,
-              ingresa el nombre de la empresa. <strong>{companyName}</strong>
+              ingresa el nombre de la encuesta. <strong>{companyName}</strong>
             </AlertDescription>
           </Alert>
           <div className="flex items-center gap-2 border rounded-md px-3 py-2 bg-gray-100">
