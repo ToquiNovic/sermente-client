@@ -16,3 +16,14 @@ export interface CreateCategoryProps {
   description: string;
   surveyId: string;
 }
+
+export interface UpdateCategoryProps {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface GetCategoriesResponse {
+  message: string;
+  categories: Category[];
+}

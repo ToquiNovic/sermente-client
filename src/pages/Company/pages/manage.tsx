@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ContentLayout } from "@/components/app/sidebar/content-layout";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { WorkersTab, CompanyTab } from "../tabs";
+import { WorkersTab, CompanyTab, SurveyTab } from "../tabs";
 import { getCompany, updateCompany } from "../services";
 import { toast } from "sonner";
 import { Company } from "@/models";
@@ -37,9 +37,6 @@ export const CompanyManage = () => {
     if (!id) return;
 
     try {
-      // Log para verificar los datos enviados
-      console.log("Datos enviados a la API:", updatedCompany);
-
       // Actualizar la empresa a través de la API
       await updateCompany(id, updatedCompany);
 
@@ -55,7 +52,12 @@ export const CompanyManage = () => {
 
   if (loading) return <div className="text-center p-6">Cargando...</div>;
 
-  if (!company) return <div className="text-center p-6">No se encontraron datos de la empresa.</div>;
+  if (!company)
+    return (
+      <div className="text-center p-6">
+        No se encontraron datos de la empresa.
+      </div>
+    );
 
   return (
     <ContentLayout
@@ -86,6 +88,14 @@ export const CompanyManage = () => {
           >
             Trabajadores
           </TabsTrigger>
+          <TabsTrigger
+            value="Encuestas"
+            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
+            data-[state=active]:text-black font-medium"
+          >
+            Encuestas
+          </TabsTrigger>
         </TabsList>
 
         <div className="border-b border-gray-300 w-full -mt-[1px]" />
@@ -95,6 +105,9 @@ export const CompanyManage = () => {
         </TabsContent>
         <TabsContent value="trabajadores">
           {id && <WorkersTab companyId={id} />}
+        </TabsContent>
+        <TabsContent value="Encuestas">
+          {id && <SurveyTab />}
         </TabsContent>
       </Tabs>
     </ContentLayout>
