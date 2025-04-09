@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { useFormContext, useFieldArray } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -27,45 +28,63 @@ export const StepTwo = ({ setIsStepValid, setTitle }: StepTwoProps) => {
     name: "categories",
   });
 
-  // 🧠 Observa datos relevantes
   const title = watch("title");
   const id = watch("id");
-  const categories = watch("categories");
+  const watchedCategories = useWatch({ control, name: "categories" });
 
-  // ✅ Mostrar en consola al entrar
+  const [localIsValid, setLocalIsValid] = useState(false);
+
   useEffect(() => {
     console.log("📝 Paso 1 - Título:", title);
     console.log("🆔 ID de encuesta (watch):", id);
   }, [title, id]);
 
-  // ✅ Actualiza el título del paso
   useEffect(() => {
     setTitle(title || "");
   }, [title, setTitle]);
 
-  // ✅ Validación en tiempo real
   useEffect(() => {
-    const hasAtLeastOneValid = Array.isArray(categories)
-      ? categories.some((cat: Category) => cat?.name?.trim() !== "")
-      : false;
+    const categoryList: Category[] = Array.isArray(watchedCategories)
+      ? watchedCategories
+      : [];
 
-    setIsStepValid(hasAtLeastOneValid);
-  }, [categories, setIsStepValid]);
+    const isValid =
+      categoryList.length >= 1 &&
+      categoryList.every(
+        (category) =>
+          typeof category?.name === "string" && category.name.trim() !== ""
+      );
+
+    setLocalIsValid(isValid);
+    setIsStepValid(isValid);
+
+    console.log("📋 Categorías actuales:", categoryList);
+  }, [watchedCategories, setIsStepValid]);
 
   const handleAddEmptyRow = () => {
-    append({ name: "", description: "" });
+    append({ id: uuidv4(), name: "", description: "" });
   };
 
   return (
     <Card className="p-6 rounded-lg shadow-sm border border-gray-200 space-y-6">
       <h2 className="text-xl font-semibold">Categorías</h2>
 
+      <p className="text-sm text-gray-500">
+        Estado de validación local: {localIsValid ? "Válido" : "No válido"}
+      </p>
+
       <Table className="border border-gray-200 rounded">
         <TableHeader>
           <TableRow className="bg-gray-50">
-            <TableHead className="w-1/3 font-medium text-gray-700">Nombre</TableHead>
-            <TableHead className="w-1/3 font-medium text-gray-700">Descripción</TableHead>
-            <TableHead className="w-12 text-center font-medium text-gray-700">Acciones</TableHead>
+            <TableHead className="w-1/3 font-medium text-gray-700">
+              Nombre
+            </TableHead>
+            <TableHead className="w-1/3 font-medium text-gray-700">
+              Descripción
+            </TableHead>
+            <TableHead className="w-12 text-center font-medium text-gray-700">
+              Acciones
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -97,6 +116,18 @@ export const StepTwo = ({ setIsStepValid, setTitle }: StepTwoProps) => {
           ))}
         </TableBody>
       </Table>
+
+      {watchedCategories?.length === 0 && (
+        <p className="text-red-500 text-sm">
+          Debes agregar al menos una categoría.
+        </p>
+      )}
+
+      {watchedCategories?.some((cat: Category) => !cat?.name?.trim()) && (
+        <p className="text-red-500 text-sm">
+          El campo "Nombre" es obligatorio para todas las categorías.
+        </p>
+      )}
 
       <div className="mt-4 text-right">
         <Button type="button" onClick={handleAddEmptyRow}>

@@ -13,14 +13,26 @@ export interface Survey {
   creator: Creator;
 }
 
+export interface Subcategory {
+  id: string;
+  name: string;
+  categoryId: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 export interface SurveyFormData {
+  id: string;
   title: string;
   description: string;
-  categories?: {
-    name: string;
-    description?: string;
-  }[];
-  id?: string; 
+  categories: { id: string; name: string; description: string }[];
+  subcategories?: {
+    [categoryId: string]: Subcategory[];
+  };
 }
 
 export interface UpdateSurveyData {

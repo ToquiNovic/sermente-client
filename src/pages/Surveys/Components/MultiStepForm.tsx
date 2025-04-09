@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { createSurvey } from "../services";
+import { useNavigate } from "react-router-dom";
 
 interface MultiStepFormProps {
   step: number;
@@ -21,7 +22,7 @@ export const MultiStepForm = ({ step, setStep }: MultiStepFormProps) => {
     defaultValues: { title: "", description: "", categories: [] },
     mode: "onChange",
   });
-
+  const navigate = useNavigate();
   const [isStepValid, setIsStepValid] = useState(false);
   const [formTitle, setFormTitle] = useState("");
 
@@ -34,13 +35,6 @@ export const MultiStepForm = ({ step, setStep }: MultiStepFormProps) => {
   const StepComponent = currentStepMeta.component;
 
   const onNext = () => {
-    const values = methods.getValues();
-    console.log("🟡 Datos actuales del formulario:", values);
-
-    if (step === 1) {
-      console.log("📦 Categorías actuales:", values.categories);
-    }
-
     if (step < stepsList.length - 1) {
       setStep(step + 1);
     }
@@ -54,24 +48,36 @@ export const MultiStepForm = ({ step, setStep }: MultiStepFormProps) => {
     const valid = await methods.trigger();
     if (!valid) return;
 
-    const data = methods.getValues();
+    const raw = methods.getValues();
 
     try {
+      const data = {
+        id: raw.id,
+        title: raw.title.trim(),
+        description: raw.description.trim(),
+        categories: raw.categories.map((cat) => ({
+          id: cat.id,
+          name: cat.name.trim(),
+          description: cat.description?.trim() || "",
+        })),
+        subcategories: Object.fromEntries(
+          Object.entries(raw.subcategories || {}).map(([catId, subs]) => [
+            catId,
+            subs.map((sub) => ({
+              id: sub.id,
+              name: sub.name.trim(),
+              categoryId: sub.categoryId,
+            })),
+          ])
+        ),
+      };
       const res = await createSurvey(data);
-
-      console.log("res", res);
-
-      // 🔥 Establece el ID en el formulario
+      navigate(`/surveys/manage/${res.id}`);
       methods.setValue("id", res.id);
-      console.log("🆔 Encuesta creada con ID:", res.id);
-
-      // ⚠️ Opcional: también lo puedes imprimir aquí
-      const updated = methods.getValues();
-      console.log("📦 Datos después del setValue:", updated);
-
       toast.success("Encuesta creada exitosamente");
-      setStep(1); // ⬅️ No redirijas aún, continúa al paso 2
-    } catch {
+      setStep(1);
+    } catch (error) {
+      console.error("❌ Error al crear encuesta:", error);
       toast.error("Ocurrió un error al crear la encuesta");
     }
   };

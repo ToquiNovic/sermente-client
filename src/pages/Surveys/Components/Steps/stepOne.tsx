@@ -42,7 +42,6 @@ export const StepOne = ({ setIsStepValid, setTitle }: StepOneProps) => {
     if (!currentId) {
       const newId = uuidv4();
       setValue("id", newId);
-      console.log("🆔 UUID generado en StepOne:", newId);
     }
   }, [getValues, setValue]);
 

@@ -25,7 +25,7 @@ export const getSurvey = async (id: string): Promise<Survey> => {
 export const createSurvey = async (data: SurveyFormData): Promise<Survey> => {
   try {
     const response = await axios.post("/api/survey", data);
-    return response.data.survey;
+    return response.data;
   } catch (error) {
     console.error("Error creating survey:", error);
     throw error;

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { SurveyFormData } from "@/models";
 
 export const surveySchema = z.object({
-  id: z.string().uuid().optional(), // ✅ Esto permite que el ID esté en el formulario
+  id: z.string().uuid().optional(),
   title: z.string().min(3, "El título debe tener al menos 3 caracteres."),
   description: z
     .string()
@@ -15,7 +15,7 @@ export const surveySchema = z.object({
         description: z.string().optional(),
       })
     )
-    .optional(), // si no quieres que sea obligatorio aún
+    .optional(),
 });
 
 export type SurveyRequest = SurveyFormData & { createdBy: string };

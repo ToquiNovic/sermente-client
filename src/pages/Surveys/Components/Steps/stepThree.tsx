@@ -1,20 +1,33 @@
 // @/pages/surveys/components/Steps/StepThree.tsx
+import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { SurveyFormData } from "@/models";
+import { SubcategoryAccordion } from "../SubcategoryAccordion";
 
-export const StepThree = () => {
-  const { getValues } = useFormContext<SurveyFormData>();
-  const data = getValues();
+interface Props {
+  setIsStepValid: (valid: boolean) => void;
+  setTitle: (title: string) => void;
+}
+
+export const StepThree = ({ setIsStepValid, setTitle }: Props) => {
+  const { watch } = useFormContext<SurveyFormData>();
+  const values = watch();
+
+  useEffect(() => {
+    setTitle("Subcategorías");
+
+    const hasAllSubcategories = values.categories.every((cat) => {
+      const subs = values.subcategories?.[cat.id];
+      return Array.isArray(subs) && subs.length > 0;
+    });
+
+    setIsStepValid(hasAllSubcategories);
+  }, [values, setIsStepValid, setTitle]);
 
   return (
-    <div>
-      <p>
-        <strong>Título:</strong> {data.title}
-      </p>
-      <p>
-        <strong>Descripción:</strong> {data.description}
-      </p>
-      <p>Revisa la información antes de enviar.</p>
+    <div className="space-y-6">
+      <h3 className="text-lg font-semibold mb-4">Subcategorías por categoría</h3>
+      <SubcategoryAccordion />
     </div>
   );
 };

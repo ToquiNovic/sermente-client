@@ -1,5 +1,5 @@
 // @/pages/surveys/utils/stepsList.ts
-import { StepOne, StepTwo, StepThree } from "../Components/Steps";
+import { StepOne, StepTwo, StepThree, StepFinal } from "../Components/Steps";
 
 export interface StepMeta {
   id: number;
@@ -27,14 +27,14 @@ export const stepsList: StepMeta[] = [
   },
   {
     id: 2,
-    title: "Categorías2",
+    title: "Categorías",
     component: StepTwo,
     description: "Agrega categorías a la encuesta.",
     buttons: ["back", "next"],
   },
   {
     id: 3,
-    title: "Subcategorías3",
+    title: "Subcategorías",
     component: StepThree,
     description:
       "Revisa la configuración de las subcategorías antes de finalizar.",
@@ -43,7 +43,7 @@ export const stepsList: StepMeta[] = [
   {
     id: 4,
     title: "Finalizar",
-    component: StepThree,
+    component: StepFinal,
     description:
       "Revisa la configuración de las subcategorías antes de finalizar.",
     buttons: ["back", "submit"],
