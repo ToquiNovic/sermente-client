@@ -19,7 +19,6 @@ const SubcategoriesTab = ({ surveyId }: SubcategoriesTabProps) => {
       try {
         setLoading(true);
         const data = await getSubcategoriesBySurveyId(surveyId);
-        console.log("📝 Subcategories:", data);
         setCategories(data);
       } catch (err) {
         console.error("Error al cargar subcategorías", err);

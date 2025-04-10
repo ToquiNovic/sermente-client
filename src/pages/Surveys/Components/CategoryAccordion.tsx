@@ -97,7 +97,7 @@ export const CategoryAccordion = ({
       setEditingRows((prev) => prev.filter((i) => i !== index));
 
       const updated = getValues().subcategories.map((sub) => ({
-        id: sub.id!, // Assert id exists
+        id: sub.id!,
         name: sub.name,
       })) as SubcategoryBase[];
       onSubcategoriesChange(categoryId, updated);
