@@ -1,9 +1,12 @@
-// schema/category.schema.ts
+// ./models/category.models.ts
+import { SubcategoryBase } from "./subCategory.models";
+
 export interface Category {
   id: string;
   name: string;
   description: string;
   surveyId: string;
+  subcategories: SubcategoryBase[]; 
 }
 
 export interface CategoryForm {
@@ -27,3 +30,4 @@ export interface GetCategoriesResponse {
   message: string;
   categories: Category[];
 }
+

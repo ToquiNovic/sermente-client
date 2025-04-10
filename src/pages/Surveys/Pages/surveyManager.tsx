@@ -63,7 +63,7 @@ export const SurveyManagerPage = () => {
           {id && <CategoriesTab surveyId={id} />}
         </TabsContent>
         <TabsContent value="subcategories">
-          <SubcategoriesTab />
+          {id && <SubcategoriesTab surveyId={id} />}
         </TabsContent>
         <TabsContent value="options">
           <OptionsTab />

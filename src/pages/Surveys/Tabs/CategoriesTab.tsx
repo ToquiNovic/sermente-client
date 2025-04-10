@@ -76,11 +76,7 @@ const CategoriesTab = ({ surveyId }: CategoriesTabProps) => {
         description: cat.description || "",
       }));
 
-      if (mapped.length > 0) {
-        replace(mapped);
-      } else {
-        replace([{ name: "", description: "" }]);
-      }
+      replace(mapped); 
     } catch (error) {
       toast.error("Error al cargar las categorías");
       console.error(error);
@@ -192,55 +188,66 @@ const CategoriesTab = ({ surveyId }: CategoriesTabProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {fields.map((field, index) => (
-            <TableRow key={field.fieldId}>
-              <TableCell>
-                <Input
-                  {...register(`categories.${index}.name`)}
-                  placeholder="Nombre"
-                  disabled={!isEditing(index)}
-                />
-              </TableCell>
-              <TableCell>
-                <Input
-                  {...register(`categories.${index}.description`)}
-                  placeholder="Descripción"
-                  disabled={!isEditing(index)}
-                />
-              </TableCell>
-              <TableCell className="text-center">
-                <div className="flex justify-center items-center gap-2">
-                  {isEditing(index) ? (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleSaveCategory(index)}
-                    >
-                      <Save className="h-4 w-4 text-green-600" />
-                    </Button>
-                  ) : (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleEdit(index)}
-                    >
-                      <Pencil className="h-4 w-4 text-blue-500" />
-                    </Button>
-                  )}
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDeleteCategory(index)}
-                  >
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </Button>
-                </div>
+          {fields.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="text-center text-muted-foreground py-6"
+              >
+                No hay categorías registradas aún.
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            fields.map((field, index) => (
+              <TableRow key={field.fieldId}>
+                <TableCell>
+                  <Input
+                    {...register(`categories.${index}.name`)}
+                    placeholder="Nombre"
+                    disabled={!isEditing(index)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Input
+                    {...register(`categories.${index}.description`)}
+                    placeholder="Descripción"
+                    disabled={!isEditing(index)}
+                  />
+                </TableCell>
+                <TableCell className="text-center">
+                  <div className="flex justify-center items-center gap-2">
+                    {isEditing(index) ? (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleSaveCategory(index)}
+                      >
+                        <Save className="h-4 w-4 text-green-600" />
+                      </Button>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(index)}
+                      >
+                        <Pencil className="h-4 w-4 text-blue-500" />
+                      </Button>
+                    )}
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteCategory(index)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
 
@@ -261,8 +268,9 @@ const CategoriesTab = ({ surveyId }: CategoriesTabProps) => {
               Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
-          <p className="text-sm text-gray-500">¿Estás seguro de eliminar la
-            categoría "<strong>{categoryToDelete?.name}</strong>"?
+          <p className="text-sm text-gray-500">
+            ¿Estás seguro de eliminar la categoría "
+            <strong>{categoryToDelete?.name}</strong>"?
           </p>
           <DialogFooter className="mt-4">
             <Button variant="outline" onClick={() => setDeleteIndex(null)}>
