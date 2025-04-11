@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BookOpen } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CategoriesTab, SubcategoriesTab, OptionsTab } from "../Tabs";
+import { CategoriesTab, SubcategoriesTab, QuestionsTab, PositionTab } from "../Tabs";
 import { Survey } from "@/models";
 import { getSurvey } from "../services";
 import { ContentLayout } from "@/components/app/sidebar/content-layout";
@@ -48,12 +48,20 @@ export const SurveyManagerPage = () => {
             Subcategorías
           </TabsTrigger>
           <TabsTrigger
-            value="options"
+            value="questions"
             className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
           >
-            Opciones
+            Preguntas
+          </TabsTrigger>
+          <TabsTrigger
+            value="positions"
+            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
+            data-[state=active]:text-black font-medium"
+          >
+            Orden
           </TabsTrigger>
         </TabsList>
 
@@ -65,8 +73,11 @@ export const SurveyManagerPage = () => {
         <TabsContent value="subcategories">
           {id && <SubcategoriesTab surveyId={id} />}
         </TabsContent>
-        <TabsContent value="options">
-          <OptionsTab />
+        <TabsContent value="questions">
+          {id && <QuestionsTab surveyId={id} />}
+        </TabsContent>
+        <TabsContent value="positions">
+          <PositionTab />
         </TabsContent>
       </Tabs>
     </ContentLayout>
