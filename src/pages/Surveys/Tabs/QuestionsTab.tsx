@@ -90,9 +90,13 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
   };
 
   const filteredQuestions =
-    questions?.filter((q) =>
-      q.text?.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
+    questions?.filter((q) => {
+      const textMatch = q.text
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const positionMatch = q.position?.toString().includes(searchTerm.trim());
+      return textMatch || positionMatch;
+    }) || [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -392,26 +396,28 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
           <div className="space-y-2">
             <Label>Opciones</Label>
             <div className="grid grid-cols-1 gap-4">
-              {options.map((option, index) => (
-                <div key={option.name} className="grid grid-cols-2 gap-2">
-                  <Input
-                    placeholder="Nombre"
-                    value={option.name.toUpperCase()}
-                    onChange={(e) =>
-                      handleOptionNameChange(index, e.target.value)
-                    }
-                    disabled={inputsDisabled}
-                  />
-                  <Input
-                    placeholder="Valor"
-                    value={option.value}
-                    onChange={(e) =>
-                      handleOptionChange(index, Number(e.target.value))
-                    }
-                    disabled={inputsDisabled}
-                  />
-                </div>
-              ))}
+              {[...options]
+                .sort((a, b) => b.value - a.value)
+                .map((option, index) => (
+                  <div key={option.name} className="grid grid-cols-2 gap-2">
+                    <Input
+                      placeholder="Nombre"
+                      value={option.name.toUpperCase()}
+                      onChange={(e) =>
+                        handleOptionNameChange(index, e.target.value)
+                      }
+                      disabled={inputsDisabled}
+                    />
+                    <Input
+                      placeholder="Valor"
+                      value={option.value}
+                      onChange={(e) =>
+                        handleOptionChange(index, Number(e.target.value))
+                      }
+                      disabled={inputsDisabled}
+                    />
+                  </div>
+                ))}
             </div>
           </div>
         )}
