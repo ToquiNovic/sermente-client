@@ -2,6 +2,13 @@
 export interface SubcategoryBase {
   id: string;
   name: string;
+  categoryId?: string;
+}
+
+export interface SubCategoryForm {
+  name: string;
+  categoryId: string;
+  subcategories: SubcategoryBase[];
 }
 
 export interface Subcategory {

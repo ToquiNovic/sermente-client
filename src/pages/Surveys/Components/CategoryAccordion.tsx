@@ -133,7 +133,7 @@ export const CategoryAccordion = ({
       const updated = getValues()
         .subcategories.filter((_, index) => index !== deleteIndex)
         .map((sub) => ({
-          id: sub.id!, 
+          id: sub.id!,
           name: sub.name,
         })) as SubcategoryBase[];
       onSubcategoriesChange(categoryId, updated);
@@ -151,7 +151,7 @@ export const CategoryAccordion = ({
 
   const handleAddSubCategory = () => {
     const newIndex = fields.length;
-    append({ name: "", categoryId });
+    append({ id: "", name: "", categoryId });
     setEditingRows((prev) => [...prev, newIndex]);
   };
 
