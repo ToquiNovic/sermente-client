@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BookOpen } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CategoriesTab, SubcategoriesTab, QuestionsTab, PositionTab } from "../Tabs";
+import {
+  CategoriesTab,
+  SubcategoriesTab,
+  QuestionsTab,
+  PositionTab,
+} from "../Tabs";
 import { Survey } from "@/models";
 import { getSurvey } from "../services";
 import { ContentLayout } from "@/components/app/sidebar/content-layout";
@@ -28,7 +33,10 @@ export const SurveyManagerPage = () => {
   }, [id]);
 
   return (
-    <ContentLayout title={survey?.title || "Gestionar Encuesta"} icon={<BookOpen />}>
+    <ContentLayout
+      title={survey?.title || "Gestionar Encuesta"}
+      icon={<BookOpen />}
+    >
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="flex space-x-2 bg-transparent justify-start">
           <TabsTrigger
@@ -77,7 +85,7 @@ export const SurveyManagerPage = () => {
           {id && <QuestionsTab surveyId={id} />}
         </TabsContent>
         <TabsContent value="positions">
-          <PositionTab />
+          {id && <PositionTab surveyId={id} />}
         </TabsContent>
       </Tabs>
     </ContentLayout>

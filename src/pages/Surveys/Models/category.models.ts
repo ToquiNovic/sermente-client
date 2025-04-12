@@ -1,12 +1,28 @@
 // ./models/category.models.ts
 import { SubcategoryBase } from "./subCategory.models";
+import { Option } from "./question.models";
+
+export interface QuestionbyCategory {
+  id: string;
+  text: string;
+  position: number;
+  subcategoryId: string;
+  options: Option[];
+}
+
+export interface SubcategoryforCategory extends SubcategoryBase {
+  status: string;
+  categoryId: string;
+  questions: QuestionbyCategory[];
+}
 
 export interface Category {
   id: string;
   name: string;
   description: string;
   surveyId: string;
-  subcategories: SubcategoryBase[]; 
+  status: string;
+  subcategories: SubcategoryforCategory[];
 }
 
 export interface CategoryForm {
@@ -30,4 +46,3 @@ export interface GetCategoriesResponse {
   message: string;
   categories: Category[];
 }
-

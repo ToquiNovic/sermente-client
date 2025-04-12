@@ -8,6 +8,7 @@ export interface Question {
 }
 
 export interface Option {
+  id?: string;
   text: string;
   weight: number;
 }

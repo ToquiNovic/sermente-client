@@ -2,12 +2,8 @@
 import axios from "axios";
 import { Question } from "../Models";
 
-export const getQuestionsBySubcategoryId = async (
-  subcategoryId: string
-) => {
-  const response = await axios.get(
-    `/api/question/${subcategoryId}`
-  );
+export const getQuestionsBySubcategoryId = async (subcategoryId: string) => {
+  const response = await axios.get(`/api/question/${subcategoryId}`);
   return response.data;
 };
 
@@ -32,5 +28,20 @@ export const updateQuestion = async (
 
 export const deleteQuestion = async (questionId: string) => {
   const response = await axios.delete(`/api/question/${questionId}`);
+  return response.data;
+};
+
+export const getQuestionBySurveyId = async (surveyId: string) => {
+  const response = await axios.get(`/api/question/survey/${surveyId}`);
+  return response.data;
+};
+
+export const updateQuestionPosition = async (
+  questionId: string,
+  newPosition: number
+) => {
+  const response = await axios.put(`/api/question/position/${questionId}`, {
+    position: newPosition,
+  });
   return response.data;
 };

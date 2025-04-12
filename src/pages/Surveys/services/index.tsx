@@ -24,4 +24,6 @@ export {
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  getQuestionBySurveyId,
+  updateQuestionPosition,
 } from "./questions.service";

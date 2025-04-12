@@ -5,13 +5,9 @@ export interface SubcategoryBase {
 }
 
 export interface Subcategory {
-  id?: string;
+  id: string;
   name: string;
   categoryId: string;
-}
-
-export interface SubCategoryForm {
-  subcategories: Subcategory[];
 }
 
 export interface SubcategoryResponse {
@@ -29,6 +25,7 @@ export interface UpdateSubcategoryProps {
   id: string;
   name: string;
 }
+
 export interface SubCategoriesTabProps {
   categoryId: string;
 }
