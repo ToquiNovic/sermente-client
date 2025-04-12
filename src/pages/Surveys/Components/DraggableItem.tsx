@@ -49,9 +49,9 @@ export const DraggableItem = ({ item, onDrop }: DraggableItemProps) => {
   return (
     <div
       ref={ref}
-      className="p-3 border rounded cursor-move bg-white shadow hover:bg-gray-50"
+      className="p-3 border rounded cursor-move bg-white shadow hover:bg-[#faa0a038]"
     >
-      <Collapsible className="w-[350px] space-y-2">
+      <Collapsible className="w-min[500px] space-y-2">
         <div className="flex items-center justify-between px-4">
           <h4 className="text-sm font-semibold truncate">
             {item.position} - {item.label}

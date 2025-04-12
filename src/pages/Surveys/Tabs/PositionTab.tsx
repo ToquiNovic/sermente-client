@@ -23,7 +23,7 @@ interface PositionTabProps {
 export const PositionTab = ({ surveyId }: PositionTabProps) => {
   const [items, setItems] = useState<PositionItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [version, setVersion] = useState(0); // ✅ Necesario para el control de versiones
+  const [version, setVersion] = useState(0); 
   const positionRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const originalPositionsRef = useRef<Record<string, number>>({});
 
@@ -60,7 +60,7 @@ export const PositionTab = ({ surveyId }: PositionTabProps) => {
 
   useEffect(() => {
     fetchAndSetQuestions();
-  }, [fetchAndSetQuestions, version]); // 🔄 Se vuelve a ejecutar al cambiar `version`
+  }, [fetchAndSetQuestions, version]); 
 
   const handleDrop = useCallback(
     (sourceId: string, targetPosition: number) => {
@@ -141,7 +141,7 @@ export const PositionTab = ({ surveyId }: PositionTabProps) => {
       originalPositionsRef.current = updatedPositions;
 
       toast.success("Posiciones actualizadas correctamente.");
-      setVersion((prev) => prev + 1); // ✅ Aumentamos versión para refetch
+      setVersion((prev) => prev + 1); 
     } catch (error) {
       console.error("Error al actualizar posiciones:", error);
       toast.error("Error al actualizar posiciones.");
@@ -226,7 +226,7 @@ export const PositionTab = ({ surveyId }: PositionTabProps) => {
               className="border-2 border-gray-300 rounded-lg p-4 bg-slate-50 min-h-[120px]"
             >
               <h3 className="text-sm font-bold text-slate-700 mb-3">
-                Capa posición {position}
+                Posición Nº {position}
               </h3>
               <DraggableItem
                 item={item}
