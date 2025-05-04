@@ -1,5 +1,5 @@
 // src/pages/Surveys/services/questions.service.ts
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Question } from "../Models";
 
 export const getQuestionsBySubcategoryId = async (subcategoryId: string) => {
@@ -18,7 +18,7 @@ export const getQuestionsBySubcategoryId = async (subcategoryId: string) => {
     }
 
     console.error("Error fetching questions:", error);
-    throw error; 
+    throw error;
   }
 };
 
@@ -26,11 +26,21 @@ export const createQuestion = async (
   subcategoryId: string,
   question: Question
 ) => {
-  const response = await axios.post(`/api/question`, {
-    subCategoryId: subcategoryId,
-    ...question,
-  });
-  return response.data;
+  try {
+    const response = await axios.post(`/api/question`, {
+      subCategoryId: subcategoryId,
+      ...question,
+    });
+    return response.data; 
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorMessage =
+        error.response?.data?.error || "Error desconocido al crear la pregunta";
+      throw new Error(errorMessage); 
+    } else {
+      throw new Error("Error desconocido al crear la pregunta");
+    }
+  }
 };
 
 export const updateQuestion = async (
