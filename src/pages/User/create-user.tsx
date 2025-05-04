@@ -1,3 +1,4 @@
+// ../create-user.tsx
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -95,14 +96,16 @@ export const CreateUser = ({
     setFormData((prev) => ({
       ...prev,
       roleIds: [roleName],
+      roleNames: [roleName],
       password: roleName === "Encuestado" ? "" : prev.password,
     }));
-    setTimeout(() => setOpen(false), 100);
   };
 
   const selectedRole = roles.find((r) => r.name === formData.roleIds[0]);
 
   const handleCreateUser = () => {
+    console.log(formData);
+
     if (
       !formData.numberDoc.trim() ||
       (selectedRole?.name !== "Encuestado" &&

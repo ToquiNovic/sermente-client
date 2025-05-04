@@ -13,6 +13,31 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "@/components/ui/tooltip";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { useEffect } from "react";
+import { LucideIcon } from "lucide-react";
+
+// Tipos
+interface Submenu {
+  href: string;
+  label: string;
+  active?: boolean;
+  adminOnly?: boolean;
+}
+
+interface MenuItem {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  active?: boolean;
+  submenus?: Submenu[];
+  adminOnly?: boolean;
+}
+
+interface MenuGroup {
+  groupLabel?: string;
+  menus: MenuItem[];
+}
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -21,17 +46,62 @@ interface MenuProps {
 export function Menu({ isOpen }: MenuProps) {
   const dispatch = useDispatch();
   const location = useLocation();
+  const { userPerfil, fetchUserDetails } = useUserProfile();
+  const isAdmin =
+    userPerfil?.roles?.some((role) => role.name === "Administrador") || false;
   const menuList = getMenuList(location.pathname);
+
+  // Cargar detalles del usuario si no están disponibles
+  useEffect(() => {
+    if (!userPerfil) {
+      fetchUserDetails();
+    }
+  }, [userPerfil, fetchUserDetails]);
 
   const handleLogout = () => {
     dispatch(logout());
   };
 
+  // Filtrar los ítems del menú según el rol
+  const filteredMenuList: MenuGroup[] = menuList.map((group) => ({
+    ...group,
+    menus: group.menus
+      .filter((menu) => {
+        const isMenuAllowed =
+          !(menu.adminOnly ?? false) || (menu.adminOnly && isAdmin);
+        if (menu.submenus && menu.submenus.length > 0) {
+          return (
+            isMenuAllowed ||
+            menu.submenus.some(
+              (submenu) =>
+                !(submenu.adminOnly ?? false) || (submenu.adminOnly && isAdmin)
+            )
+          );
+        }
+        return isMenuAllowed;
+      })
+      .map((menu) => ({
+        ...menu,
+        submenus: menu.submenus
+          ? menu.submenus
+              .filter(
+                (submenu) =>
+                  !(submenu.adminOnly ?? false) ||
+                  (submenu.adminOnly && isAdmin)
+              )
+              .map((submenu) => ({
+                ...submenu,
+                icon: Ellipsis, // Añadir icon por defecto para submenús
+              }))
+          : menu.submenus,
+      })),
+  }));
+
   return (
     <ScrollArea className="[&>div>div[style]]:!block">
       <nav className="mt-8 h-full w-full">
         <ul className="flex flex-col min-h-[calc(100vh-48px-36px-16px-32px)] lg:min-h-[calc(100vh-32px-40px-32px)] items-start space-y-1 px-2">
-          {menuList.map(({ groupLabel, menus }, index) => (
+          {filteredMenuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {(isOpen && groupLabel) || isOpen === undefined ? (
                 <p className="text-sm font-medium text-muted-foreground px-4 pb-2 max-w-[248px] truncate">
@@ -136,7 +206,9 @@ export function Menu({ isOpen }: MenuProps) {
                   </Button>
                 </TooltipTrigger>
                 {isOpen === false && (
-                  <TooltipContent side="right" onClick={handleLogout} >Cerrar Sesión</TooltipContent>
+                  <TooltipContent side="right" onClick={handleLogout}>
+                    Cerrar Sesión
+                  </TooltipContent>
                 )}
               </Tooltip>
             </TooltipProvider>

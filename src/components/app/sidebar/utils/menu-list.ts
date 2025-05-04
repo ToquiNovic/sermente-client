@@ -14,6 +14,7 @@ type Submenu = {
   href: string;
   label: string;
   active?: boolean;
+  adminOnly?: boolean;
 };
 
 type Menu = {
@@ -22,6 +23,7 @@ type Menu = {
   active?: boolean;
   icon: LucideIcon;
   submenus?: Submenu[];
+  adminOnly?: boolean;
 };
 
 type Group = {
@@ -78,72 +80,105 @@ export function getMenuList(pathname: string): Group[] {
               active: pathname === "/surveys",
             },
           ],
-        }
+        },
       ],
     },
     {
-      groupLabel: "Configuracion",
+      groupLabel: "Configuración",
       menus: [
-        {label: "Usuarios", href: "/users", icon: UsersRound, active: pathname === "/users"},
-        {label: "Roles", href: "/rol", icon: SlidersVertical, active: pathname === "/rol"},
-        {label: "Cuenta", href: "/commingsoon", icon: CircleUser , active: pathname === "/commingsoon"},
-        {label: "Economía", href: "/commingsoon", icon: Coins, active: pathname === "/commingsoon"},
+        {
+          label: "Usuarios",
+          href: "/users",
+          icon: UsersRound,
+          active: pathname === "/users",
+          adminOnly: true,
+        },
+        {
+          label: "Roles",
+          href: "/rol",
+          icon: SlidersVertical,
+          active: pathname === "/rol",
+          adminOnly: true,
+        },
+        {
+          label: "Cuenta",
+          href: "/commingsoon",
+          icon: CircleUser,
+          active: pathname === "/commingsoon",
+        },
+        {
+          label: "Economía",
+          href: "/commingsoon",
+          icon: Coins,
+          active: pathname === "/commingsoon",
+        },
         {
           label: "Configuraciones",
           href: "#",
           icon: Settings2,
+          adminOnly: true,
           submenus: [
             {
               label: "Tipo Contrato",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Tipo Sangre",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Tipo Encuesta",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Tipo Salario",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Estrato",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Nivel de Estudio",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Géneros",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Dependencias",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Housing Types",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
             {
               label: "Marital Statuses",
               href: "/commingsoon",
               active: pathname === "/commingsoon",
+              adminOnly: true,
             },
-          ],          
+          ],
         },
       ],
     },
