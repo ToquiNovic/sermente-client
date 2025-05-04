@@ -397,7 +397,23 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
             <Label>Opciones</Label>
             <div className="grid grid-cols-1 gap-4">
               {[...options]
-                .sort((a, b) => b.value - a.value)
+                .sort(
+                  (a, b) =>
+                    [
+                      "siempre",
+                      "casi siempre",
+                      "algunas veces",
+                      "casi nunca",
+                      "nunca",
+                    ].indexOf(a.name.toLowerCase()) -
+                    [
+                      "siempre",
+                      "casi siempre",
+                      "algunas veces",
+                      "casi nunca",
+                      "nunca",
+                    ].indexOf(b.name.toLowerCase())
+                )
                 .map((option, index) => (
                   <div key={option.name} className="grid grid-cols-2 gap-2">
                     <Input

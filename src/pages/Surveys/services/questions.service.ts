@@ -3,8 +3,23 @@ import axios from "axios";
 import { Question } from "../Models";
 
 export const getQuestionsBySubcategoryId = async (subcategoryId: string) => {
-  const response = await axios.get(`/api/question/${subcategoryId}`);
-  return response.data;
+  try {
+    const response = await axios.get(`/api/question/${subcategoryId}`);
+    const data = response.data;
+
+    if (!data || !Array.isArray(data.questions)) {
+      return { questions: [] };
+    }
+
+    return data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return { questions: [] };
+    }
+
+    console.error("Error fetching questions:", error);
+    throw error; 
+  }
 };
 
 export const createQuestion = async (

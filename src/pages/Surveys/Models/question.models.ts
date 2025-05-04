@@ -12,3 +12,9 @@ export interface Option {
   text: string;
   weight: number;
 }
+
+export interface QuestionFormValues {
+  text: string;
+  isMultipleChoice: boolean;
+  options: Option[];
+}
