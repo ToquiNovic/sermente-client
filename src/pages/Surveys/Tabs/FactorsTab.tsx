@@ -206,7 +206,7 @@ export const FactorsTab = ({ surveyId }: FactorsTabProps) => {
                 colSpan={3}
                 className="text-center text-muted-foreground py-6"
               >
-                No hay categorías registradas aún.
+                No hay Factores registrados aún.
               </TableCell>
             </TableRow>
           ) : (
