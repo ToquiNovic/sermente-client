@@ -1,8 +1,11 @@
+import { Domain } from "./domains.type";
+
 export interface Factor {
   id?: string;
   name: string;
   description: string;
   position: number;
+  domains?: Domain[];
 }
 
 export interface createFactorProps {

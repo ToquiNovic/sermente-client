@@ -34,3 +34,5 @@ export {
   deleteFactor,
   getFactorsbySurveyId,
 } from "./factor.service";
+
+export { getDomainsbySurveyId, createDomain, updateDomain, deleteDomain } from "./domains.service";

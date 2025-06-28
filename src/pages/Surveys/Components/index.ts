@@ -5,3 +5,4 @@ export { SubcategoryAccordion } from "./SubcategoryAccordion";
 export { CategoryAccordion } from "./CategoryAccordion";
 export { DraggableItem } from "./DraggableItem";
 export { MultipleChoiceOptions } from "./MultipleChoiceOptions";
+export { DomainAccordion } from "./DomainsAccordion";

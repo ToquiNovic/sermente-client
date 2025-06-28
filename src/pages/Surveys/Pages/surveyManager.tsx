@@ -5,6 +5,7 @@ import { BookOpen } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   FactorsTab,
+  DomainsTab,
   CategoriesTab,
   SubcategoriesTab,
   QuestionsTab,
@@ -49,6 +50,14 @@ export const SurveyManagerPage = () => {
             Factores
           </TabsTrigger>
           <TabsTrigger
+            value="domains"
+            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
+            data-[state=active]:text-black font-medium"
+          >
+            Dominios
+          </TabsTrigger>
+          <TabsTrigger
             value="categories"
             className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
@@ -86,6 +95,9 @@ export const SurveyManagerPage = () => {
 
         <TabsContent value="factors">
           {id && <FactorsTab surveyId={id} />}
+        </TabsContent>
+        <TabsContent value="domains">
+          {id && <DomainsTab surveyId={id} />}
         </TabsContent>
         <TabsContent value="categories">
           {id && <CategoriesTab surveyId={id} />}

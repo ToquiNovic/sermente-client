@@ -44,7 +44,7 @@ const SubcategoriesTab = ({ surveyId }: SubcategoriesTabProps) => {
         )
       );
     },
-    [] // 👈 muy importante: sin dependencias
+    []
   );
 
   return (
