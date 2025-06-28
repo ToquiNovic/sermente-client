@@ -27,3 +27,10 @@ export {
   getQuestionBySurveyId,
   updateQuestionPosition,
 } from "./questions.service";
+export {
+  getFactors,
+  createFactor,
+  updateFactor,
+  deleteFactor,
+  getFactorsbySurveyId,
+} from "./factor.service";

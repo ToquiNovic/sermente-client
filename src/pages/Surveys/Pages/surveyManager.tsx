@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { BookOpen } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  FactorsTab,
   CategoriesTab,
   SubcategoriesTab,
   QuestionsTab,
@@ -16,7 +17,7 @@ import { ContentLayout } from "@/components/app/sidebar/content-layout";
 export const SurveyManagerPage = () => {
   const { id } = useParams();
   const [survey, setSurvey] = useState<Survey | null>(null);
-  const [activeTab, setActiveTab] = useState("categories");
+  const [activeTab, setActiveTab] = useState("factors");
 
   useEffect(() => {
     if (!id) return;
@@ -39,6 +40,14 @@ export const SurveyManagerPage = () => {
     >
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="flex space-x-2 bg-transparent justify-start">
+          <TabsTrigger
+            value="factors"
+            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
+            data-[state=active]:text-black font-medium"
+          >
+            Factores
+          </TabsTrigger>
           <TabsTrigger
             value="categories"
             className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
@@ -75,6 +84,9 @@ export const SurveyManagerPage = () => {
 
         <div className="border-b border-gray-300 w-full -mt-[1px]" />
 
+        <TabsContent value="factors">
+          {id && <FactorsTab surveyId={id} />}
+        </TabsContent>
         <TabsContent value="categories">
           {id && <CategoriesTab surveyId={id} />}
         </TabsContent>
