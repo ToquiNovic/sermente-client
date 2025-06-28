@@ -7,6 +7,7 @@ import {
   GetFactorsResponse,
 } from "../types";
 import { toast } from "sonner";
+import type { AxiosError } from "axios";
 
 export const getFactors = async (): Promise<Factor[]> => {
   try {
@@ -16,13 +17,14 @@ export const getFactors = async (): Promise<Factor[]> => {
 
     return response.data;
   } catch (error) {
-    console.error("Error al obtener factores:", error);
+    const err = error as AxiosError<{ error: string }>;
 
-    toast.error(
-      "No se pudieron cargar los factores. Intenta de nuevo más tarde."
-    );
+    const errorMessage =
+      err.response?.data?.error || "Error al cargar los factores.";
 
-    return [];
+    toast.error(errorMessage);
+
+    throw error;
   }
 };
 
@@ -31,14 +33,15 @@ export const createFactor = async (
 ): Promise<Factor> => {
   try {
     const response = await axios.post("/api/factor", factor);
-
     toast.success("Factor creado exitosamente.");
-
     return response.data;
   } catch (error) {
-    console.error("Error al crear factor:", error);
+    const err = error as AxiosError<{ error: string }>;
 
-    toast.error("Error al crear factor. Intenta de nuevo más tarde.");
+    const errorMessage =
+      err.response?.data?.error || "Error al crear el factor.";
+
+    toast.error(errorMessage);
 
     throw error;
   }
@@ -84,7 +87,7 @@ export const getFactorsbySurveyId = async (
 ): Promise<GetFactorsResponse> => {
   try {
     const response = await axios.get(`/api/factor/survey/${surveyId}`);
-    
+
     if (showSuccessToast) {
       toast.success("Factores cargados correctamente.");
     }
