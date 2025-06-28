@@ -7,13 +7,6 @@ export {
 } from "./survey.service";
 export { postSurveyAssignment } from "./surveyAssignment.service";
 export {
-  getCategories,
-  createCategory,
-  getCategoriesbySurveyId,
-  updateCategory,
-  deleteCategory,
-} from "./category.service";
-export {
   getSubcategoriesBySurveyId,
   createSubcategory,
   updateSubcategory,
@@ -36,3 +29,5 @@ export {
 } from "./factor.service";
 
 export { getDomainsbySurveyId, createDomain, updateDomain, deleteDomain } from "./domains.service";
+
+export { getDimensionsbySurveyId, createDimension, updateDimension, deleteDimension } from "./dimensions.service";

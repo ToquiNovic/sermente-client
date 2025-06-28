@@ -6,10 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   FactorsTab,
   DomainsTab,
-  CategoriesTab,
-  SubcategoriesTab,
   QuestionsTab,
   PositionTab,
+  DimensionsTab,
 } from "../Tabs";
 import { Survey } from "@/models";
 import { getSurvey } from "../services";
@@ -58,20 +57,12 @@ export const SurveyManagerPage = () => {
             Dominios
           </TabsTrigger>
           <TabsTrigger
-            value="categories"
+            value="dimensions"
             className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
           >
-            Categorías
-          </TabsTrigger>
-          <TabsTrigger
-            value="subcategories"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
-            data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
-            data-[state=active]:text-black font-medium"
-          >
-            Subcategorías
+            Dimensiones
           </TabsTrigger>
           <TabsTrigger
             value="questions"
@@ -99,11 +90,8 @@ export const SurveyManagerPage = () => {
         <TabsContent value="domains">
           {id && <DomainsTab surveyId={id} />}
         </TabsContent>
-        <TabsContent value="categories">
-          {id && <CategoriesTab surveyId={id} />}
-        </TabsContent>
-        <TabsContent value="subcategories">
-          {id && <SubcategoriesTab surveyId={id} />}
+        <TabsContent value="dimensions">
+          {id && <DimensionsTab surveyId={id} />}
         </TabsContent>
         <TabsContent value="questions">
           {id && <QuestionsTab surveyId={id} />}

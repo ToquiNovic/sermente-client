@@ -225,13 +225,13 @@ export const DomainAccordion = ({
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>¿Eliminar subcategoría?</DialogTitle>
+            <DialogTitle>¿Eliminar Dominio?</DialogTitle>
             <DialogDescription>
               Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <p className="text-sm text-gray-500">
-            ¿Estás seguro de eliminar la subcategoría "
+            ¿Estás seguro de eliminar el dominio "
             <strong>{domainToDelete?.name}</strong>"?
           </p>
           <DialogFooter className="mt-4">

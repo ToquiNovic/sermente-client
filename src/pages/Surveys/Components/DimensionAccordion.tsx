@@ -1,64 +1,39 @@
-import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
+  TableCell,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { DomainforDimension } from "../types";
+import { useFieldArray, useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import { Pencil, Save, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
-  createSubcategory,
-  updateSubcategory,
-  deleteSubcategory,
+  updateDimension,
+  createDimension,
+  deleteDimension,
 } from "../services";
-import { SubCategoryForm, SubcategoryBase } from "../Models";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-interface CategoryAccordionProps {
-  category: {
-    id: string;
-    name: string;
-    description: string;
-    surveyId: string;
-    subcategories: SubcategoryBase[];
-  };
-  onSubcategoriesChange: (
-    categoryId: string,
-    updatedSubcategories: SubcategoryBase[]
-  ) => void;
+interface DimensionAccordionProps {
+  domain: DomainforDimension;
 }
 
-export const CategoryAccordion = ({
-  category,
-  onSubcategoriesChange,
-}: CategoryAccordionProps) => {
-  const categoryId = category.id;
-  const { control, register, setValue, getValues } = useForm<SubCategoryForm>({
+export const DimensionAccordion = ({ domain }: DimensionAccordionProps) => {
+  const { control, register, setValue } = useForm({
     defaultValues: {
-      subcategories: category.subcategories.map((sub) => ({
-        id: sub.id,
-        name: sub.name || "",
-        categoryId: categoryId,
-      })),
+      dimensions: domain.dimensions || [],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "subcategories",
+    name: "dimensions",
     keyName: "fieldId",
   });
 
@@ -71,46 +46,47 @@ export const CategoryAccordion = ({
     setEditingRows((prev) => (prev.includes(index) ? prev : [...prev, index]));
   };
 
-  const handleSaveSubCategory = async (index: number) => {
-    const subcategory = getValues().subcategories[index];
+  const handleSaveDimension = async (index: number) => {
+    const dimension = control._formValues.dimensions[index];
 
-    if (!subcategory.name.trim()) {
-      toast.error("El nombre de la subcategoría no puede estar vacío.");
+    if (!dimension.name.trim()) {
+      toast.error("El nombre de la dimensión no puede estar vacío.");
       return;
     }
 
     try {
-      if (subcategory.id) {
-        await updateSubcategory({
-          id: subcategory.id,
-          name: subcategory.name,
+      if (dimension.id) {
+        await updateDimension({
+          id: dimension.id,
+          name: dimension.name,
+          domainId: domain.id,
         });
       } else {
-        const newSub = await createSubcategory({
-          name: subcategory.name,
-          categoryId: categoryId,
+        const newDimension = await createDimension({
+          name: dimension.name,
+          domainId: domain.id,
         });
-        setValue(`subcategories.${index}.id`, newSub.id);
+
+        if (newDimension && newDimension.id) {
+          setValue(`dimensions.${index}.id`, newDimension.id);
+        }
       }
 
-      toast.success("Subcategoría guardada exitosamente.");
       setEditingRows((prev) => prev.filter((i) => i !== index));
-
-      const updated = getValues().subcategories.map((sub) => ({
-        id: sub.id!,
-        name: sub.name,
-      })) as SubcategoryBase[];
-      onSubcategoriesChange(categoryId, updated);
     } catch (error) {
-      toast.error("Error al guardar la subcategoría.");
+      toast.error("Ocurrió un error al guardar la dimensión.");
       console.error(error);
     }
   };
 
-  const handleDeleteSubcategory = (index: number) => {
-    const subcategory = getValues().subcategories[index];
+  const handleDeleteDimension = (index: number) => {
+    const dimension = control._formValues.dimensions[index];
 
-    if (!subcategory.name || subcategory.name.trim() === "") {
+    const isEmpty =
+      (!dimension.name || dimension.name.trim() === "") &&
+      (!dimension.description || dimension.description.trim() === "");
+
+    if (isEmpty) {
       remove(index);
       setEditingRows((prev) => prev.filter((i) => i !== index));
     } else {
@@ -121,46 +97,35 @@ export const CategoryAccordion = ({
   const confirmDelete = async () => {
     if (deleteIndex === null) return;
 
-    const subcategory = getValues().subcategories[deleteIndex];
+    const dimension = control._formValues.dimensions[deleteIndex];
 
     try {
-      if (subcategory?.id) {
-        await deleteSubcategory(subcategory.id);
-        toast.success("Subcategoría eliminada del servidor.");
+      if (dimension?.id) {
+        await deleteDimension(dimension.id);
       }
 
       remove(deleteIndex);
-      const updated = getValues()
-        .subcategories.filter((_, index) => index !== deleteIndex)
-        .map((sub) => ({
-          id: sub.id!,
-          name: sub.name,
-        })) as SubcategoryBase[];
-      onSubcategoriesChange(categoryId, updated);
-
-      setEditingRows((prev: number[]) =>
-        prev.filter((i: number) => i !== deleteIndex)
-      );
+      setEditingRows((prev) => prev.filter((i) => i !== deleteIndex));
     } catch (error) {
-      toast.error("Error al eliminar la subcategoría.");
       console.error(error);
+      toast.error("Error al eliminar la dimensión.");
     } finally {
       setDeleteIndex(null);
     }
   };
 
-  const handleAddSubCategory = () => {
+  const handleAddDimension = () => {
     const newIndex = fields.length;
-    append({ id: "", name: "", categoryId });
+    append({ name: "" });
     setEditingRows((prev) => [...prev, newIndex]);
   };
 
-  const subcategoryToDelete =
-    deleteIndex !== null ? getValues().subcategories[deleteIndex] : null;
+  const dimensionToDelete =
+    deleteIndex !== null ? control._formValues.dimensions[deleteIndex] : null;
 
   return (
     <>
-      <h2 className="text-lg font-semibold mb-4">Gestionar Subcategorías</h2>
+      <h2 className="text-lg font-semibold mb-4">Gestionar Dimensiones</h2>
       <Table className="border border-gray-200 rounded">
         <TableHeader>
           <TableRow className="bg-gray-50">
@@ -177,9 +142,9 @@ export const CategoryAccordion = ({
             <TableRow>
               <TableCell
                 colSpan={2}
-                className="text-center text-muted-foreground py-6"
+                className="text-center text-muted-foreground py-4"
               >
-                No hay subcategorías registradas aún.
+                No hay dimensiones.
               </TableCell>
             </TableRow>
           ) : (
@@ -187,7 +152,7 @@ export const CategoryAccordion = ({
               <TableRow key={field.fieldId}>
                 <TableCell>
                   <Input
-                    {...register(`subcategories.${index}.name`)}
+                    {...register(`dimensions.${index}.name`)}
                     placeholder="Nombre"
                     disabled={!isEditing(index)}
                   />
@@ -199,7 +164,7 @@ export const CategoryAccordion = ({
                         type="button"
                         variant="ghost"
                         size="icon"
-                        onClick={() => handleSaveSubCategory(index)}
+                        onClick={() => handleSaveDimension(index)}
                       >
                         <Save className="h-4 w-4 text-green-600" />
                       </Button>
@@ -217,7 +182,7 @@ export const CategoryAccordion = ({
                       type="button"
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDeleteSubcategory(index)}
+                        onClick={() => handleDeleteDimension(index)}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
@@ -230,8 +195,8 @@ export const CategoryAccordion = ({
       </Table>
 
       <div className="mt-4 flex justify-end">
-        <Button type="button" onClick={handleAddSubCategory}>
-          Añadir subcategoría
+        <Button type="button" onClick={handleAddDimension}>
+          Añadir Dimension
         </Button>
       </div>
 
@@ -241,14 +206,14 @@ export const CategoryAccordion = ({
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>¿Eliminar subcategoría?</DialogTitle>
+            <DialogTitle>¿Eliminar Dimension?</DialogTitle>
             <DialogDescription>
               Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <p className="text-sm text-gray-500">
-            ¿Estás seguro de eliminar la subcategoría "
-            <strong>{subcategoryToDelete?.name}</strong>"?
+            ¿Estás seguro de eliminar la dimensión "
+            <strong>{dimensionToDelete?.name}</strong>"?
           </p>
           <DialogFooter className="mt-4">
             <Button variant="outline" onClick={() => setDeleteIndex(null)}>
