@@ -65,8 +65,8 @@ export const DraggableItem = ({ item, onDrop }: DraggableItemProps) => {
         </div>
 
         <div className={sectionClass}>
-          <div>Categoría: {item.category}</div>
-          <div>Subcategoría: {item.subcategory}</div>
+          <div>Dominio: {item.domains}</div>
+          <div>Dimension: {item.dimension}</div>
         </div>
 
         <CollapsibleContent className="space-y-2 px-4">
@@ -76,13 +76,13 @@ export const DraggableItem = ({ item, onDrop }: DraggableItemProps) => {
           ) : (
             <div className="space-y-2">
               {[...(item.options || [])]
-                .sort((a, b) => b.value - a.value)
+                .sort((a, b) => b.weight - a.weight)
                 .map((opt, index) => (
                   <div
                     key={index}
                     className="rounded-md border px-4 py-2 font-mono text-sm shadow-sm"
                   >
-                    {opt.name.toUpperCase()} - {opt.value}
+                    {opt.text.toUpperCase()} - {opt.weight}
                   </div>
                 ))}
             </div>

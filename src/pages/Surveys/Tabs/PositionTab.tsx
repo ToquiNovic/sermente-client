@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { DraggableItem } from "../Components";
-import { Category, PositionItem } from "../Models";
+import { FactorGroup, PositionItem } from "../Models";
+import { FactorForQuestion } from "../types";
 import { getQuestionBySurveyId, updateQuestionPosition } from "../services";
+import { useFactorColors } from "../utils/colorRamdon";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,35 +25,63 @@ interface PositionTabProps {
 export const PositionTab = ({ surveyId }: PositionTabProps) => {
   const [items, setItems] = useState<PositionItem[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [version, setVersion] = useState(0); 
+  const [version, setVersion] = useState(0);
   const positionRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const originalPositionsRef = useRef<Record<string, number>>({});
+  const [groupedItems, setGroupedItems] = useState<FactorGroup[]>([]);
+
+  const factorColorMap = useFactorColors(groupedItems);
 
   const fetchAndSetQuestions = useCallback(async () => {
     try {
       const data = await getQuestionBySurveyId(surveyId);
-      const allQuestions: PositionItem[] = [];
+      const allGrouped: FactorGroup[] = [];
 
-      (data.questions as Category[]).forEach((category) => {
-        category.subcategories.forEach((subcategory) => {
-          subcategory.questions.forEach((question) => {
-            allQuestions.push({
-              id: question.id,
-              label: question.text,
-              position: question.position ?? 0,
-              category: category.name,
-              subcategory: subcategory.name,
-              options: question.options.map((option) => ({
-                name: option.text,
-                value: option.weight,
-              })),
+      const orderedFactors = [...(data.questions as FactorForQuestion[])].sort(
+        (a, b) => a.position - b.position
+      );
+
+      orderedFactors.forEach((factor) => {
+        const factorQuestions: PositionItem[] = [];
+
+        factor.domains?.forEach((domain) => {
+          domain.dimensions?.forEach((dimension) => {
+            const orderedQuestions = [...(dimension.questions ?? [])].sort(
+              (a, b) => a.position - b.position
+            );
+
+            orderedQuestions.forEach((question) => {
+              factorQuestions.push({
+                id: question.id,
+                label: question.text,
+                position: question.position ?? 0,
+                domains: domain.name,
+                dimension: dimension.name,
+                options:
+                  question.options?.map((option) => ({
+                    text: option.text,
+                    weight: option.weight,
+                  })) ?? [],
+              });
+
+              originalPositionsRef.current[question.id] =
+                question.position ?? 0;
             });
-            originalPositionsRef.current[question.id] = question.position ?? 0;
           });
+        });
+
+        allGrouped.push({
+          id: factor.id!,
+          name: factor.name,
+          position: factor.position,
+          questions: factorQuestions,
         });
       });
 
-      setItems(allQuestions);
+      setGroupedItems(allGrouped);
+      // Flatten all questions from all groups into a single array
+      const flatQuestions = allGrouped.flatMap((group) => group.questions);
+      setItems(flatQuestions);
     } catch (error) {
       console.error("Error al obtener preguntas:", error);
       toast.error("Error al obtener preguntas.");
@@ -60,7 +90,7 @@ export const PositionTab = ({ surveyId }: PositionTabProps) => {
 
   useEffect(() => {
     fetchAndSetQuestions();
-  }, [fetchAndSetQuestions, version]); 
+  }, [fetchAndSetQuestions, version]);
 
   const handleDrop = useCallback(
     (sourceId: string, targetPosition: number) => {
@@ -141,7 +171,7 @@ export const PositionTab = ({ surveyId }: PositionTabProps) => {
       originalPositionsRef.current = updatedPositions;
 
       toast.success("Posiciones actualizadas correctamente.");
-      setVersion((prev) => prev + 1); 
+      setVersion((prev) => prev + 1);
     } catch (error) {
       console.error("Error al actualizar posiciones:", error);
       toast.error("Error al actualizar posiciones.");
@@ -187,7 +217,7 @@ export const PositionTab = ({ surveyId }: PositionTabProps) => {
                     {item.position}
                   </div>
                   <div className="text-xs text-slate-500">
-                    {item.category} / {item.subcategory}
+                    {item.domains} / {item.dimension}
                   </div>
                 </div>
               ))}
@@ -214,28 +244,40 @@ export const PositionTab = ({ surveyId }: PositionTabProps) => {
         </Dialog>
       </div>
 
-      <div className="space-y-6">
-        {sortedPositions.map((position) => {
-          const item = groupedByPosition[position];
-          if (!item) return null;
+      <div className="space-y-10">
+        {groupedItems.map((factor) => (
+          <div
+            key={factor.id}
+            className={`border rounded-lg p-4 shadow-sm ${
+              factorColorMap[factor.id]
+            }`}
+          >
+            <h2 className="text-lg font-semibold mb-4">
+              Factor Nº {factor.position} - {factor.name}
+            </h2>
 
-          return (
-            <div
-              key={position}
-              ref={(el) => (positionRefs.current[position] = el)}
-              className="border-2 border-gray-300 rounded-lg p-4 bg-slate-50 min-h-[120px]"
-            >
-              <h3 className="text-sm font-bold text-slate-700 mb-3">
-                Posición Nº {position}
-              </h3>
-              <DraggableItem
-                item={item}
-                onDrop={() => {}}
-                surveyId={surveyId}
-              />
+            <div className="space-y-4">
+              {factor.questions
+                .sort((a, b) => a.position - b.position)
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    ref={(el) => (positionRefs.current[item.position] = el)}
+                    className="border border-gray-300 rounded p-3 bg-slate-50"
+                  >
+                    <h3 className="text-sm font-medium mb-1">
+                      Posición Nº {item.position} - {item.label}
+                    </h3>
+                    <DraggableItem
+                      item={item}
+                      onDrop={() => {}}
+                      surveyId={surveyId}
+                    />
+                  </div>
+                ))}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );
