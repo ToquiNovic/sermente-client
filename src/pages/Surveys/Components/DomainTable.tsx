@@ -14,15 +14,15 @@ import {
 import { Trash2 } from "lucide-react";
 
 interface Props {
-  categoryId: string;
+  factorIndex: number;
 }
 
-export const SubcategoryTable = ({ categoryId }: Props) => {
+export const DomainTable = ({ factorIndex }: Props) => {
   const { control, register } = useFormContext<SurveyFormData>();
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `subcategories.${categoryId}` as const,
+    name: `factors.${factorIndex}.domains`,
   });
 
   return (
@@ -39,7 +39,9 @@ export const SubcategoryTable = ({ categoryId }: Props) => {
             <TableRow key={field.id}>
               <TableCell>
                 <Input
-                  {...register(`subcategories.${categoryId}.${index}.name`)}
+                  {...register(
+                    `factors.${factorIndex}.domains.${index}.name` as const
+                  )}
                   placeholder="Nombre"
                 />
               </TableCell>
@@ -65,11 +67,11 @@ export const SubcategoryTable = ({ categoryId }: Props) => {
             append({
               id: uuidv4(),
               name: "",
-              categoryId,
+              description: "",
             })
           }
         >
-          + Agregar subcategoría
+          + Agregar Dominio
         </Button>
       </div>
     </>

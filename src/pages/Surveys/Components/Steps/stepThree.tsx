@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { SurveyFormData } from "@/models";
-import { SubcategoryAccordion } from "../SubcategoryAccordion";
+import { DomainAccordionForm } from "../DomainAccordionForm";
 
 interface Props {
   setIsStepValid: (valid: boolean) => void;
@@ -14,20 +14,19 @@ export const StepThree = ({ setIsStepValid, setTitle }: Props) => {
   const values = watch();
 
   useEffect(() => {
-    setTitle("Subcategorías");
+    setTitle("Dominios");
 
-    const hasAllSubcategories = values.categories.every((cat) => {
-      const subs = values.subcategories?.[cat.id];
-      return Array.isArray(subs) && subs.length > 0;
+    const hasAllDomain = values.factors.every((factor) => {
+      return factor.domains && factor.domains.length > 0;
     });
 
-    setIsStepValid(hasAllSubcategories);
+    setIsStepValid(hasAllDomain);
   }, [values, setIsStepValid, setTitle]);
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold mb-4">Subcategorías por categoría</h3>
-      <SubcategoryAccordion />
+      <h3 className="text-lg font-semibold mb-4">Dominios de Factores</h3>
+      <DomainAccordionForm />
     </div>
   );
 };

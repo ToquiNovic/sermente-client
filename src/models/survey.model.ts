@@ -13,26 +13,31 @@ export interface Survey {
   creator: Creator;
 }
 
-export interface Subcategory {
+export interface FactorforSurvey {
   id: string;
   name: string;
-  categoryId: string;
+  description: string;
+  position: number;
+  domains?: DomainforFactor[];
 }
 
-export interface Category {
+export interface DomainforFactor {
   id: string;
   name: string;
-  description?: string;
+  description: string;
+}
+
+export interface DimensionforDomain {
+  id: string;
+  name: string;
 }
 
 export interface SurveyFormData {
   id: string;
   title: string;
   description: string;
-  categories: { id: string; name: string; description: string }[];
-  subcategories?: {
-    [categoryId: string]: Subcategory[];
-  };
+  factors: FactorforSurvey[];
+  dimensions: DimensionforDomain[];
 }
 
 export interface UpdateSurveyData {
