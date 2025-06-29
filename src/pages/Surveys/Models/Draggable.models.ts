@@ -1,5 +1,4 @@
 // /models/Draggable.models.ts
-import { Category } from "./category.models";
 import { Option } from "../types";
 
 export interface PositionItem {
@@ -22,9 +21,4 @@ export interface DraggableItemProps {
   item: PositionItem;
   onDrop: (sourceId: string, targetId: string) => void;
   surveyId: string;
-}
-
-export interface QuestionResponse {
-  message: string;
-  questions: Category[];
 }

@@ -19,7 +19,7 @@ interface MultiStepFormProps {
 export const MultiStepForm = ({ step, setStep }: MultiStepFormProps) => {
   const methods = useForm<SurveyFormData>({
     resolver: zodResolver(surveySchema),
-    defaultValues: { title: "", description: "", categories: [] },
+    defaultValues: { title: "", description: "" },
     mode: "onChange",
   });
   const navigate = useNavigate();
@@ -55,21 +55,21 @@ export const MultiStepForm = ({ step, setStep }: MultiStepFormProps) => {
         id: raw.id,
         title: raw.title.trim(),
         description: raw.description.trim(),
-        categories: raw.categories.map((cat) => ({
-          id: cat.id,
-          name: cat.name.trim(),
-          description: cat.description?.trim() || "",
+        factors: raw.factors.map((factor) => ({
+          id: factor.id,
+          name: factor.name.trim(),
+          description: factor.description?.trim() || "",
+          position: factor.position,
+          domains: factor.domains?.map((domain) => ({
+            id: domain.id,
+            name: domain.name.trim(),
+            description: domain.description?.trim() || "",
+          })),
         })),
-        subcategories: Object.fromEntries(
-          Object.entries(raw.subcategories || {}).map(([catId, subs]) => [
-            catId,
-            subs.map((sub) => ({
-              id: sub.id,
-              name: sub.name.trim(),
-              categoryId: sub.categoryId,
-            })),
-          ])
-        ),
+        dimensions: raw.dimensions?.map((dimension) => ({
+          ...dimension,
+          name: dimension.name.trim(),
+        })) || [],
       };
       const res = await createSurvey(data);
       navigate(`/surveys/manage/${res.id}`);
