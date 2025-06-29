@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useFormContext, useFieldArray, useWatch } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Trash2 } from "lucide-react";
-import { Category } from "../../Models";
+import { Factor } from "../../types";
 
 interface StepTwoProps {
   setIsStepValid: (isValid: boolean) => void;
@@ -25,14 +25,12 @@ export const StepTwo = ({ setIsStepValid, setTitle }: StepTwoProps) => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "categories",
+    name: "factors",
   });
 
   const title = watch("title");
   const id = watch("id");
-  const watchedCategories = useWatch({ control, name: "categories" });
-
-  const [localIsValid, setLocalIsValid] = useState(false);
+  const watchedFactors = useWatch({ control, name: "factors" });
 
   useEffect(() => {
     console.log("📝 Paso 1 - Título:", title);
@@ -44,22 +42,20 @@ export const StepTwo = ({ setIsStepValid, setTitle }: StepTwoProps) => {
   }, [title, setTitle]);
 
   useEffect(() => {
-    const categoryList: Category[] = Array.isArray(watchedCategories)
-      ? watchedCategories
+    const factorList: Factor[] = Array.isArray(watchedFactors)
+      ? watchedFactors
       : [];
 
     const isValid =
-      categoryList.length >= 1 &&
-      categoryList.every(
-        (category) =>
-          typeof category?.name === "string" && category.name.trim() !== ""
+      factorList.length >= 1 &&
+      factorList.every(
+        (factor) =>
+          typeof factor?.name === "string" && factor.name.trim() !== ""
       );
-
-    setLocalIsValid(isValid);
     setIsStepValid(isValid);
 
-    console.log("📋 Categorías actuales:", categoryList);
-  }, [watchedCategories, setIsStepValid]);
+    console.log("📋 Factores actuales:", factorList);
+  }, [watchedFactors, setIsStepValid]);
 
   const handleAddEmptyRow = () => {
     append({ id: uuidv4(), name: "", description: "" });
@@ -67,15 +63,13 @@ export const StepTwo = ({ setIsStepValid, setTitle }: StepTwoProps) => {
 
   return (
     <Card className="p-6 rounded-lg shadow-sm border border-gray-200 space-y-6">
-      <h2 className="text-xl font-semibold">Categorías</h2>
-
-      <p className="text-sm text-gray-500">
-        Estado de validación local: {localIsValid ? "Válido" : "No válido"}
-      </p>
-
+      <h2 className="text-xl font-semibold">Factores</h2>
       <Table className="border border-gray-200 rounded">
         <TableHeader>
           <TableRow className="bg-gray-50">
+            <TableHead className="w-1/4 font-medium text-gray-700">
+              Posición
+            </TableHead>
             <TableHead className="w-1/3 font-medium text-gray-700">
               Nombre
             </TableHead>
@@ -90,15 +84,21 @@ export const StepTwo = ({ setIsStepValid, setTitle }: StepTwoProps) => {
         <TableBody>
           {fields.map((field, index) => (
             <TableRow key={field.id}>
+              <TableCell className="w-1/4">
+                <Input
+                  {...register(`factors.${index}.position`)}
+                  placeholder="Posición"
+                />
+              </TableCell>
               <TableCell>
                 <Input
-                  {...register(`categories.${index}.name`)}
+                  {...register(`factors.${index}.name`)}
                   placeholder="Nombre"
                 />
               </TableCell>
               <TableCell>
                 <Input
-                  {...register(`categories.${index}.description`)}
+                  {...register(`factors.${index}.description`)}
                   placeholder="Descripción"
                 />
               </TableCell>
@@ -117,21 +117,27 @@ export const StepTwo = ({ setIsStepValid, setTitle }: StepTwoProps) => {
         </TableBody>
       </Table>
 
-      {watchedCategories?.length === 0 && (
+      {watchedFactors?.length === 0 && (
         <p className="text-red-500 text-sm">
-          Debes agregar al menos una categoría.
+          Debes agregar al menos un factor.
         </p>
       )}
 
-      {watchedCategories?.some((cat: Category) => !cat?.name?.trim()) && (
+      {watchedFactors?.some((fact: Factor) => !fact?.position) && (
         <p className="text-red-500 text-sm">
-          El campo "Nombre" es obligatorio para todas las categorías.
+          El campo "Posición" es obligatorio para todos los factores.
+        </p>
+      )}
+
+      {watchedFactors?.some((fact: Factor) => !fact?.name?.trim()) && (
+        <p className="text-red-500 text-sm">
+          El campo "Nombre" es obligatorio para todas los factores.
         </p>
       )}
 
       <div className="mt-4 text-right">
         <Button type="button" onClick={handleAddEmptyRow}>
-          + Agregar categoría
+          + Agregar Factor
         </Button>
       </div>
     </Card>

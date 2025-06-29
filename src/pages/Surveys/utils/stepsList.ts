@@ -1,5 +1,6 @@
 // @/pages/surveys/utils/stepsList.ts
-import { StepOne, StepTwo, StepThree, StepFinal } from "../Components/Steps";
+import { StepOne, StepTwo, StepThree, StepFinal, StepFour } from "../Components/Steps";
+import { Dispatch, SetStateAction } from "react";
 
 export interface StepMeta {
   id: number;
@@ -10,8 +11,8 @@ export interface StepMeta {
 }
 
 export interface StepProps {
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  setIsStepValid: React.Dispatch<React.SetStateAction<boolean>>;
+  setTitle: Dispatch<SetStateAction<string>>;
+  setIsStepValid: Dispatch<SetStateAction<boolean>>;
   onNext: () => void;
   onBack?: () => void;
   onSubmit?: () => void;
@@ -27,21 +28,29 @@ export const stepsList: StepMeta[] = [
   },
   {
     id: 2,
-    title: "Categorías",
+    title: "Factores",
     component: StepTwo,
-    description: "Agrega categorías a la encuesta.",
+    description: "Agrega factores a la encuesta.",
     buttons: ["back", "next"],
   },
   {
     id: 3,
-    title: "Subcategorías",
+    title: "Dominios",
     component: StepThree,
     description:
-      "Revisa la configuración de las subcategorías antes de finalizar.",
+      "Revisa la configuración de los dominios para cada factor.",
     buttons: ["back", "next"],
   },
   {
     id: 4,
+    title: "Dimensiones",
+    component: StepFour,
+    description:
+      "Revisa la configuración de las dimensiones para cada dominio.",
+    buttons: ["back", "next"],
+  },
+  {
+    id: 5,
     title: "Finalizar",
     component: StepFinal,
     description:
