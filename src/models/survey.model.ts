@@ -25,11 +25,13 @@ export interface DomainforFactor {
   id: string;
   name: string;
   description: string;
+  factorId?: string;
 }
 
 export interface DimensionforDomain {
   id: string;
   name: string;
+  domainId?: string;
 }
 
 export interface SurveyFormData {
