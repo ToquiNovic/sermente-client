@@ -7,13 +7,7 @@ export {
 } from "./survey.service";
 export { postSurveyAssignment } from "./surveyAssignment.service";
 export {
-  getSubcategoriesBySurveyId,
-  createSubcategory,
-  updateSubcategory,
-  deleteSubcategory,
-} from "./subcategory.service";
-export {
-  getQuestionsBySubcategoryId,
+  getQuestionsByDimenionId,
   createQuestion,
   updateQuestion,
   deleteQuestion,

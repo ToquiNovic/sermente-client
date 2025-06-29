@@ -2,9 +2,9 @@
 import axios, { AxiosError } from "axios";
 import { Question } from "../Models";
 
-export const getQuestionsBySubcategoryId = async (subcategoryId: string) => {
+export const getQuestionsByDimenionId = async (dimensionId: string) => {
   try {
-    const response = await axios.get(`/api/question/${subcategoryId}`);
+    const response = await axios.get(`/api/question/${dimensionId}`);
     const data = response.data;
 
     if (!data || !Array.isArray(data.questions)) {

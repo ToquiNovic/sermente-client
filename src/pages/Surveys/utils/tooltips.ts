@@ -1,4 +1,5 @@
 interface TooltipContent {
+  factor: string;
   category: string;
   subcategory: string;
   relatedQuestion: string;
@@ -9,6 +10,7 @@ interface TooltipContent {
 }
 
 export const tooltips: TooltipContent = {
+  factor: "Selecciona el factor que se utilizará para la encuesta.",
   category: "Selecciona una categoría principal para organizar las preguntas.",
   subcategory:
     "Selecciona una subcategoría dentro de la categoría para asociar las preguntas.",

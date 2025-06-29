@@ -40,10 +40,12 @@ interface QuestionsTabProps {
 
 export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
   const {
-    categories,
-    selectedCategoryId,
-    subcategories,
-    selectedSubcategoryId,
+    factors,
+    selectedFactor,
+    domains,
+    selectedDomainId,
+    dimensions,
+    selectedDimensionId,
     filteredQuestions,
     questionText,
     setQuestionText,
@@ -58,8 +60,9 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
     inputsDisabled,
     originalQuestion,
     hasChanges,
-    handleCategoryChange,
-    handleSubcategoryChange,
+    handleFactorChange,
+    handleDomainChange,
+    handleDimensionChange,
     handleQuestionSelect,
     updateOption,
     deleteOption,
@@ -92,9 +95,46 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
       <Card className="w-full max-w-3xl mx-auto mt-4">
         <CardContent className="space-y-6 py-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2 col-span-1 md:col-span-2">
+              <div className="flex items-center gap-2">
+                <Label>Factor</Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Información sobre Factor"
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{tooltips.category}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              <Select
+                value={selectedFactor?.id ?? ""}
+                onValueChange={handleFactorChange}
+                disabled={isLoading}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un factor" />
+                </SelectTrigger>
+                <SelectContent>
+                  {factors.map((factor) => (
+                    <SelectItem key={factor.id ?? ""} value={factor.id ?? ""}>
+                      {factor.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Label>Categoría</Label>
+                <Label>Dominio</Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -110,17 +150,17 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                   </TooltipContent>
                 </Tooltip>
               </div>
-              <Select onValueChange={handleCategoryChange} disabled={isLoading}>
+              <Select onValueChange={handleDomainChange} disabled={isLoading}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona una categoría" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category) => (
+                  {domains.map((domain) => (
                     <SelectItem
-                      key={category.idcategory}
-                      value={category.idcategory}
+                      key={domain.id ?? ""}
+                      value={domain.id ?? ""}
                     >
-                      {category.namecategory}
+                      {domain.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -129,7 +169,7 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
 
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Label>Subcategoría</Label>
+                <Label>Dimension</Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -146,16 +186,16 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                 </Tooltip>
               </div>
               <Select
-                disabled={!subcategories.length || isLoading}
-                onValueChange={handleSubcategoryChange}
+                disabled={!dimensions.length || isLoading}
+                onValueChange={handleDimensionChange}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona una subcategoría" />
                 </SelectTrigger>
                 <SelectContent>
-                  {subcategories.map((sub) => (
-                    <SelectItem key={sub.id} value={sub.id}>
-                      {sub.name}
+                  {dimensions.map((dime) => (
+                    <SelectItem key={dime.id ?? ""} value={dime.id ?? ""}>
+                      {dime.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -189,7 +229,7 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                 setIsQuestionSelectOpen(false);
               }}
               disabled={
-                !selectedCategoryId || !selectedSubcategoryId || isLoading
+                !selectedDomainId || !selectedDimensionId || isLoading
               }
             >
               <SelectTrigger>
@@ -206,7 +246,7 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                       setIsQuestionSelectOpen(false);
                       handleAddQuestion();
                     }}
-                    disabled={isLoading || !categories.length}
+                    disabled={isLoading || !dimensions.length}
                   >
                     <Plus className="mr-2 h-4 w-4" /> Agregar
                   </Button>

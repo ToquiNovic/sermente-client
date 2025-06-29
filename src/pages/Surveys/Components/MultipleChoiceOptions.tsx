@@ -6,19 +6,14 @@ import { Tooltip } from "@radix-ui/react-tooltip";
 import { TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { tooltips } from "../utils/tooltips";
 import { useEffect, useState } from "react";
-
-// Tipos
-interface Option {
-  name: string;
-  value: number;
-}
+import {  Option } from "../types";
 
 interface MultipleChoiceOptionsProps {
   options: Option[];
   updateOption: (
     index: number,
     field: "name" | "value",
-    value: string | number
+    weight: string | number
   ) => void;
   deleteOption: (index: number) => void;
   isMultipleChoice: boolean;
@@ -50,8 +45,8 @@ export const MultipleChoiceOptions = ({
     const current = options[index];
     if (!original || !current) return false;
     return (
-      original.name.toLowerCase() !== current.name.toLowerCase() ||
-      original.value !== current.value
+      original.text.toLowerCase() !== current.text.toLowerCase() ||
+      original.weight !== current.weight
     );
   };
 
@@ -59,8 +54,8 @@ export const MultipleChoiceOptions = ({
   const revertOption = (index: number) => {
     const original = originalOptions[index];
     if (original) {
-      updateOption(index, "name", original.name);
-      updateOption(index, "value", original.value);
+      updateOption(index, "name", original.text);
+      updateOption(index, "value", original.weight);
     }
   };
 
@@ -74,7 +69,7 @@ export const MultipleChoiceOptions = ({
 
   // Verifica si las opciones actuales coinciden exactamente con el orden predeterminado
   const isDefaultOrder = () => {
-    const currentNames = options.map((opt) => opt.name.toLowerCase());
+    const currentNames = options.map((opt) => opt.text.toLowerCase());
     return (
       currentNames.length === defaultOptionOrder.length &&
       currentNames.every((name, index) => name === defaultOptionOrder[index])
@@ -84,15 +79,15 @@ export const MultipleChoiceOptions = ({
   // Ordena solo si las opciones coinciden con el orden predeterminado
   const sortedOptions = isDefaultOrder()
     ? [...options].sort((a, b) => {
-        const aIndex = defaultOptionOrder.indexOf(a.name.toLowerCase());
-        const bIndex = defaultOptionOrder.indexOf(b.name.toLowerCase());
+        const aIndex = defaultOptionOrder.indexOf(a.text.toLowerCase());
+        const bIndex = defaultOptionOrder.indexOf(b.text.toLowerCase());
 
         if (aIndex !== -1 && bIndex !== -1) {
           return aIndex - bIndex;
         }
         if (aIndex !== -1) return -1;
         if (bIndex !== -1) return 1;
-        return a.name.localeCompare(b.name);
+        return a.text.localeCompare(b.text);
       })
     : options;
 
@@ -123,14 +118,14 @@ export const MultipleChoiceOptions = ({
               >
                 <Input
                   placeholder="Nombre"
-                  value={option.name}
+                  value={option.text}
                   onChange={(e) => updateOption(index, "name", e.target.value)}
                   disabled={inputsDisabled || isLoading}
                 />
                 <Input
                   type="number"
                   placeholder="Valor"
-                  value={option.value}
+                  value={option.weight}
                   onChange={(e) =>
                     updateOption(index, "value", Number(e.target.value))
                   }
