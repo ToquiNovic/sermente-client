@@ -55,13 +55,7 @@ export const DimensionsTab = ({ surveyId }: DimensionsTabProps) => {
                   <AccordionItem key={domain.id} value={domain.id}>
                     <AccordionTrigger>{domain.name}</AccordionTrigger>
                     <AccordionContent>
-                      {domain.dimensions?.length ? (
-                        <DimensionAccordion domain={domain} />
-                      ) : (
-                        <p className="text-muted-foreground">
-                          No hay dimensiones.
-                        </p>
-                      )}
+                      <DimensionAccordion domain={domain} />
                     </AccordionContent>
                   </AccordionItem>
                 ))
