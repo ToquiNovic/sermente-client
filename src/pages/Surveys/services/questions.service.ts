@@ -23,12 +23,12 @@ export const getQuestionsByDimenionId = async (dimensionId: string) => {
 };
 
 export const createQuestion = async (
-  subcategoryId: string,
+  dimensionId: string,
   question: Question
 ) => {
   try {
     const response = await axios.post(`/api/question`, {
-      subCategoryId: subcategoryId,
+      dimensionId: dimensionId,
       ...question,
     });
     return response.data; 

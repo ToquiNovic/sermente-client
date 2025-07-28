@@ -109,7 +109,7 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{tooltips.category}</p>
+                    <p>{tooltips.factor}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -140,19 +140,19 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label="Información sobre Categoría"
+                      aria-label="Información sobre Dominio"
                     >
                       <Info className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{tooltips.category}</p>
+                    <p>{tooltips.domain}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
               <Select onValueChange={handleDomainChange} disabled={isLoading}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecciona una categoría" />
+                  <SelectValue placeholder="Selecciona un dominio" />
                 </SelectTrigger>
                 <SelectContent>
                   {domains.map((domain) => (
@@ -175,13 +175,13 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label="Información sobre Subcategoría"
+                      aria-label="Información sobre Dimension"
                     >
                       <Info className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{tooltips.subcategory}</p>
+                    <p>{tooltips.dimension}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -190,7 +190,7 @@ export const QuestionsTab = ({ surveyId }: QuestionsTabProps) => {
                 onValueChange={handleDimensionChange}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecciona una subcategoría" />
+                  <SelectValue placeholder="Selecciona una dimensión" />
                 </SelectTrigger>
                 <SelectContent>
                   {dimensions.map((dime) => (

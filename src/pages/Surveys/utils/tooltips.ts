@@ -1,7 +1,7 @@
 interface TooltipContent {
   factor: string;
-  category: string;
-  subcategory: string;
+  domain: string;
+  dimension: string;
   relatedQuestion: string;
   position: string;
   question: string;
@@ -11,11 +11,10 @@ interface TooltipContent {
 
 export const tooltips: TooltipContent = {
   factor: "Selecciona el factor que se utilizará para la encuesta.",
-  category: "Selecciona una categoría principal para organizar las preguntas.",
-  subcategory:
-    "Selecciona una subcategoría dentro de la categoría para asociar las preguntas.",
-  relatedQuestion:
-    "Selecciona la pregunta para editarla, si aplica.",
+  domain: "Selecciona un Dominio para asociar las preguntas.",
+  dimension:
+    "Selecciona una dimensión dentro del dominio para asociar las preguntas.",
+  relatedQuestion: "Selecciona la pregunta para editarla, si aplica.",
   position:
     "Define el orden en que aparecerá la pregunta dentro de la subcategoría.",
   question: "Escribe el texto de la pregunta que se presentará en la encuesta.",
