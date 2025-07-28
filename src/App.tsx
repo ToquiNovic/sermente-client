@@ -5,7 +5,7 @@ import { lazy, Suspense } from "react";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminPanelLayout, PublicLayout } from "./layouts";
-import { AdminGuard } from "./components/AdminGuard";
+import { RoleGuard } from "./components";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import {
   Dashboard,
@@ -21,7 +21,7 @@ import {
   CompanyManage,
   RespondentPage,
   UnauthorizedPage,
-  NotFoundPage
+  NotFoundPage,
 } from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
@@ -76,7 +76,7 @@ function App() {
                 </Route>
 
                 {/* Rutas Protegidas */}
-                <Route element={<AdminGuard />}>
+                <Route element={<RoleGuard />}>
                   <Route element={<AdminPanelLayout />}>
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route
