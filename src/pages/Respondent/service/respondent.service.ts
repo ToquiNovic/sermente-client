@@ -1,0 +1,37 @@
+import axios, { AxiosError } from "axios";
+import { QuestionsResponse, Survey } from "../type";
+import { toast } from "sonner";
+
+export const getQuestionsBySurveyId = async (surveyId: string) => {
+  try {
+    const { data } = await axios.get<QuestionsResponse>(
+      `/api/question/survey/${surveyId}`
+    );
+    return data;
+  } catch (error) {
+    toast.error("Error al obtener preguntas");
+    console.error("Error al obtener preguntas:", error);
+    return null;
+  }
+};
+
+export const getSurveyAsignments = async (
+  userId: string
+): Promise<Survey[]> => {
+  try {
+    const { data } = await axios.get<Survey[]>(
+      `/api/surveyassignment/user/${userId}`
+    );
+    return data;
+  } catch (err: unknown) {
+    console.error("Error al obtener asignaciones de encuestas:", err);
+
+    if (err instanceof AxiosError && err.response?.status === 404) {
+      // No hay encuestas, devolvemos array vacío
+      return [];
+    }
+
+    toast.error("Error al obtener asignaciones de encuestas");
+    return [];
+  }
+};

@@ -1,81 +1,54 @@
-import { Link, useLocation } from "react-router-dom";
-import { getMenuList } from "@/components/app/sidebar/utils";
 import {
-  Breadcrumb,
-  BreadcrumbList,
+  Breadcrumb as ShadcnBreadcrumb,
   BreadcrumbItem,
-  BreadcrumbSeparator,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { House } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Home } from "lucide-react";
+import { Fragment } from "react";
 
-export default function AppBreadcrumb() {
-  const location = useLocation();
-  const pathname = location.pathname;
-  const menuList = getMenuList(pathname);
+export interface BreadcrumbItemProps {
+  label: string;
+  href?: string;
+  isCurrent?: boolean;
+  icon?: React.ReactNode;
+}
 
-  const breadcrumbItems = [];
-  let groupLabel = "Dashboard";
+interface CustomBreadcrumbProps {
+  items: BreadcrumbItemProps[];
+}
 
-  for (const group of menuList) {
-    for (const menu of group.menus) {
-      if (menu.href === pathname) {
-        breadcrumbItems.push({ label: menu.label, href: menu.href });
-        groupLabel = group.groupLabel;
-      }
-      if (menu.submenus) {
-        for (const submenu of menu.submenus) {
-          if (submenu.href === pathname) {
-            breadcrumbItems.push(
-              { label: menu.label, href: menu.href },
-              { label: submenu.label, href: submenu.href }
-            );
-            groupLabel = group.groupLabel;
-          }
-        }
-      }
-    }
-  }
+export function CustomBreadcrumb({ items }: CustomBreadcrumbProps) {
+  const breadcrumbItems: BreadcrumbItemProps[] = [
+    { label: "Inicio", href: "/dashboard", icon: <Home className="h-4 w-4" /> },
+    ...items,
+  ];
 
   return (
-    <Breadcrumb className="mb-4">
+    <ShadcnBreadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/dashboard">
-              <House className="w-4 h-4" />
-            </Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
+        {breadcrumbItems.map(({ label, href, isCurrent, icon }, index) => {
+          const isLast = index === breadcrumbItems.length - 1;
 
-        {breadcrumbItems.length > 0 && groupLabel ? (
-          <>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/dashboard">{groupLabel}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator /> 
-          </>
-        ) : <BreadcrumbSeparator />}
-
-        {breadcrumbItems.map((item, index) => (
-          <div key={item.href} className="flex items-center">
-            {index > 0 && <BreadcrumbSeparator />}
-            <BreadcrumbItem>
-              {index === breadcrumbItems.length - 1 ? (
-                <BreadcrumbPage>{item.label}</BreadcrumbPage>
-              ) : (
-                <BreadcrumbLink asChild>
-                  <Link to={item.href}>{item.label}</Link>
-                </BreadcrumbLink>
-              )}
-            </BreadcrumbItem>
-          </div>
-        ))}
+          return (
+            <Fragment key={label}>
+              <BreadcrumbItem>
+                {isCurrent || isLast ? (
+                  <BreadcrumbPage>{icon || label}</BreadcrumbPage>
+                ) : (
+                  <BreadcrumbLink asChild>
+                    <Link to={href || "#"}>{icon || label}</Link>
+                  </BreadcrumbLink>
+                )}
+              </BreadcrumbItem>
+              {!isLast && <BreadcrumbSeparator />}
+            </Fragment>
+          );
+        })}
       </BreadcrumbList>
-    </Breadcrumb>
+    </ShadcnBreadcrumb>
   );
 }

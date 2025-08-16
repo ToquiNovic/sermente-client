@@ -78,7 +78,7 @@ export function getMenuList(pathname: string, userRole: string): Group[] {
               active: pathname === "/company",
             },
           ],
-          roles: [ADMIN_ROLE, SPECIALIST_ROLE, SURVEYED],
+          roles: [ADMIN_ROLE, SPECIALIST_ROLE],
         },
         {
           label: "Encuesta",
@@ -96,6 +96,7 @@ export function getMenuList(pathname: string, userRole: string): Group[] {
               active: pathname === "/surveys",
             },
           ],
+          roles: [ADMIN_ROLE],
         },
       ],
     },

@@ -22,6 +22,7 @@ import {
   RespondentPage,
   UnauthorizedPage,
   NotFoundPage,
+  SurveyRespondentPage,
 } from "@/pages";
 import { store, persistor } from "./redux/store";
 import { Spinner } from "@/components";
@@ -73,6 +74,7 @@ function App() {
                 <Route element={<PublicLayout />}>
                   <Route path="/" element={<Login />} />
                   <Route path="/respondent" element={<RespondentPage />} />
+                  <Route path="/respondent/survey/:id" element={<SurveyRespondentPage />} />
                 </Route>
 
                 {/* Rutas Protegidas */}

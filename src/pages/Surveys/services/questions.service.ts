@@ -58,6 +58,8 @@ export const deleteQuestion = async (questionId: string) => {
 
 export const getQuestionBySurveyId = async (surveyId: string) => {
   const response = await axios.get(`/api/question/survey/${surveyId}`);
+  console.log(response.data);
+  
   return response.data;
 };
 

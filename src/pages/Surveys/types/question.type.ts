@@ -31,6 +31,7 @@ export interface QuestionForFactor {
   position: number;
   dimensionId: string;
   options?: Option[];
+  isMultipleChoice?: boolean;
 }
 
 export interface DimensionForQuestion {
