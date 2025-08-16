@@ -29,7 +29,7 @@ export const RoleGuard = () => {
         const fullPath = location.pathname;
         const normalizedPath = fullPath.replace(/\/$/, "");
 
-        const allMenus = getMenuList(normalizedPath)
+        const allMenus = getMenuList(normalizedPath, role?.[0]?.name ?? "")
           .flatMap((group: Group) => group.menus)
           .flatMap((menu: Menu) => [
             ...(menu.roles ? [{ href: menu.href, roles: menu.roles }] : []),
