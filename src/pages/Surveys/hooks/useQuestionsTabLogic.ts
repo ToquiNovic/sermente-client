@@ -41,7 +41,7 @@ export const useQuestionsTab = (surveyId: string) => {
     null
   );
   const [questionText, setQuestionText] = useState("");
-  const [questionPosition, setQuestionPosition] = useState(0);
+  const [questionPosition, setQuestionPosition] = useState<number | "">("");
   const [isMultipleChoice, setIsMultipleChoice] = useState(true);
   const [options, setOptions] = useState<Option[]>(DEFAULT_OPTIONS);
   const [originalQuestion, setOriginalQuestion] = useState<Question | null>(
@@ -75,7 +75,7 @@ export const useQuestionsTab = (surveyId: string) => {
   const resetForm = useCallback(() => {
     setSelectedQuestionId(null);
     setQuestionText("");
-    setQuestionPosition(0);
+    setQuestionPosition("");
     setIsMultipleChoice(true);
     setOptions(DEFAULT_OPTIONS);
     setOriginalQuestion(null);
@@ -132,7 +132,7 @@ export const useQuestionsTab = (surveyId: string) => {
       if (!selected) return;
 
       setQuestionText(selected.text);
-      setQuestionPosition(selected.position || 0);
+      setQuestionPosition(selected.position ?? "");
       setIsMultipleChoice(selected.isMultipleChoice ?? true);
       setOptions(
         selected.options?.length
@@ -233,7 +233,7 @@ export const useQuestionsTab = (surveyId: string) => {
     const newQuestion: Question = {
       id: crypto.randomUUID(),
       text: questionText,
-      position: questionPosition,
+      position: typeof questionPosition === 'number' ? questionPosition : 0,
       isMultipleChoice,
       options: isMultipleChoice
         ? options.map((opt) => ({ text: opt.text, weight: Number(opt.weight) }))
@@ -287,7 +287,7 @@ export const useQuestionsTab = (surveyId: string) => {
     const updated: Question = {
       id: selectedQuestionId,
       text: questionText,
-      position: questionPosition,
+      position: typeof questionPosition === 'number' ? questionPosition : 0,
       isMultipleChoice,
       options: isMultipleChoice
         ? options.map((opt) => ({ text: opt.text, weight: Number(opt.weight) }))
