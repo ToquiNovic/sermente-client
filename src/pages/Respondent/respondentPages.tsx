@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Survey } from "./type";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import { SurveyCard } from "./components";
 
 export const RespondentPage = () => {
   const [data, setData] = useState<Survey[] | null>(null);
@@ -15,7 +16,6 @@ export const RespondentPage = () => {
     setLoading(true);
     try {
       const response = await getSurveyAsignments(userId);
-      console.log("Encuestas asignadas:", response);
       setData(response);
     } catch (error) {
       console.error("Error al obtener asignaciones de encuestas:", error);
@@ -43,12 +43,7 @@ export const RespondentPage = () => {
         {data.length === 0 ? (
           <div>No tienes encuestas asignadas.</div>
         ) : (
-          data.map((survey) => (
-            <div key={survey.id}>
-              <h2 className="text-xl font-bold">{survey.title}</h2>
-              <p className="text-gray-500">{survey.description}</p>
-            </div>
-          ))
+          data.map((survey) => <SurveyCard key={survey.id} survey={survey} />)
         )}
       </div>
     </ContentLayout>

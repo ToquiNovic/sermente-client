@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 // ---- Renderizador de una pregunta ----
-function QuestionItem({ question }: { question: Question }) {
+export function QuestionItem({ question }: { question: Question }) {
   if (question.options.length === 0) {
     // Pregunta abierta (input)
     return (
