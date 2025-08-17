@@ -6,7 +6,8 @@ import { ActionsCell } from "./actionsCell";
 
 export const getColumns = (
   handleUserDeleted: (id: string) => void,
-  handleUserDetails: (user: WorkerTableData) => void
+  handleUserDetails: (user: WorkerTableData) => void,
+  companyId: string
 ): ColumnDef<WorkerTableData>[] => {
   return [
     {
@@ -63,31 +64,52 @@ export const getColumns = (
 
         return hasSelectedRows ? (
           <ActionsCell
+            companyId={companyId}
             onWorkerDeleted={() => {
               const selectedIds = table
                 .getFilteredSelectedRowModel()
                 .rows.map((row) => row.original.id);
+
+              if (selectedIds.length === 0) return null;
               selectedIds.forEach(handleUserDeleted);
             }}
             onWorkerDetails={() => {
               const selectedWorkers = table
                 .getFilteredSelectedRowModel()
                 .rows.map((row) => row.original);
+
+              if (selectedWorkers.length === 0) return null;
               selectedWorkers.forEach(handleUserDetails);
             }}
             multipleSelection
+            selectedWorkers={table
+              .getFilteredSelectedRowModel()
+              .rows.map((row) => row.original)}
           />
         ) : (
           "Acciones"
         );
       },
-      cell: ({ row }) => (
-        <ActionsCell
-          worker={row.original}
-          onWorkerDeleted={handleUserDeleted}
-          onWorkerDetails={handleUserDetails}
-        />
-      ),
+      cell: ({ row, table }) => {
+        const worker = row.original;
+
+        // 👇 ocultar las acciones en las filas cuando hay selección múltiple
+        const hasSelectedRows =
+          table.getIsSomeRowsSelected() || table.getIsAllPageRowsSelected();
+
+        if (!worker || !worker.id || hasSelectedRows) {
+          return null;
+        }
+
+        return (
+          <ActionsCell
+            companyId={companyId}
+            worker={worker}
+            onWorkerDeleted={handleUserDeleted}
+            onWorkerDetails={handleUserDetails}
+          />
+        );
+      },
     },
   ];
 };

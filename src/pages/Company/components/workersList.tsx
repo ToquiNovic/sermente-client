@@ -34,7 +34,6 @@ interface Worker {
 }
 
 export const WorkersList = ({ companyId, specialistId }: Props) => {
-//   const [data, setData] = useState<WorkerTableData[]>([]);
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,12 +71,14 @@ export const WorkersList = ({ companyId, specialistId }: Props) => {
     <p className="text-red-500">{error}</p>
   ) : filteredWorkers.length > 0 ? (
     <DataTable
-    columns={getColumns(
+      columns={getColumns(
         (id) => setWorkers((prev) => prev.filter((worker) => worker.id !== id)),
-        (worker: WorkerTableData) => console.log("Detalles del usuario:", worker)
+        (worker: WorkerTableData) =>
+          console.log("Detalles del usuario:", worker),
+        companyId
       )}
       data={filteredWorkers.map((worker) => ({
-        id: worker.id,
+        id: worker.user.id,
         numberDoc: worker.user.numberDoc,
         names: worker.user.people.names,
         surNames: worker.user.people.surNames,

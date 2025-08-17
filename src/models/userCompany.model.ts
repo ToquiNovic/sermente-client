@@ -13,3 +13,13 @@ export interface AssignUsersToCompanyProps {
   companyId?: string;
   users: AssignUserProps[];
 }
+
+type Users = {
+  id: string;
+}
+
+export interface AssignUsersToSurveyProps {
+  companyId?: string;
+  deadline: string;
+  users: Users[];
+}
