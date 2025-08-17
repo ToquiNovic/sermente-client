@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LayoutGrid, LogOut, User } from "lucide-react";
 import { useUserProfile } from "@/hooks";
 import { Button } from "@/components/ui/button";
@@ -24,10 +24,12 @@ import { logout } from "@/redux/states/userSlice";
 export function UserNav() {
   const dispatch = useDispatch();
   const { userPerfil, fetchUserDetails } = useUserProfile();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-      dispatch(logout());
-    };
+    dispatch(logout());
+    navigate("/");
+  };
 
   return (
     <DropdownMenu onOpenChange={(open) => open && fetchUserDetails()}>

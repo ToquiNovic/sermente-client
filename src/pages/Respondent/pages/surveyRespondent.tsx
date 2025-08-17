@@ -13,11 +13,10 @@ export const SurveyRespondentPage = () => {
 
   console.log(id);
 
+  useEffect(() => {
   const fetchQuestions = async () => {
     try {
-      const data = await getQuestionsBySurveyId(
-        "08626d27-f81f-4670-9e5c-f0c31517ed3a"
-      );
+      const data = await getQuestionsBySurveyId(id!);
       setData(data);
     } catch (error) {
       console.error("Error al obtener preguntas:", error);
@@ -26,9 +25,11 @@ export const SurveyRespondentPage = () => {
     }
   };
 
-  useEffect(() => {
+  if (id) {
     fetchQuestions();
-  }, []);
+  }
+}, [id]);
+
 
   if (loading) return <div>Cargando...</div>;
 
@@ -36,7 +37,9 @@ export const SurveyRespondentPage = () => {
     <ContentLayout
       title="Mis Encuestas"
       icon={<NotebookPen />}
-      breadcrumbs={[{ label: "Encuestas", isCurrent: true }]}
+      breadcrumbs={[{ label: "Encuestas", href: "/respondent" },
+        { label: "Responder: ", isCurrent: true }
+      ]}
     >
       <div className="container py-6">
         <h1 className="text-2xl font-bold mb-4">Formulario dinámico</h1>
