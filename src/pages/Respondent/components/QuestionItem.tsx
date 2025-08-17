@@ -19,12 +19,15 @@ export function QuestionItem({ question, onAnswer }: QuestionItemProps) {
     }
   };
 
-  if (
-    question.options.length === 0 ||
-    (question.options.length === 1 &&
-      question.options[0].text === "pregunta abierta")
-  ) {
-    // Pregunta abierta
+  // normalizamos para que siempre sea array
+  const options = question.options ?? [];
+
+  const isOpenQuestion =
+    options.length === 0 ||
+    (options.length === 1 &&
+      options[0].text.toLowerCase() === "pregunta abierta");
+
+  if (isOpenQuestion) {
     return (
       <div className="space-y-2">
         <Label>{question.text}</Label>
@@ -33,11 +36,10 @@ export function QuestionItem({ question, onAnswer }: QuestionItemProps) {
     );
   }
 
-  // Pregunta con opciones
   return (
     <div className="space-y-2">
       <Label>{question.text}</Label>
-      <QuestionOptions options={question.options} onAnswer={handleAnswer} />
+      <QuestionOptions options={options} onAnswer={handleAnswer} />
     </div>
   );
 }

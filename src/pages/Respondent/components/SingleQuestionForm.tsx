@@ -16,7 +16,9 @@ export const SingleQuestionForm = ({
   const questions: Question[] = data.questions.flatMap((f) =>
     f.domains.flatMap((d) =>
       d.dimensions.flatMap((dim) =>
-        dim.questions.sort((a, b) => a.position - b.position)
+        dim.questions
+          .filter((q) => q && q.text) // asegura que la pregunta exista
+          .sort((a, b) => a.position - b.position)
       )
     )
   );

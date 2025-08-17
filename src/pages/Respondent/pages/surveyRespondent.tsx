@@ -18,9 +18,10 @@ export const SurveyRespondentPage = () => {
     const fetchQuestions = async () => {
       try {
         const data = await getQuestionsBySurveyId(id!);
+        console.log("data", data?.questions);
         const survey = await getSurveyById(id!);
         setSurvey(survey);
-        setData(data);
+        setData(data?.questions ? data : null);
       } catch (error) {
         console.error("Error al obtener preguntas:", error);
       } finally {
