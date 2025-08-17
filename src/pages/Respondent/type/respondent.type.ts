@@ -1,7 +1,7 @@
-// types.ts
 export interface QuestionsResponse {
   message: string;
   questions: Factor[];
+  surveys?: Survey[];
 }
 
 export interface Option {
@@ -36,12 +36,6 @@ export interface Factor {
   position: number;
   domains: Domain[];
 }
-
-export interface QuestionsResponse {
-  message: string;
-  questions: Factor[];
-}
-
 
 export interface Survey {
   id: string;

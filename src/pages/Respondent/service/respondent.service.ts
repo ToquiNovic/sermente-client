@@ -19,15 +19,14 @@ export const getSurveyAsignments = async (
   userId: string
 ): Promise<Survey[]> => {
   try {
-    const { data } = await axios.get<Survey[]>(
+    const { data } = await axios.get<QuestionsResponse>(
       `/api/surveyassignment/user/${userId}`
     );
-    return data;
+    return data.surveys ?? [];
   } catch (err: unknown) {
     console.error("Error al obtener asignaciones de encuestas:", err);
 
     if (err instanceof AxiosError && err.response?.status === 404) {
-      // No hay encuestas, devolvemos array vacío
       return [];
     }
 
