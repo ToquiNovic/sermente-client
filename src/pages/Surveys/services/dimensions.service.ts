@@ -13,7 +13,6 @@ export const getDimensionsbySurveyId = async (
 ): Promise<GetDimensionBySurveyId> => {
   try {
     const response = await axios.get(`/api/dimension/survey/${surveyId}`);
-    toast.success("Dimensiones cargados correctamente.");
     return response.data;
   } catch (error) {
     console.error("Error al obtener dimensiones:", error);
@@ -47,7 +46,10 @@ export const updateDimension = async (
   dimension: UpdateDimensionProps
 ): Promise<DomainforDimension> => {
   try {
-    const response = await axios.put(`/api/dimension/${dimension.id}`, dimension);
+    const response = await axios.put(
+      `/api/dimension/${dimension.id}`,
+      dimension
+    );
 
     toast.success("Dimensión actualizada correctamente.");
     return response.data;

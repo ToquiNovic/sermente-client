@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { getDimensionsbySurveyId } from "../services";
 import { FactorforDimension } from "../types";
 import { DimensionAccordion } from "../Components";
+import { ChevronRight } from "lucide-react";
 
 interface DimensionsTabProps {
   surveyId: string;
@@ -43,30 +44,39 @@ export const DimensionsTab = ({ surveyId }: DimensionsTabProps) => {
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
-        factors.map((factor) => (
-          <div key={factor.id} className="space-y-2">
-            <h3 className="text-lg font-semibold">
-              {factor.position} - {factor.name}
-            </h3>
+        factors
+          .sort((a, b) => a.position - b.position)
+          .map((factor) => (
+            <div key={factor.id} className="space-y-2">
+              <h3 className="text-lg font-semibold">
+                {factor.position} - {factor.name}
+              </h3>
+              
+              <div className="border-b border-gray-300 w-full -mt-[1px]" />
 
-            <Accordion type="multiple" className="w-full">
-              {factor.domains && factor.domains.length > 0 ? (
-                factor.domains.map((domain) => (
-                  <AccordionItem key={domain.id} value={domain.id}>
-                    <AccordionTrigger>{domain.name}</AccordionTrigger>
-                    <AccordionContent>
-                      <DimensionAccordion domain={domain} />
-                    </AccordionContent>
-                  </AccordionItem>
-                ))
-              ) : (
-                <p className="text-muted-foreground">
-                  No hay dominios disponibles.
-                </p>
-              )}
-            </Accordion>
-          </div>
-        ))
+              <Accordion type="multiple" className="w-full">
+                {factor.domains && factor.domains.length > 0 ? (
+                  factor.domains.map((domain) => (
+                    <AccordionItem key={domain.id} value={domain.id}>
+                      <AccordionTrigger>
+                        <div className="flex items-center gap-2">
+                          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          <span>{domain.name}</span>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <DimensionAccordion domain={domain} />
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))
+                ) : (
+                  <p className="text-muted-foreground">
+                    No hay dominios disponibles.
+                  </p>
+                )}
+              </Accordion>
+            </div>
+          ))
       )}
     </div>
   );

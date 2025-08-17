@@ -59,17 +59,22 @@ export const DomainsTab = ({ surveyId }: DomainsTabProps) => {
         <p className="text-red-500">{error}</p>
       ) : (
         <Accordion type="multiple" className="w-full">
-          {factors.map((factor) => (
-            <AccordionItem key={factor.id} value={factor.id!}>
-              <AccordionTrigger>{factor.position} - {factor.name}</AccordionTrigger>
-              <AccordionContent>
-                <DomainAccordion
-                  factor={factor}
-                  onDomainsChange={handleDomainsChange}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          ))}
+          {factors
+            .slice()
+            .sort((a, b) => a.position - b.position)
+            .map((factor) => (
+              <AccordionItem key={factor.id} value={factor.id!}>
+                <AccordionTrigger>
+                  {factor.position} - {factor.name}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <DomainAccordion
+                    factor={factor}
+                    onDomainsChange={handleDomainsChange}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            ))}
         </Accordion>
       )}
     </div>

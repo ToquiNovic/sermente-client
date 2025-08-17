@@ -13,8 +13,6 @@ export const getFactors = async (): Promise<Factor[]> => {
   try {
     const response = await axios.get("/api/factor");
 
-    toast.success("Factores cargados correctamente.");
-
     return response.data;
   } catch (error) {
     const err = error as AxiosError<{ error: string }>;

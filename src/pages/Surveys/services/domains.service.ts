@@ -13,8 +13,6 @@ export const getDomainsbySurveyId = async (
 ): Promise<GetDomainsBySurveyIdResponse> => {
   try {
     const response = await axios.get(`/api/domain/survey/${surveyId}`);
-
-    toast.success("Dominios cargados correctamente.");
     return response.data;
   } catch (error) {
     console.error("Error al obtener dominios:", error);

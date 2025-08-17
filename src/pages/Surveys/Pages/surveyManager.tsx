@@ -37,69 +37,78 @@ export const SurveyManagerPage = () => {
     <ContentLayout
       title={survey?.title || "Gestionar Encuesta"}
       icon={<BookOpen />}
+      breadcrumbs={[
+        { label: "Encuestas", href: "/surveys" },
+        {
+          label: `Gestionar: ${survey?.title || "Gestionar Encuesta"}`,
+          isCurrent: true,
+        },
+      ]}
     >
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="flex space-x-2 bg-transparent justify-start">
-          <TabsTrigger
-            value="factors"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+      <div className="container py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="flex space-x-2 bg-transparent justify-start">
+            <TabsTrigger
+              value="factors"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Factores
-          </TabsTrigger>
-          <TabsTrigger
-            value="domains"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            >
+              Factores
+            </TabsTrigger>
+            <TabsTrigger
+              value="domains"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Dominios
-          </TabsTrigger>
-          <TabsTrigger
-            value="dimensions"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            >
+              Dominios
+            </TabsTrigger>
+            <TabsTrigger
+              value="dimensions"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Dimensiones
-          </TabsTrigger>
-          <TabsTrigger
-            value="questions"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            >
+              Dimensiones
+            </TabsTrigger>
+            <TabsTrigger
+              value="questions"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Preguntas
-          </TabsTrigger>
-          <TabsTrigger
-            value="positions"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            >
+              Preguntas
+            </TabsTrigger>
+            <TabsTrigger
+              value="positions"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Orden
-          </TabsTrigger>
-        </TabsList>
+            >
+              Orden
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="border-b border-gray-300 w-full -mt-[1px]" />
+          <div className="border-b border-gray-300 w-full -mt-[1px]" />
 
-        <TabsContent value="factors">
-          {id && <FactorsTab surveyId={id} />}
-        </TabsContent>
-        <TabsContent value="domains">
-          {id && <DomainsTab surveyId={id} />}
-        </TabsContent>
-        <TabsContent value="dimensions">
-          {id && <DimensionsTab surveyId={id} />}
-        </TabsContent>
-        <TabsContent value="questions">
-          {id && <QuestionsTab surveyId={id} />}
-        </TabsContent>
-        <TabsContent value="positions">
-          {id && <PositionTab surveyId={id} />}
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="factors">
+            {id && <FactorsTab surveyId={id} />}
+          </TabsContent>
+          <TabsContent value="domains">
+            {id && <DomainsTab surveyId={id} />}
+          </TabsContent>
+          <TabsContent value="dimensions">
+            {id && <DimensionsTab surveyId={id} />}
+          </TabsContent>
+          <TabsContent value="questions">
+            {id && <QuestionsTab surveyId={id} />}
+          </TabsContent>
+          <TabsContent value="positions">
+            {id && <PositionTab surveyId={id} />}
+          </TabsContent>
+        </Tabs>
+      </div>
     </ContentLayout>
   );
 };
