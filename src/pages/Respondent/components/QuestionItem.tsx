@@ -11,12 +11,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+type QuestionWithMeta = Question & {
+  factorName: string;
+  domainName: string;
+  dimensionName: string;
+};
+
 interface QuestionItemProps {
-  question: Question & {
-    factorName: string;
-    domainName: string;
-    dimensionName: string;
-  };
+  question: QuestionWithMeta;
   onAnswer: (value: string) => void;
 }
 
