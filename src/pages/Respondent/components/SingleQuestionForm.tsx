@@ -1,33 +1,48 @@
 import { useState } from "react";
-import type { QuestionsResponse, Question } from "../type";
+import type { QuestionsResponse } from "../type";
 import { QuestionItem } from "./QuestionItem";
 import { Button } from "@/components/ui/button";
 
 interface SingleQuestionFormProps {
   data: QuestionsResponse;
-  onAnswer: () => void;
+  onAnswer: (answers: Record<string, string>) => void;
 }
 
 export const SingleQuestionForm = ({
   data,
   onAnswer,
 }: SingleQuestionFormProps) => {
-  // Aplanamos todas las preguntas en un solo array
-  const questions: Question[] = data.questions.flatMap((f) =>
+  const questions = data.questions.flatMap((f) =>
     f.domains.flatMap((d) =>
       d.dimensions.flatMap((dim) =>
         dim.questions
-          .filter((q) => q && q.text) // asegura que la pregunta exista
+          .filter((q) => q && q.text)
           .sort((a, b) => a.position - b.position)
+          .map((q) => ({
+            ...q,
+            factorName: f.name,
+            domainName: d.name,
+            dimensionName: dim.name,
+          }))
       )
     )
   );
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  const handleAnswer = (questionId: string, value: string) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }));
+  };
 
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
+    } else {
+      onAnswer(answers);
     }
   };
 
@@ -37,11 +52,16 @@ export const SingleQuestionForm = ({
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <QuestionItem question={questions[currentIndex]} onAnswer={onAnswer} />
+  const currentQuestion = questions[currentIndex];
 
-      <div className="flex justify-between mt-4">
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-6">
+        <QuestionItem
+          question={currentQuestion}
+          onAnswer={(value) => handleAnswer(currentQuestion.id, value)}
+        />
+
+      <div className="flex justify-between w-full max-w-md">
         <Button
           variant="outline"
           onClick={handlePrev}
@@ -50,11 +70,8 @@ export const SingleQuestionForm = ({
           Anterior
         </Button>
 
-        <Button
-          onClick={handleNext}
-          disabled={currentIndex === questions.length - 1}
-        >
-          Siguiente
+        <Button onClick={handleNext}>
+          {currentIndex === questions.length - 1 ? "Finalizar" : "Siguiente"}
         </Button>
       </div>
 

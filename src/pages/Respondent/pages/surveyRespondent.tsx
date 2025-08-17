@@ -1,7 +1,6 @@
 import { ContentLayout } from "@/components/app/sidebar/content-layout";
 import { NotebookPen } from "lucide-react";
-// import { QuestionsForm, SingleQuestionForm, SurveyProgress } from "../components";
-import {  SingleQuestionForm, SurveyProgress } from "../components";
+import { SingleQuestionForm, SurveyProgress } from "../components";
 import { QuestionsResponse, Survey } from "../type";
 import { useEffect, useState } from "react";
 import { getQuestionsBySurveyId, getSurveyById } from "../service";
@@ -52,28 +51,18 @@ export const SurveyRespondentPage = () => {
         { label: `Responder: ${survey?.title}`, isCurrent: true },
       ]}
     >
-      <div className="flex flex-col items-center justify-center min-h-[70vh] py-6">
+      <div className="flex flex-col justify-center py-6">
         <h1 className="text-2xl font-bold mb-4 text-center">{survey?.title}</h1>
 
         {/* Barra de progreso */}
         <SurveyProgress current={answered} total={totalQuestions} />
 
         {/* Formulario */}
-        {/* {data && (
-          <div className="w-full max-w-2xl mt-6">
-            <QuestionsForm
-              data={data}
-              onAnswer={() => setAnswered((prev) => prev + 1)}
-            />
-          </div>
-        )} */}
         {data && (
-          <div className="w-full max-w-2xl mt-6">
-            <SingleQuestionForm
-              data={data}
-              onAnswer={() => setAnswered((prev) => prev + 1)}
-            />
-          </div>
+          <SingleQuestionForm
+            data={data}
+            onAnswer={() => setAnswered((prev) => prev + 1)}
+          />
         )}
       </div>
     </ContentLayout>
