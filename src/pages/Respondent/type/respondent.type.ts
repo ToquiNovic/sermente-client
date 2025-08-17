@@ -5,6 +5,7 @@ export interface QuestionsResponse {
 }
 
 export interface Option {
+  icon: any;
   id: string;
   text: string;
   weight: number;

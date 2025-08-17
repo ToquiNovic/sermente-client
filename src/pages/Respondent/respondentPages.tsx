@@ -16,6 +16,7 @@ export const RespondentPage = () => {
     setLoading(true);
     try {
       const response = await getSurveyAsignments(userId);
+      console.log("Encuestas asignadas:", response);
       setData(response);
     } catch (error) {
       console.error("Error al obtener asignaciones de encuestas:", error);

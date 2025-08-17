@@ -34,3 +34,16 @@ export const getSurveyAsignments = async (
     return [];
   }
 };
+
+export const getSurveyById = async (surveyId: string) => {
+  try {
+    const { data } = await axios.get<{ survey: Survey }>(
+      `/api/survey/${surveyId}`
+    );
+    return data.survey;
+  } catch (error) {
+    toast.error("Error al obtener encuesta");
+    console.error("Error al obtener encuesta:", error);
+    return null;
+  }
+};
