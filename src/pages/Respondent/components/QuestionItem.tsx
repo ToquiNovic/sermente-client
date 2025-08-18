@@ -63,10 +63,8 @@ export function QuestionItem({ question, onAnswer }: QuestionItemProps) {
   return (
     <Card className="shadow-md rounded-xl bg-blue-50">
       <CardHeader className="text-center bg-blue-400">
-        <CardTitle>{question.factorName}</CardTitle>
-        <CardDescription>
-          {question.domainName} - {question.dimensionName}
-        </CardDescription>
+        <CardTitle>{question.domainName}</CardTitle>
+        <CardDescription>{question.dimensionName}</CardDescription>
       </CardHeader>
 
       <CardContent className="flex flex-col items-center justify-center gap-6 py-6">

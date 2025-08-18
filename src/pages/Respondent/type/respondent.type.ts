@@ -1,48 +1,49 @@
-export interface QuestionsResponse {
-  message: string;
-  questions: Factor[];
-  surveys?: Survey[];
-}
+  export interface QuestionsResponse {
+    message: string;
+    questions: Factor[];
+    surveys?: Survey[];
+    factors?: Factor[];
+  }
 
-export interface Option {
-  icon: any;
-  id: string;
-  text: string;
-  weight: number;
-}
+  export interface Option {
+    icon: string;
+    id: string;
+    text: string;
+    weight: number;
+  }
 
-export interface Question {
-  id: string;
-  text: string;
-  position: number;
-  dimensionId: string;
-  options: Option[];
-}
+  export interface Question {
+    id: string;
+    text: string;
+    position: number;
+    dimensionId: string;
+    options: Option[];
+  }
 
-export interface Dimension {
-  id: string;
-  name: string;
-  questions: Question[];
-}
+  export interface Dimension {
+    id: string;
+    name: string;
+    questions: Question[];
+  }
 
-export interface Domain {
-  id: string;
-  name: string;
-  dimensions: Dimension[];
-}
+  export interface Domain {
+    id: string;
+    name: string;
+    dimensions: Dimension[];
+  }
 
-export interface Factor {
-  id: string;
-  name: string;
-  position: number;
-  domains: Domain[];
-}
+  export interface Factor {
+    id: string;
+    name: string;
+    position: number;
+    domains: Domain[];
+  }
 
-export interface Survey {
-  id: string;
-  title: string;
-  description: string;
-  questions: Question[];
-  factors: Factor[];
-  domains: Domain[];
-}
+  export interface Survey {
+    id: string;
+    title: string;
+    description: string;
+    questions: Question[];
+    factors: Factor[];
+    domains: Domain[];
+  }

@@ -17,7 +17,6 @@ export const SurveyRespondentPage = () => {
     const fetchQuestions = async () => {
       try {
         const data = await getQuestionsBySurveyId(id!);
-        console.log("data", data?.questions);
         const survey = await getSurveyById(id!);
         setSurvey(survey);
         setData(data?.questions ? data : null);
@@ -40,6 +39,8 @@ export const SurveyRespondentPage = () => {
       )
     ).length || 0;
 
+  const factors = data?.questions ?? [];
+
   if (loading) return <div>Cargando...</div>;
 
   return (
@@ -55,7 +56,13 @@ export const SurveyRespondentPage = () => {
         <h1 className="text-2xl font-bold mb-4 text-center">{survey?.title}</h1>
 
         {/* Barra de progreso */}
-        <SurveyProgress current={answered} total={totalQuestions} />
+        {data && (
+          <SurveyProgress
+            current={answered}
+            total={totalQuestions}
+            factors={factors}
+          />
+        )}
 
         {/* Formulario */}
         {data && (
