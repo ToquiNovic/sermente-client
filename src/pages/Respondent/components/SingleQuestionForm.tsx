@@ -39,6 +39,10 @@ export const SingleQuestionForm = ({
   }, []);
 
   const handleNext = useCallback(() => {
+    const currentQuestion = questions[currentIndex];
+    if (!answers[currentQuestion.id]) {
+      return; // No avanzar si no hay respuesta
+    }
     setCurrentIndex((prev) => {
       if (prev < questions.length - 1) {
         return prev + 1;
@@ -47,7 +51,7 @@ export const SingleQuestionForm = ({
         return prev;
       }
     });
-  }, [questions.length, onAnswer, answers]);
+  }, [questions, currentIndex, onAnswer, answers]);
 
   const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
@@ -57,19 +61,26 @@ export const SingleQuestionForm = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") {
-        handleNext();
+        const currentQuestion = questions[currentIndex];
+        if (answers[currentQuestion.id]) {
+          handleNext();
+        }
       } else if (e.key === "ArrowLeft") {
         handlePrev();
       } else if (e.key === "Enter") {
-        handleNext();
+        const currentQuestion = questions[currentIndex];
+        if (answers[currentQuestion.id]) {
+          handleNext();
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleNext, handlePrev]);
+  }, [handleNext, handlePrev, questions, currentIndex, answers]);
 
   const currentQuestion = questions[currentIndex];
+  const isAnswered = !!answers[currentQuestion.id];
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-6">
@@ -88,7 +99,7 @@ export const SingleQuestionForm = ({
           Anterior
         </Button>
 
-        <Button size="lg" onClick={handleNext}>
+        <Button size="lg" onClick={handleNext} disabled={!isAnswered}>
           {currentIndex === questions.length - 1 ? "Finalizar" : "Siguiente"}
         </Button>
       </div>
