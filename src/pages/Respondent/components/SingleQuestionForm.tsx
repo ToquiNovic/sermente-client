@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { QuestionsResponse } from "../type";
 import { QuestionItem } from "./QuestionItem";
 import { Button } from "@/components/ui/button";
@@ -31,46 +31,64 @@ export const SingleQuestionForm = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
-  const handleAnswer = (questionId: string, value: string) => {
+  const handleAnswer = useCallback((questionId: string, value: string) => {
     setAnswers((prev) => ({
       ...prev,
       [questionId]: value,
     }));
-  };
+  }, []);
 
-  const handleNext = () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-    } else {
-      onAnswer(answers);
-    }
-  };
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => {
+      if (prev < questions.length - 1) {
+        return prev + 1;
+      } else {
+        onAnswer(answers);
+        return prev;
+      }
+    });
+  }, [questions.length, onAnswer, answers]);
 
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
-  };
+  const handlePrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
+  }, []);
+
+  // 👇 soporte para flechas
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        handleNext();
+      } else if (e.key === "ArrowLeft") {
+        handlePrev();
+      } else if (e.key === "Enter") {
+        handleNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleNext, handlePrev]);
 
   const currentQuestion = questions[currentIndex];
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] space-y-6">
-        <QuestionItem
-          question={currentQuestion}
-          onAnswer={(value) => handleAnswer(currentQuestion.id, value)}
-        />
+      <QuestionItem
+        question={currentQuestion}
+        onAnswer={(value) => handleAnswer(currentQuestion.id, value)}
+      />
 
-      <div className="flex justify-between w-full max-w-md">
+      <div className="flex justify-between w-full max-w-3xl px-6">
         <Button
           variant="outline"
+          size="lg"
           onClick={handlePrev}
           disabled={currentIndex === 0}
         >
           Anterior
         </Button>
 
-        <Button onClick={handleNext}>
+        <Button size="lg" onClick={handleNext}>
           {currentIndex === questions.length - 1 ? "Finalizar" : "Siguiente"}
         </Button>
       </div>
