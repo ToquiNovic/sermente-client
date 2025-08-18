@@ -44,12 +44,21 @@ export function QuestionItem({ question, onAnswer }: QuestionItemProps) {
     [answered, onAnswer]
   );
 
-  // 👇 Capturar número del teclado
+  // 👇 Capturar número del teclado con reordenamiento
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const num = parseInt(e.key, 10);
-      if (!isNaN(num) && num >= 1 && num <= options.length) {
-        const option = options[num - 1];
+      if (!isNaN(num) && num >= 1 && num <= 5) {
+        // Limitar a 5 opciones
+        const frequencyOrder = [
+          "Nunca",
+          "Casi nunca",
+          "Algunas veces",
+          "Casi siempre",
+          "Siempre",
+        ];
+        const targetText = frequencyOrder[num - 1];
+        const option = options.find((opt) => opt.text === targetText);
         if (option) {
           handleAnswer(option.id);
         }

@@ -9,7 +9,10 @@ interface CustomRadioGroupProps {
   onChange: (value: string) => void;
 }
 
-const frequencyMap: Record<string, { icon: React.ComponentType<{ className?: string }> }> = {
+const frequencyMap: Record<
+  string,
+  { icon: React.ComponentType<{ className?: string }> }
+> = {
   Nunca: { icon: Ban },
   "Casi nunca": { icon: AlertCircle },
   "Algunas veces": { icon: Minus },
@@ -17,7 +20,13 @@ const frequencyMap: Record<string, { icon: React.ComponentType<{ className?: str
   Siempre: { icon: Star },
 };
 
-const frequencySet = Object.keys(frequencyMap);
+const frequencySet = [
+  "Nunca",
+  "Casi nunca",
+  "Algunas veces",
+  "Casi siempre",
+  "Siempre",
+];
 
 export function CustomRadioGroup({
   options,
@@ -25,6 +34,12 @@ export function CustomRadioGroup({
   onChange,
 }: CustomRadioGroupProps) {
   const isFrequency = options.every((opt) => frequencySet.includes(opt.text));
+
+  const sortedOptions = isFrequency
+    ? frequencySet
+        .map((text) => options.find((opt) => opt.text === text))
+        .filter((opt): opt is Option => opt !== undefined)
+    : options;
 
   return (
     <RadioGroup
@@ -36,7 +51,7 @@ export function CustomRadioGroup({
           : "flex flex-wrap justify-center gap-4"
       )}
     >
-      {options.map((opt) => {
+      {sortedOptions.map((opt) => {
         const Icon = isFrequency ? frequencyMap[opt.text]?.icon : opt.icon;
 
         return (
