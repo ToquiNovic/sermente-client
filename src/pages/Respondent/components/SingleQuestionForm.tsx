@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 interface SingleQuestionFormProps {
   data: QuestionsResponse;
   onAnswer: (answers: Record<string, string>) => void;
+  onNext?: () => void;
 }
 
 export const SingleQuestionForm = ({
   data,
   onAnswer,
+  onNext,
 }: SingleQuestionFormProps) => {
   const questions = data.questions.flatMap((f) =>
     f.domains.flatMap((d) =>
@@ -31,27 +33,32 @@ export const SingleQuestionForm = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
-  const handleAnswer = useCallback((questionId: string, value: string) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: value,
-    }));
-  }, []);
+  const handleAnswer = useCallback(
+    (questionId: string, value: string) => {
+      setAnswers((prev) => {
+        const newAnswers = { ...prev, [questionId]: value };
+        onAnswer(newAnswers);
+        return newAnswers;
+      });
+    },
+    [onAnswer]
+  );
 
   const handleNext = useCallback(() => {
     const currentQuestion = questions[currentIndex];
-    if (!answers[currentQuestion.id]) {
-      return; // No avanzar si no hay respuesta
-    }
+    if (!answers[currentQuestion.id]) return;
+
+    console.log("answers:", answers);    
+
     setCurrentIndex((prev) => {
       if (prev < questions.length - 1) {
+        onNext?.();
         return prev + 1;
       } else {
-        onAnswer(answers);
         return prev;
       }
     });
-  }, [questions, currentIndex, onAnswer, answers]);
+  }, [questions, currentIndex, answers, onNext]);
 
   const handlePrev = useCallback(() => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));

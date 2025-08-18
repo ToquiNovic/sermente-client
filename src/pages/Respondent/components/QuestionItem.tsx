@@ -70,8 +70,8 @@ export function QuestionItem({ question, onAnswer }: QuestionItemProps) {
   }, [options, handleAnswer]);
 
   return (
-    <Card className="shadow-md rounded-xl bg-blue-50">
-      <CardHeader className="text-center bg-blue-400">
+    <Card className="shadow-md rounded-xl">
+      <CardHeader className="text-center bg-red-100">
         <CardTitle>{question.domainName}</CardTitle>
         <CardDescription>{question.dimensionName}</CardDescription>
       </CardHeader>

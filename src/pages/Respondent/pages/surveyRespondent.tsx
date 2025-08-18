@@ -12,6 +12,7 @@ export const SurveyRespondentPage = () => {
   const [survey, setSurvey] = useState<Survey | null>(null);
   const [loading, setLoading] = useState(true);
   const [answered, setAnswered] = useState(0);
+  const [animateProgress, setAnimateProgress] = useState(false);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -43,6 +44,15 @@ export const SurveyRespondentPage = () => {
 
   if (loading) return <div>Cargando...</div>;
 
+  const handleAnswers = (answers: Record<string, string>) => {
+    const newAnsweredCount = Object.keys(answers).length;
+    if (newAnsweredCount > answered) {
+      setAnimateProgress(true);
+      setAnswered(newAnsweredCount);
+      setTimeout(() => setAnimateProgress(false), 300);
+    }
+  };
+
   return (
     <ContentLayout
       title="Mis Encuestas"
@@ -61,16 +71,12 @@ export const SurveyRespondentPage = () => {
             current={answered}
             total={totalQuestions}
             factors={factors}
+            animate={animateProgress}
           />
         )}
 
         {/* Formulario */}
-        {data && (
-          <SingleQuestionForm
-            data={data}
-            onAnswer={() => setAnswered((prev) => prev + 1)}
-          />
-        )}
+        {data && <SingleQuestionForm data={data} onAnswer={handleAnswers} />}
       </div>
     </ContentLayout>
   );
