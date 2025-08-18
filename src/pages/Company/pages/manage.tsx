@@ -69,47 +69,53 @@ export const CompanyManage = () => {
           className="w-8 h-8 rounded-full"
         />
       }
+      breadcrumbs={[
+        { label: "Empresas", href: "/company" },
+        { label: `Administrar: ${company?.name}`, isCurrent: true },
+      ]}
     >
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="flex space-x-2 bg-transparent justify-start">
-          <TabsTrigger
-            value="empresa"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+      <div className="container py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="flex space-x-2 bg-transparent justify-start">
+            <TabsTrigger
+              value="empresa"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Empresa
-          </TabsTrigger>
-          <TabsTrigger
-            value="trabajadores"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            >
+              Empresa
+            </TabsTrigger>
+            <TabsTrigger
+              value="trabajadores"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Trabajadores
-          </TabsTrigger>
-          <TabsTrigger
-            value="Encuestas"
-            className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
+            >
+              Trabajadores
+            </TabsTrigger>
+            <TabsTrigger
+              value="Encuestas"
+              className="relative py-2 px-4 text-gray-600 border border-transparent rounded-t-md rounded-b-none
             data-[state=active]:border-gray-300 data-[state=active]:border-b-white data-[state=active]:bg-white 
             data-[state=active]:text-black font-medium"
-          >
-            Encuestas
-          </TabsTrigger>
-        </TabsList>
+            >
+              Encuestas
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="border-b border-gray-300 w-full -mt-[1px]" />
+          <div className="border-b border-gray-300 w-full -mt-[1px]" />
 
-        <TabsContent value="empresa">
-          <CompanyTab company={company} onSave={handleSave} />
-        </TabsContent>
-        <TabsContent value="trabajadores">
-          {id && <WorkersTab companyId={id} />}
-        </TabsContent>
-        <TabsContent value="Encuestas">
-          {id && <SurveyTab />}
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="empresa">
+            <CompanyTab company={company} onSave={handleSave} />
+          </TabsContent>
+          <TabsContent value="trabajadores">
+            {id && <WorkersTab companyId={id} />}
+          </TabsContent>
+          <TabsContent value="Encuestas">
+            {id && <SurveyTab companyId={id} />}
+          </TabsContent>
+        </Tabs>
+      </div>
     </ContentLayout>
   );
 };

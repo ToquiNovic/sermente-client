@@ -65,3 +65,16 @@ export const assignUsersToSurvey = async (
     throw error;
   }
 };
+
+export const getSurveyAsignmentsbyCompanyId = async (companyId: string) => {
+  try {
+    const response = await axios.get(
+      `/api/surveyassignment/company/${companyId}`
+    );
+    console.log("response.data:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener asignaciones de encuestas:", error);
+    throw error;
+  }
+};

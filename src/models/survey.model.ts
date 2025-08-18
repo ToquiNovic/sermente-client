@@ -8,9 +8,9 @@ export interface Survey {
   id: string;
   title: string;
   description: string;
-  deadline: string;
-  createdAt: string;
-  creator: Creator;
+  deadline?: string;
+  createdAt?: string;
+  creator?: Creator;
 }
 
 export interface FactorforSurvey {
